@@ -1,5 +1,6 @@
 package com.sjtubus.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -48,11 +49,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
         mToolbar.setNavigationIcon(R.drawable.person);
         reserve_btn = findViewById(R.id.reserve_btn);
+        reserve_btn.setOnClickListener(this);
         record_btn = findViewById(R.id.record_btn);
+        record_btn.setOnClickListener(this);
         position_btn = findViewById(R.id.position_btn);
+        position_btn.setOnClickListener(this);
         schedule_btn = findViewById(R.id.schedule_btn);
+        schedule_btn.setOnClickListener(this);
         map_btn = findViewById(R.id.map_btn);
+        map_btn.setOnClickListener(this);
         navigate_btn = findViewById(R.id.navigate_btn);
+        navigate_btn.setOnClickListener(this);
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -72,6 +79,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     }
     public void loadImages(){
+        //目前的图片是用的网上的传图网站
         images.add("http://chuantu.biz/t6/337/1530513364x-1566688664.jpg");
         images.add("http://chuantu.biz/t6/337/1530513397x-1566688664.jpg");
         images.add("http://chuantu.biz/t6/337/1530513420x-1566688664.jpg");
@@ -81,11 +89,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()){
             case R.id.reserve_btn:
+                break;
             case R.id.record_btn:
+                break;
             case R.id.position_btn:
+                break;
             case R.id.schedule_btn:
-            case R.id.map_btn:
+                break;
+            case R.id.map_btn: {
+                Intent intent = new Intent(MainActivity.this,MapActivity.class);
+                startActivity(intent);
+            }
             case R.id.navigate_btn:
+                break;
             default:
                 break;
         }
