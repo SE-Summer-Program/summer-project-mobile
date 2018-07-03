@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SJTUBus</string>
+    <string name="sjtubus_host">localhost:8080</string>
 </resources>
