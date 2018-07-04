@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SJTUBus</string>
+    <string name="schedule_type1">在校期-周一到周五</string>
+    <string name="schedule_type2">在校期-双休日、节假日</string>
+    <string name="schedule_type3">寒暑假-周一到周五</string>
+    <string name="schedule_type4">寒暑假-双休日</string>
 </resources>
