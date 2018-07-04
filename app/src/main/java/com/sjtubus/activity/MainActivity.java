@@ -1,5 +1,6 @@
 package com.sjtubus.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -47,12 +48,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mToolbar.setBackgroundColor(getResources().getColor(R.color.primary_red,null));
         mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
         mToolbar.setNavigationIcon(R.drawable.person);
+
         reserve_btn = findViewById(R.id.reserve_btn);
         record_btn = findViewById(R.id.record_btn);
         position_btn = findViewById(R.id.position_btn);
         schedule_btn = findViewById(R.id.schedule_btn);
         map_btn = findViewById(R.id.map_btn);
         navigate_btn = findViewById(R.id.navigate_btn);
+        reserve_btn.setOnClickListener(this);
+        record_btn.setOnClickListener(this);
+        position_btn.setOnClickListener(this);
+        schedule_btn.setOnClickListener(this);
+        map_btn.setOnClickListener(this);
+        navigate_btn.setOnClickListener(this);
+
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -84,6 +93,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             case R.id.record_btn:
             case R.id.position_btn:
             case R.id.schedule_btn:
+                Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
+                startActivity(intent);
+                break;
             case R.id.map_btn:
             case R.id.navigate_btn:
             default:
