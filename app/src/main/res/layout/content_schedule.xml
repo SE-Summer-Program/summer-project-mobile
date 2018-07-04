@@ -10,7 +10,8 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_schedule"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:paddingTop="@dimen/toolbar_padding_top"
+        android:layout_height="@dimen/toolbar_height">
 
         <TextView
             android:layout_width="wrap_content"
@@ -18,7 +19,7 @@
             android:layout_gravity="center"
             android:textColor="@color/primary_white"
             android:textSize="20sp"
-            android:text="班次信息"/>
+            android:text="@string/title_schedule"/>
     </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView

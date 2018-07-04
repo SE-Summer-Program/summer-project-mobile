@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.sjtubus.App;
 import com.sjtubus.R;
@@ -50,7 +51,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void initView(){
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.primary_red,null));
         mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
         mToolbar.setNavigationIcon(R.drawable.person);
 
@@ -66,6 +66,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         schedule_btn.setOnClickListener(this);
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
+
 
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
@@ -83,7 +84,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 return true;
             }
         });
-
     }
     public void loadImages(){
         images.add("http://chuantu.biz/t6/337/1530513364x-1566688664.jpg");
@@ -98,11 +98,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             case R.id.record_btn:
             case R.id.position_btn:
             case R.id.schedule_btn:
-                Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
-                startActivity(intent);
+                Intent scheduleIntent = new Intent(MainActivity.this, ScheduleActivity.class);
+                startActivity(scheduleIntent);
                 break;
             case R.id.map_btn:
             case R.id.navigate_btn:
+            case R.id.login_btn:
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+                break;
+            case R.id.register_btn:
             default:
                 break;
         }

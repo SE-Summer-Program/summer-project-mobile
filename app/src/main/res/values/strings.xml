@@ -11,5 +11,8 @@
     <string name="idea">意见</string>
     <string name="login">登录</string>
     <string name="register">注册</string>
+    <string name="forget_password">忘记密码</string>
     <string name="not_login">未登录，点击下方登录或注册</string>
+    <string name="title_home">SJTU校园巴士</string>
+    <string name="title_schedule">班次信息</string>
 </resources>
