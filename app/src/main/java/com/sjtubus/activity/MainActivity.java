@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mToolbar.setTitle("");
         mToolbar.setBackgroundColor(getResources().getColor(R.color.primary_red,null));
         mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
-        mToolbar.setNavigationIcon(R.drawable.person);
+        mToolbar.setNavigationIcon(R.mipmap.person);
 
         reserve_btn = findViewById(R.id.reserve_btn);
         record_btn = findViewById(R.id.record_btn);

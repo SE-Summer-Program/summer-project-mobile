@@ -1,5 +1,6 @@
 package com.sjtubus.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
@@ -13,7 +14,7 @@ public class Schedule {
 
     private String subtitle;
 
-    private List<String> scheduleTime;
+    private List<String> scheduleTime = new ArrayList<>();
 
     public Schedule(String lineName, String types){
         this.lineName = lineName;

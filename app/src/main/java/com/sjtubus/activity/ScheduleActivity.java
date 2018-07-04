@@ -1,6 +1,7 @@
 package com.sjtubus.activity;
 
 import android.os.Bundle;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -12,10 +13,10 @@ import android.widget.Button;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 import android.widget.Toast;
+import com.sjtubus.R;
 
 import com.sjtubus.model.Schedule;
 import com.sjtubus.model.ScheduleAdapter;
-import com.sjtubus.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,7 +58,14 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
         mToolbar.setTitle("");
         mToolbar.setBackgroundColor(getResources().getColor(R.color.primary_red,null));
         mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
-        mToolbar.setNavigationIcon(R.drawable.calendar);
+        mToolbar.setNavigationIcon(R.mipmap.calendar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickDlg();
+            }
+        });
+       // mToolbar.inflateMenu(R.menu.schedule_types);
     }
 
     public void setAndShowSchedule(String type){
@@ -121,7 +129,7 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
         datePickerDialog.show();
 
         //测试canlendar
-        Toast.makeText(this, calendar.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, calendar.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

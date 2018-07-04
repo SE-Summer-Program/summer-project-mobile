@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <group>
         <item
             android:id="@+id/schedule_normalWorkday"
             android:checked="true"
-            android:icon="@drawable/ic_launcher_background"
+            app:showAsAction="ifRoom"
             android:title="@string/schedule_type1" />
         <item
             android:id="@+id/schedule_normalWeekendAndLegalHoilday"
             android:checked="true"
-            android:icon="@drawable/ic_launcher_background"
+            app:showAsAction="ifRoom"
             android:title="@string/schedule_type2" />
         <item
             android:id="@+id/schedule_hoildayWorkday"
             android:checked="true"
-            android:icon="@drawable/ic_launcher_background"
+            app:showAsAction="ifRoom"
             android:title="@string/schedule_type3" />
         <item
             android:id="@+id/schedule_hoildayWeekend"
             android:checked="true"
-            android:icon="@drawable/ic_launcher_background"
+            app:showAsAction="ifRoom"
             android:title="@string/schedule_type4" />
     </group>
 
