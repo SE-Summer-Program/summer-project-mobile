@@ -38,6 +38,10 @@ public class LoginActivity extends BaseActivity {
         initWebview();
     }
 
+    public int getContentViewId(){
+        return R.layout.activity_login;
+    }
+
     private void initWebview() {
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setUserAgentString(((App) App.getInstance()).getUserAgent());

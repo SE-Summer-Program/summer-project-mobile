@@ -5,4 +5,11 @@
     <string name="schedule_type2">在校期-双休日、节假日</string>
     <string name="schedule_type3">寒暑假-周一到周五</string>
     <string name="schedule_type4">寒暑假-双休日</string>
+    <string name="person_info">个人信息</string>
+    <string name="reserve_record">预约记录</string>
+    <string name="message">消息</string>
+    <string name="idea">意见</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="not_login">未登录，点击下方登录或注册</string>
 </resources>

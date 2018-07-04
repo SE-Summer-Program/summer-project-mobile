@@ -39,8 +39,6 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_schedule);
-
         initViews();
 
         recyclerView = (RecyclerView)findViewById(R.id.recycle_schedule);
@@ -50,6 +48,10 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
 
         String type = getTypes();
         setAndShowSchedule(type);
+    }
+
+    public int getContentViewId(){
+        return R.layout.content_schedule;
     }
 
     public void initViews(){
