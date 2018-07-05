@@ -18,6 +18,7 @@ import android.view.WindowManager;
 //import com.avos.avoscloud.PushService;
 //import com.avos.avoscloud.SaveCallback;
 //import com.mcxiaoke.packer.helper.PackerNg;
+import com.mob.MobSDK;
 import com.sjtubus.user.ReminderManager;
 import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
@@ -62,6 +63,7 @@ public class App extends Application {
         context = this;
         EventBus.getDefault().register(this);
         UserManager.init();
+        MobSDK.init(this);
         //initBugly();
         //initLeanCloud();
         //initMta();
