@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
-        mToolbar.setNavigationIcon(R.drawable.person);
+        mToolbar.setNavigationIcon(R.mipmap.person);
 
         reserve_btn = findViewById(R.id.reserve_btn);
         record_btn = findViewById(R.id.record_btn);
@@ -66,7 +66,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         schedule_btn.setOnClickListener(this);
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
-
 
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
@@ -84,6 +83,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 return true;
             }
         });
+
     }
     public void loadImages(){
         images.add("http://chuantu.biz/t6/337/1530513364x-1566688664.jpg");
@@ -95,19 +95,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()){
             case R.id.reserve_btn:
+                break;
             case R.id.record_btn:
+                break;
             case R.id.position_btn:
+                break;
             case R.id.schedule_btn:
                 Intent scheduleIntent = new Intent(MainActivity.this, ScheduleActivity.class);
                 startActivity(scheduleIntent);
                 break;
             case R.id.map_btn:
+                break;
             case R.id.navigate_btn:
             case R.id.login_btn:
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
                 break;
             case R.id.register_btn:
+                break;
             default:
                 break;
         }
