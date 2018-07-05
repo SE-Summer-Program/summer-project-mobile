@@ -45,8 +45,11 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_schedule);
         initViews();
+    }
+
+    public int getContentViewId(){
+        return R.layout.activity_schedule;
     }
 
     public void initViews(){
