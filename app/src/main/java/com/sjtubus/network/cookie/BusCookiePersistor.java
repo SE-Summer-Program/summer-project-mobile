@@ -17,6 +17,7 @@ package com.sjtubus.network.cookie;
  */
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +30,7 @@ public class BusCookiePersistor implements CookiePersistor {
 
     private final SharedPreferences sharedPreferences;
 
-    public BusCookiePersistor(SharedPreferences sharedPreferences) {
+    BusCookiePersistor(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;// FIXME: extract string resources
     }
 
@@ -38,7 +39,7 @@ public class BusCookiePersistor implements CookiePersistor {
         List<Cookie> cookies = new ArrayList<>(sharedPreferences.getAll().size());
 
         for (Map.Entry<String, ?> entry : sharedPreferences.getAll().entrySet()) {
-            //Log.d("TEST ENTRY", String.valueOf(entry));
+            Log.d("TEST ENTRY", String.valueOf(entry));
             String serializedCookie = (String) entry.getValue();
             Cookie cookie = new SerializableCookie().decode(serializedCookie);
             // TODO: 此处存在cookie为null的情况
@@ -46,7 +47,7 @@ public class BusCookiePersistor implements CookiePersistor {
                 cookies.add(cookie);
             }
         }
-        //Log.d("TEST COOKIES", String.valueOf(cookies));
+        Log.d("TEST COOKIES", String.valueOf(cookies));
         return cookies;
     }
 

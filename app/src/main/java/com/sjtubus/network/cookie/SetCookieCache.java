@@ -28,7 +28,7 @@ public class SetCookieCache implements CookieCache {
 
     private Set<IdentifiableCookie> cookies;
 
-    public SetCookieCache() {
+    SetCookieCache() {
         cookies = new HashSet<>();
     }
 
@@ -54,7 +54,7 @@ public class SetCookieCache implements CookieCache {
 
         private Iterator<IdentifiableCookie> iterator;
 
-        public SetCookieCacheIterator() {
+        SetCookieCacheIterator() {
             iterator = cookies.iterator();
         }
 

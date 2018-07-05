@@ -41,7 +41,7 @@ class IdentifiableCookie {
         return identifiableCookies;
     }
 
-    IdentifiableCookie(Cookie cookie) {
+    private IdentifiableCookie(Cookie cookie) {
         this.cookie = cookie;
     }
 
