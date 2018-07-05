@@ -25,8 +25,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
         public ViewHolder(View view){
             super(view);
-            scheduleTitle = (TextView) view.findViewById(R.id.schedule_title);
             scheduleSubTitle = (TextView) view.findViewById(R.id.schedule_subtitle);
+            scheduleTitle = (TextView) view.findViewById(R.id.schedule_title);
+      //      scheduleSubTitle = (TextView) view.findViewById(R.id.schedule_subtitle);
             scheduleDetail = (TextView) view.findViewById(R.id.schedule_detail);
         }
     }

@@ -90,14 +90,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()){
             case R.id.reserve_btn:
+                break;
             case R.id.record_btn:
+                break;
             case R.id.position_btn:
+                break;
             case R.id.schedule_btn:
                 Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
                 startActivity(intent);
                 break;
             case R.id.map_btn:
+                break;
             case R.id.navigate_btn:
+                break;
             default:
                 break;
         }
