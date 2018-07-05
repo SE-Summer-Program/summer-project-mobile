@@ -10,7 +10,10 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_schedule"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        app:popupTheme="@style/Theme.AppCompat.Light"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- android:theme="@style/Theme.ToolBar.Menu" -->
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,7 +28,6 @@
         android:id="@+id/recycle_schedule"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </android.support.v7.widget.RecyclerView>
 
 

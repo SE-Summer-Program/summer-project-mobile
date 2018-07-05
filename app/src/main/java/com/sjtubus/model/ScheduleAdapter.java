@@ -2,6 +2,7 @@ package com.sjtubus.model;
 
 import com.sjtubus.R;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,7 +14,8 @@ import java.util.List;
 
 public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder>{
 
-    public List<Schedule> mScheduleList;
+    private List<Schedule> mScheduleList;
+    private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -29,8 +31,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         }
     }
 
-    public ScheduleAdapter(List<Schedule> scheduleList){
-        mScheduleList = scheduleList;
+    public ScheduleAdapter(Context context, List<Schedule> scheduleList){
+        this.context = context;
+        this.mScheduleList = scheduleList;
     }
 
     @NonNull
@@ -38,7 +41,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.schedule_item, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        return  holder;
+        return holder;
     }
 
     @Override

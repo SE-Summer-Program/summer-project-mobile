@@ -1,5 +1,10 @@
 package com.sjtubus.model;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import com.sjtubus.activity.ScheduleActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +21,13 @@ public class Schedule {
 
     private List<String> scheduleTime = new ArrayList<>();
 
-    public Schedule(String lineName, String types){
+    public Schedule(String lineName){
+       // Log.d("model schedule:", types);
         this.lineName = lineName;
-        this.types = types;
+        this.types = "None";
         //this.scheduleTime = ... 根据linename和types，只添加满足情况的schedule
         initScheduleTime();
-        this.subtitle = "首班车：8:00" + "，末车班：20:00"; //获取schedule数组的头和尾
+        this.subtitle = "首班车：8:00，末车班：20:00"; //获取schedule数组的头和尾
     }
 
     private void initScheduleTime(){
