@@ -30,4 +30,9 @@
     <dimen name="smallButtonWidth">48dp</dimen>
     <dimen name="normalButtonHeight">48dp</dimen>
     <dimen name="normalButtonWidth">80dp</dimen>
+
+    <!--edittext尺寸-->
+    <dimen name="editCornerSize">5dp</dimen>
+    <dimen name="smallEditHeight">40dp</dimen>
+    <dimen name="normalEditHeight">50dp</dimen>
 </resources>

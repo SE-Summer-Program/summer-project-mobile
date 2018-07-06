@@ -14,6 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.avos.avoscloud.feedback.FeedbackAgent;
+import com.mob.ums.OperationCallback;
+import com.mob.ums.User;
+import com.mob.ums.gui.UMSGUI;
 import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.utils.GlideImageLoader;
@@ -77,9 +81,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-                Snackbar.make(MainActivity.this.getWindow().getDecorView(), menuItem.getTitle() + " pressed", Snackbar.LENGTH_LONG).show();
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                switch (menuItem.getItemId()){
+                    case R.id.navigation_item_idea:
+                        FeedbackAgent agent = new FeedbackAgent(App.getInstance());
+                        agent.startDefaultThreadActivity();
+                        break;
+                    default:
+                        break;
+                }
                 return true;
             }
         });
@@ -109,8 +118,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             case R.id.navigate_btn:
                 break;
             case R.id.login_btn:
-                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(loginIntent);
+//                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(loginIntent);
+                UMSGUI.showLogin(new OperationCallback<User>(){
+                    public void onSuccess(User user) {
+
+                        // 登录成功的操作
+                    }
+
+                    public void onCancel() {
+                        // 执行取消的操作
+                    }
+
+                    public void onFailed(Throwable t) {
+                        // 提示错误信息
+                    }
+                });
                 break;
             case R.id.register_btn:
                 break;

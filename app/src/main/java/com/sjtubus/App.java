@@ -18,6 +18,7 @@ import android.view.WindowManager;
 //import com.avos.avoscloud.PushService;
 //import com.avos.avoscloud.SaveCallback;
 //import com.mcxiaoke.packer.helper.PackerNg;
+import com.avos.avoscloud.AVOSCloud;
 import com.mob.MobSDK;
 import com.sjtubus.user.ReminderManager;
 import com.sjtubus.user.UserChangeEvent;
@@ -64,8 +65,8 @@ public class App extends Application {
         EventBus.getDefault().register(this);
         UserManager.init();
         MobSDK.init(this);
+        initLeanCloud();
         //initBugly();
-        //initLeanCloud();
         //initMta();
     }
 
@@ -98,11 +99,11 @@ public class App extends Application {
         return userAgent;
     }
 
-//    private void initLeanCloud() {
-//        final String appID = "mSU7LJ8jBeRMRkkXVNNuseml-gzGzoHsz";
-//        final String appKey = "MxxboYqkTenaqlWz3BRfoDG7";
-//        AVOSCloud.initialize(this, appID, appKey);
-//
+    private void initLeanCloud() {
+        final String appID = "UTfPOKjAoRvO8m7Gux0964oT-gzGzoHsz";
+        final String appKey = "tnpkj8g2EyCFWydpDrbcXj3X";
+        AVOSCloud.initialize(this, appID, appKey);
+
 //        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
 //            public void done(AVException e) {
 //                if (e == null) {
@@ -117,7 +118,7 @@ public class App extends Application {
 //        PushService.setDefaultPushCallback(this, LaunchActivity.class);
 //        // 订阅频道，当该频道消息到来的时候，打开对应的 Activity
 //        PushService.subscribe(this, "public", LaunchActivity.class);
-//    }
+    }
 
 //    protected RefWatcher setupLeakCanary() {
 //        if (LeakCanary.isInAnalyzerProcess(this)) {
