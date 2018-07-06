@@ -1,29 +1,24 @@
 package com.sjtubus.model;
 
 import java.util.ArrayList;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.sjtubus.activity.ScheduleActivity;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Schedule {
 
-    private String lineName;
+    private java.lang.String lineName;
         //MinToXu, XuToMin, MinToQi, QiToMin
 
-    private String types;
+    private java.lang.String types;
         //"NormalWorkday"，"NormalWeekendAndLegalHoilday"
         //"HoildayWorkday"，"HoildayWeekend"
 
-    private String subtitle;
+    private java.lang.String subtitle;
 
-    private List<String> scheduleTime = new ArrayList<>();
-    private List<String> scheduleComment = new ArrayList<>();
+    private List<java.lang.String> scheduleTime = new ArrayList<>();
+    private List<java.lang.String> scheduleComment = new ArrayList<>();
 
-    public Schedule(String lineName, String types){
+    public Schedule(java.lang.String lineName, java.lang.String types){
         initScheduleTime(types);
 
         this.lineName = lineName;
@@ -33,7 +28,7 @@ public class Schedule {
         this.subtitle = "首班车：8:00，末车班：20:00"; //获取schedule数组的头和尾
     }
 
-    private void initScheduleTime(String types){
+    private void initScheduleTime(java.lang.String types){
         this.scheduleTime.add("8:00");
         this.scheduleTime.add("9:00");
         this.scheduleTime.add("20:00");
@@ -44,20 +39,20 @@ public class Schedule {
         //在这里get不同类型的数据，并且赋值给scheduleTime
     }
 
-    public String getLineName(){
+    public java.lang.String getLineName(){
         return lineName;
     } //等同于getTitle
 
-    public String getTypes(){
+    public java.lang.String getTypes(){
         return types;
     }
 
-    public String getSubtitle() { return subtitle; }
+    public java.lang.String getSubtitle() { return subtitle; }
 
-    public List<String> getSchedule(){ return scheduleTime; }
+    public List<java.lang.String> getSchedule(){ return scheduleTime; }
 
-    public String getDetail() {
-        String detail = "123";
+    public java.lang.String getDetail() {
+        java.lang.String detail = "123";
         for (int i = 0; i < scheduleTime.size(); i++){
             detail.concat(scheduleTime.get(i));
             detail.concat(scheduleComment.get(i));

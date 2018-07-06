@@ -1,4 +1,4 @@
-package com.sjtubus.model;
+package com.sjtubus.widget;
 
 import com.sjtubus.R;
 
@@ -10,31 +10,37 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHolder>{
+public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
 
-    private List<Schedule> mScheduleList;
+    private List<String> mLineList;
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView scheduleTitle;
+        TextView linename;
         TextView scheduleSubTitle;
         TextView scheduleDetail;
 
         public ViewHolder(View view){
             super(view);
             scheduleSubTitle = (TextView) view.findViewById(R.id.schedule_subtitle);
-            scheduleTitle = (TextView) view.findViewById(R.id.schedule_title);
+            linename = (TextView) view.findViewById(R.id.schedule_title);
       //      scheduleSubTitle = (TextView) view.findViewById(R.id.schedule_subtitle);
             scheduleDetail = (TextView) view.findViewById(R.id.schedule_detail);
         }
     }
 
-    public ScheduleAdapter(Context context, List<Schedule> scheduleList){
+    public void setDataList(List<String> list) {
+        mLineList = list;
+        notifyDataSetChanged();
+    }
+
+    public LineAdapter(Context context){
         this.context = context;
-        this.mScheduleList = scheduleList;
+        this.mLineList = new ArrayList<>();
     }
 
     @NonNull
@@ -47,14 +53,12 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Schedule schedule = mScheduleList.get(position);
-        holder.scheduleTitle.setText(schedule.getLineName());
-        holder.scheduleSubTitle.setText(schedule.getSubtitle());
-        holder.scheduleDetail.setText(schedule.getDetail()); //这个不对的
+        String line_name = mLineList.get(position);
+        holder.linename.setText(line_name);
     }
 
     @Override
     public int getItemCount() {
-        return mScheduleList.size();
+        return mLineList.size();
     }
 }

@@ -15,4 +15,6 @@
     <string name="not_login">未登录，点击下方登录或注册</string>
     <string name="title_home">SJTU校园巴士</string>
     <string name="title_schedule">班次信息</string>
+    <string name="title_message">我的消息</string>
+    <string name="message_none">无消息</string>
 </resources>

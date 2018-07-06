@@ -18,8 +18,13 @@ import android.view.WindowManager;
 //import com.avos.avoscloud.PushService;
 //import com.avos.avoscloud.SaveCallback;
 //import com.mcxiaoke.packer.helper.PackerNg;
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
+import com.avos.avoscloud.PushService;
+import com.avos.avoscloud.SaveCallback;
 import com.mob.MobSDK;
+import com.sjtubus.activity.MainActivity;
 import com.sjtubus.user.ReminderManager;
 import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
@@ -60,12 +65,12 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //setupLeakCanary();
         context = this;
         EventBus.getDefault().register(this);
         UserManager.init();
         MobSDK.init(this);
         initLeanCloud();
+        //setupLeakCanary();
         //initBugly();
         //initMta();
     }
@@ -104,20 +109,20 @@ public class App extends Application {
         final String appKey = "tnpkj8g2EyCFWydpDrbcXj3X";
         AVOSCloud.initialize(this, appID, appKey);
 
-//        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
-//            public void done(AVException e) {
-//                if (e == null) {
-//                    // 保存成功
-//                    installationId = AVInstallation.getCurrentInstallation().getInstallationId();
-//                    // 关联  installationId 到用户表等操作……
-//                } else {
-//                    // 保存失败，输出错误信息
-//                }
-//            }
-//        });
-//        PushService.setDefaultPushCallback(this, LaunchActivity.class);
-//        // 订阅频道，当该频道消息到来的时候，打开对应的 Activity
-//        PushService.subscribe(this, "public", LaunchActivity.class);
+        AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
+            public void done(AVException e) {
+                if (e == null) {
+                    // 保存成功
+                    installationId = AVInstallation.getCurrentInstallation().getInstallationId();
+                    // 关联  installationId 到用户表等操作……
+                } else {
+                    // 保存失败，输出错误信息
+                }
+            }
+        });
+        PushService.setDefaultPushCallback(this, MainActivity.class);
+        // 订阅频道，当该频道消息到来的时候，打开对应的 Activity
+        PushService.subscribe(this, "public", MainActivity.class);
     }
 
 //    protected RefWatcher setupLeakCanary() {
@@ -128,13 +133,13 @@ public class App extends Application {
 //    }
 
 //    protected void initMta() {
-//        String channel = PackerNg.getChannel(getApplicationContext());
+//        Schedule channel = PackerNg.getChannel(getApplicationContext());
 //        if (channel == null) channel = "";
 //        StatConfig.setInstallChannel(channel);
 //    }
 
     //    private void initBugly() {
-//        final String buglyId = "900018050";
+//        final Schedule buglyId = "900018050";
 //        final Boolean debug = false;
 //        Bugly.init(getApplicationContext(), buglyId, debug);
 //        CrashReport.setAppVersion(getApplicationContext(), AppVersionName);

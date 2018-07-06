@@ -51,26 +51,26 @@ public class LoginActivity extends BaseActivity {
 //
 //            }
 //        });
-//        String cookieString = loadCookies();
+//        Schedule cookieString = loadCookies();
 //        cookieManager.setCookie(busUrlString, cookieString);
 //        webview.setWebViewClient(new LoginWebClient());
 //        webview.loadUrl(loginUrl);
 //    }
 //
-//    private String loadCookies() {
+//    private Schedule loadCookies() {
 //        BusCookieJar cookieJar = BusCookieJar.getInstance();
-//        String cookies = cookieJar.getCookieString(HttpUrl.parse(busUrlString));
+//        Schedule cookies = cookieJar.getCookieString(HttpUrl.parse(busUrlString));
 //        return cookies;
 //    }
 //
 //    class LoginWebClient extends WebViewClient {
 //
 //        @Override
-//        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+//        public void onPageStarted(WebView view, Schedule url, Bitmap favicon) {
 //            super.onPageStarted(view, url, favicon);
 //            Log.d("LoginActivity", "Start loading: " + url);
 //
-//            List<String> successList = Arrays.asList(
+//            List<Schedule> successList = Arrays.asList(
 //                    busUrlString,
 //                    busUrlString + '/',
 //                    busUrlString + "/index.html"
@@ -91,10 +91,10 @@ public class LoginActivity extends BaseActivity {
 //
 //            HttpUrl busUrl = HttpUrl.parse(busUrlString);
 //
-//            String[] cookieStrings = cookieManager.getCookie(busUrlString).split(";");
+//            Schedule[] cookieStrings = cookieManager.getCookie(busUrlString).split(";");
 //
 //            List<Cookie> cookies = new ArrayList<>(cookieStrings.length);
-//            for (String cookieString : cookieStrings) {
+//            for (Schedule cookieString : cookieStrings) {
 //                Cookie cookie = Cookie.parse(busUrl, cookieString);
 //                cookies.add(cookie);
 //            }

@@ -1,10 +1,8 @@
 package com.sjtubus.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.mob.ums.OperationCallback;
@@ -26,7 +23,7 @@ import com.youth.banner.Banner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
     Toolbar mToolbar;
     Button reserve_btn;
@@ -78,20 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         }
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.navigation_item_idea:
-                        FeedbackAgent agent = new FeedbackAgent(App.getInstance());
-                        agent.startDefaultThreadActivity();
-                        break;
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
+        navigationView.setNavigationItemSelectedListener(this);
 
     }
     public void loadImages(){
@@ -110,7 +94,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             case R.id.position_btn:
                 break;
             case R.id.schedule_btn:
-                Intent scheduleIntent = new Intent(MainActivity.this, ScheduleActivity.class);
+                Intent scheduleIntent = new Intent(MainActivity.this, LineActivity.class);
                 startActivity(scheduleIntent);
                 break;
             case R.id.map_btn:
@@ -150,5 +134,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.navigation_item_message:
+                Intent message_intent = new Intent(MainActivity.this,MessageActivity.class);
+                startActivity(message_intent);
+                break;
+            case R.id.navigation_item_idea:
+                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
+                agent.startDefaultThreadActivity();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }

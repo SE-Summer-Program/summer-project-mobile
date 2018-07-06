@@ -54,7 +54,7 @@ public class ReminderManager {
 //                );
     }
 
-//    private Observable<ActDetail> getActDetail(String actId) {
+//    private Observable<ActDetail> getActDetail(Schedule actId) {
 //        return RetrofitClient
 //                .getTongquApi()
 //                .getActDetail(actId)
