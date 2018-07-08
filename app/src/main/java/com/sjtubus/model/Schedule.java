@@ -6,19 +6,19 @@ import java.util.List;
 
 public class Schedule {
 
-    private java.lang.String lineName;
+    private String lineName;
         //MinToXu, XuToMin, MinToQi, QiToMin
 
-    private java.lang.String types;
+    private String types;
         //"NormalWorkday"，"NormalWeekendAndLegalHoilday"
         //"HoildayWorkday"，"HoildayWeekend"
 
-    private java.lang.String subtitle;
+    private String subtitle;
 
-    private List<java.lang.String> scheduleTime = new ArrayList<>();
-    private List<java.lang.String> scheduleComment = new ArrayList<>();
+    private List<String> scheduleTime = new ArrayList<>();
+    private List<String> scheduleComment = new ArrayList<>();
 
-    public Schedule(java.lang.String lineName, java.lang.String types){
+    public Schedule(String lineName,String types){
         initScheduleTime(types);
 
         this.lineName = lineName;
@@ -49,9 +49,11 @@ public class Schedule {
 
     public java.lang.String getSubtitle() { return subtitle; }
 
-    public List<java.lang.String> getSchedule(){ return scheduleTime; }
+    public List<String> getScheduleTime(){ return scheduleTime; }
 
-    public java.lang.String getDetail() {
+    public List<String> getScheduleComment(){ return scheduleComment; }
+
+    public String getDetail() {
         java.lang.String detail = "123";
         for (int i = 0; i < scheduleTime.size(); i++){
             detail.concat(scheduleTime.get(i));

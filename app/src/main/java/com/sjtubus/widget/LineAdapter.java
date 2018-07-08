@@ -1,6 +1,7 @@
 package com.sjtubus.widget;
 
 import com.sjtubus.R;
+import com.sjtubus.activity.LineActivity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -16,7 +17,12 @@ import java.util.List;
 public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
 
     private List<String> mLineList;
-    private Context context;
+    private LineActivity context;
+    private OnItemClickListener mItemClickListener;
+
+    public void setItemClickListener(OnItemClickListener itemClickListener) {
+        this.mItemClickListener = itemClickListener;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -38,7 +44,7 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
         notifyDataSetChanged();
     }
 
-    public LineAdapter(Context context){
+    public LineAdapter(LineActivity context){
         this.context = context;
         this.mLineList = new ArrayList<>();
     }
@@ -47,7 +53,13 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.schedule_item, parent, false);
-        ViewHolder holder = new ViewHolder(view);
+        final ViewHolder holder = new ViewHolder(view);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mItemClickListener.onItemClick(v);
+            }
+        });
         return holder;
     }
 
@@ -57,8 +69,16 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
         holder.linename.setText(line_name);
     }
 
+    public String getLinename(int index){
+        return mLineList.get(index);
+    }
+
     @Override
     public int getItemCount() {
         return mLineList.size();
+    }
+
+    public static interface OnItemClickListener {
+        void onItemClick(View view);
     }
 }

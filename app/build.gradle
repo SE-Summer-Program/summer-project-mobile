@@ -68,11 +68,21 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.youth.banner:banner:1.4.10'
+    implementation "com.squareup.okhttp3:okhttp:3.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'org.greenrobot:eventbus:3.1.1'
+
+    //自定义的view
+    implementation 'com.youth.banner:banner:1.4.10'
+    implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
 
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
@@ -81,12 +91,6 @@ dependencies {
     // 推送与实时聊天需要的包
     implementation ('cn.leancloud.android:avoscloud-push:v4.6.4@aar'){transitive = true}
 
-    implementation "com.squareup.okhttp3:okhttp:3.10.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

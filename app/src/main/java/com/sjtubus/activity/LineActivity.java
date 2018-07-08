@@ -2,6 +2,7 @@ package com.sjtubus.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -21,6 +22,7 @@ import com.sjtubus.model.response.LineNameResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.reactivex.Observer;
@@ -32,7 +34,7 @@ import static android.content.ContentValues.TAG;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-public class LineActivity extends BaseActivity implements View.OnClickListener{
+public class LineActivity extends BaseActivity implements LineAdapter.OnItemClickListener{
 
     Toolbar mToolbar;
     RecyclerView recyclerView;
@@ -53,22 +55,12 @@ public class LineActivity extends BaseActivity implements View.OnClickListener{
     }
 
     public int getContentViewId(){
-        return R.layout.activity_schedule;
+        return R.layout.activity_line;
     }
 
     public void initViews(){
         mToolbar = findViewById(R.id.toolbar_schedule);
-      //  setSupportActionBar(mToolbar);
-        mToolbar.setTitle("");
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.primary_red,null));
-        mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
-//        mToolbar.setNavigationIcon(R.mipmap.calendar);
-//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDatePickDlg();
-//            }
-//        });
+        //setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.menu);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +69,13 @@ public class LineActivity extends BaseActivity implements View.OnClickListener{
             }
         });
 
-        recyclerView = (RecyclerView)findViewById(R.id.recycle_schedule);
+        recyclerView = findViewById(R.id.recycle_schedule);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL); //设置为垂直布局，默认
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); //分割线
         adapter = new LineAdapter(this);
+        adapter.setItemClickListener(this);
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
             @Override
@@ -133,6 +126,9 @@ public class LineActivity extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
+                    ArrayList<String> temp = new ArrayList<String>();
+                    temp.add("逆时针校园巴士");
+                    adapter.setDataList(temp);
                 }
 
                 @Override
@@ -143,12 +139,15 @@ public class LineActivity extends BaseActivity implements View.OnClickListener{
             });
     }
 
+
     @Override
-    public void onClick(View v){
-        switch (v.getId()){
-            default:
-                break;
-        }
+    public void onItemClick(View view) {
+        int position = recyclerView.getChildAdapterPosition(view);
+        String line_name = adapter.getLinename(position);
+        Intent schedule_intent = new Intent(LineActivity.this, ScheduleActivity.class);
+        schedule_intent.putExtra("LINE_TYPE",type_list[select]);
+        schedule_intent.putExtra("LINE_NAME",line_name);
+        startActivity(schedule_intent);
     }
 
     public void putDialog() {

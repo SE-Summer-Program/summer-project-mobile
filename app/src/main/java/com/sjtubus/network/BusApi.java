@@ -4,6 +4,8 @@ import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.LineNameResponse;
 import com.sjtubus.model.response.LoginResponse;
 import com.sjtubus.model.response.MessageResponse;
+import com.sjtubus.model.response.ScheduleResponse;
+import com.sjtubus.model.response.StationResponse;
 
 import java.util.List;
 
@@ -36,4 +38,10 @@ public interface BusApi {
 
     @GET("/messages")
     Observable<MessageResponse> getMessages();
+
+    @GET("/shift/schedule")
+    Observable<ScheduleResponse> getSchedule(@Query("type")String type, @Query("line_name")String line_name);
+
+    @GET("/station")
+    Observable<StationResponse> getLineStation(@Query("line_name")String line_name);
 }
