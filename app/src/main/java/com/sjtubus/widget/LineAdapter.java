@@ -2,8 +2,8 @@ package com.sjtubus.widget;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.LineActivity;
+import com.sjtubus.model.LineInfo;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import java.util.List;
 
 public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
 
-    private List<String> mLineList;
+    private List<LineInfo> mLineList;
     private LineActivity context;
     private OnItemClickListener mItemClickListener;
 
@@ -27,19 +27,18 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
     static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView linename;
-        TextView scheduleSubTitle;
-        TextView scheduleDetail;
+        TextView firsttime;
+        TextView lasttime;
 
         public ViewHolder(View view){
             super(view);
-            scheduleSubTitle = (TextView) view.findViewById(R.id.schedule_subtitle);
-            linename = (TextView) view.findViewById(R.id.schedule_title);
-      //      scheduleSubTitle = (TextView) view.findViewById(R.id.schedule_subtitle);
-            scheduleDetail = (TextView) view.findViewById(R.id.schedule_detail);
+            linename = (TextView) view.findViewById(R.id.line_name);
+            firsttime = (TextView) view.findViewById(R.id.line_first_time);
+            lasttime = (TextView) view.findViewById(R.id.line_last_time);
         }
     }
 
-    public void setDataList(List<String> list) {
+    public void setDataList(List<LineInfo> list) {
         mLineList = list;
         notifyDataSetChanged();
     }
@@ -52,7 +51,7 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.schedule_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_line, parent, false);
         final ViewHolder holder = new ViewHolder(view);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,12 +64,16 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String line_name = mLineList.get(position);
+        String line_name = mLineList.get(position).getLineNameCN();
+        String first_time = mLineList.get(position).getFirstTime();
+        String last_time = mLineList.get(position).getLastTime();
         holder.linename.setText(line_name);
+        holder.firsttime.setText(first_time);
+        holder.lasttime.setText(last_time);
     }
 
     public String getLinename(int index){
-        return mLineList.get(index);
+        return mLineList.get(index).getLineName();
     }
 
     @Override

@@ -18,7 +18,7 @@ import android.widget.DatePicker;
 import com.sjtubus.R;
 
 import com.sjtubus.widget.LineAdapter;
-import com.sjtubus.model.response.LineNameResponse;
+import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
 
@@ -46,7 +46,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     private int select = 0;
 
     private String[] type_list = {"在校期-工作日", "在校期-双休日、节假日", "寒暑假-工作日","寒暑假-双休日"};
-    private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoilday","HoildayWorkday","HoildayWeekend"};
+    private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,27 +108,24 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     public void setAndShowSchedule(String type){
         //Log.d("LineActivity", type);
         RetrofitClient.getBusApi()
-            .getLinenames(type)
+            .getLineInfos(type)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<LineNameResponse>() {
+            .subscribe(new Observer<LineInfoResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     addDisposable(d);
                 }
 
                 @Override
-                public void onNext(LineNameResponse response) {
+                public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
-                    adapter.setDataList(response.getLinenames());
+                    adapter.setDataList(response.getLineInfos());
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
-                    ArrayList<String> temp = new ArrayList<String>();
-                    temp.add("逆时针校园巴士");
-                    adapter.setDataList(temp);
                 }
 
                 @Override
@@ -145,7 +142,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         int position = recyclerView.getChildAdapterPosition(view);
         String line_name = adapter.getLinename(position);
         Intent schedule_intent = new Intent(LineActivity.this, ScheduleActivity.class);
-        schedule_intent.putExtra("LINE_TYPE",type_list[select]);
+        schedule_intent.putExtra("LINE_TYPE",type_list_E[select]);
         schedule_intent.putExtra("LINE_NAME",line_name);
         startActivity(schedule_intent);
     }
@@ -164,19 +161,19 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
 
     public void refreshSchedule(){
         RetrofitClient.getBusApi()
-            .getLinenames(type_list_E[select])
+            .getLineInfos(type_list_E[select])
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<LineNameResponse>() {
+            .subscribe(new Observer<LineInfoResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     addDisposable(d);
                 }
 
                 @Override
-                public void onNext(LineNameResponse response) {
+                public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
-                    adapter.setDataList(response.getLinenames());
+                    adapter.setDataList(response.getLineInfos());
                     swipeRefresh.setRefreshing(false);
                 }
 
