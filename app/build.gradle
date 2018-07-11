@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.mob.sdk'
 
 android {
     compileSdkVersion 27
@@ -16,22 +17,80 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildToolsVersion '27.0.3'
+
+    //为了解决部分第三方库重复打包了META-INF的问题(Leancloud)
+    packagingOptions{
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+MobSDK {
+    appKey "26b5786c3909c"
+    appSecret "7a1856615364cf66ead4d76019bee5ad"
+    SMSSDK {}
+    ShareSDK {
+        devInfo {
+            SinaWeibo {
+                appKey "568898243"
+                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+                callbackUri "http://www.sharesdk.cn"
+                shareByAppClient true
+            }
+            ShortMessage {}
+            Wechat {
+                appId "wx4868b35061f87885"
+                appSecret "64020361b8ec4c99936c0e3999a9f249"
+                userName "gh_afb25ac019c9"
+                path "pages/index/index.html?id=1"
+                withShareTicket true
+                miniprogramType 2
+                bypassApproval false
+            }
+            QQ {
+                appId "100371282"
+                appKey "aed9b0303e3ed1e27bae87c33761161d"
+                shareByAppClient true
+                bypassApproval false
+            }
+        }
+    }
+    UMSSDK {}
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.youth.banner:banner:1.4.10'
-
-
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
-
+    implementation "com.squareup.okhttp3:okhttp:3.10.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+
+    //自定义的view
+    implementation 'com.youth.banner:banner:1.4.10'
+    implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
+
+    // LeanCloud 基础包
+    implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
+    // LeanCloud 用户反馈包
+    implementation 'cn.leancloud.android:avoscloud-feedback:v4.6.4@aar'
+    // 推送与实时聊天需要的包
+    implementation ('cn.leancloud.android:avoscloud-push:v4.6.4@aar'){transitive = true}
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

@@ -25,16 +25,12 @@ public class RetrofitClient {
                     .registerTypeAdapter(Date.class,new GsonDateTypeAdapter())
                     .create();
 
-            OkHttpClient client = new OkHttpClient.Builder()
-                    //添加应用拦截器
-                    .build();
-
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .callbackExecutor(executor)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .client(client)
+                    .client(BusOkHttpClient.getInstance())
                     .build();
 
             busApi = retrofit.create(BusApi.class);

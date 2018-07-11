@@ -3,7 +3,6 @@ package com.sjtubus.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,6 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.avos.avoscloud.feedback.FeedbackAgent;
+import com.mob.ums.OperationCallback;
+import com.mob.ums.User;
+import com.mob.ums.gui.UMSGUI;
+import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.utils.GlideImageLoader;
 import com.youth.banner.Banner;
@@ -19,7 +23,7 @@ import com.youth.banner.Banner;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
     Toolbar mToolbar;
     Button reserve_btn;
@@ -35,19 +39,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         Banner banner = findViewById(R.id.banner);
         initView();
         loadImages();
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
     }
 
+    public int getContentViewId(){
+        return R.layout.activity_main;
+    }
+
     public void initView(){
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
-        mToolbar.setBackgroundColor(getResources().getColor(R.color.primary_red,null));
         mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
-        mToolbar.setNavigationIcon(R.drawable.person);
+        mToolbar.setNavigationIcon(R.mipmap.person);
 
         reserve_btn = findViewById(R.id.reserve_btn);
         record_btn = findViewById(R.id.record_btn);
@@ -55,7 +61,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         schedule_btn = findViewById(R.id.schedule_btn);
         map_btn = findViewById(R.id.map_btn);
         navigate_btn = findViewById(R.id.navigate_btn);
-
         reserve_btn.setOnClickListener(this);
         record_btn.setOnClickListener(this);
         position_btn.setOnClickListener(this);
@@ -70,15 +75,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         }
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                Snackbar.make(MainActivity.this.getWindow().getDecorView(), menuItem.getTitle() + " pressed", Snackbar.LENGTH_LONG).show();
-                menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
-                return true;
-            }
-        });
+        navigationView.setNavigationItemSelectedListener(this);
 
     }
     public void loadImages(){
@@ -91,11 +88,39 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()){
             case R.id.reserve_btn:
+                break;
             case R.id.record_btn:
+                break;
             case R.id.position_btn:
+                break;
             case R.id.schedule_btn:
+                Intent scheduleIntent = new Intent(MainActivity.this, LineActivity.class);
+                startActivity(scheduleIntent);
+                break;
             case R.id.map_btn:
+                break;
             case R.id.navigate_btn:
+                break;
+            case R.id.login_btn:
+//                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(loginIntent);
+                  UMSGUI.showLogin(new OperationCallback<User>(){
+                    public void onSuccess(User user) {
+
+                        // 登录成功的操作
+                    }
+
+                    public void onCancel() {
+                        // 执行取消的操作
+                    }
+
+                    public void onFailed(Throwable t) {
+                        // 提示错误信息
+                    }
+                });
+                break;
+            case R.id.register_btn:
+                break;
             default:
                 break;
         }
@@ -109,5 +134,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.navigation_item_message:
+                Intent message_intent = new Intent(MainActivity.this,MessageActivity.class);
+                startActivity(message_intent);
+                break;
+            case R.id.navigation_item_idea:
+                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
+                agent.startDefaultThreadActivity();
+                break;
+            default:
+                break;
+        }
+        return true;
     }
 }
