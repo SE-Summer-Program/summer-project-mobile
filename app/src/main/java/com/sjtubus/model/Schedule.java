@@ -39,15 +39,15 @@ public class Schedule {
         //在这里get不同类型的数据，并且赋值给scheduleTime
     }
 
-    public java.lang.String getLineName(){
+    public String getLineName(){
         return lineName;
     } //等同于getTitle
 
-    public java.lang.String getTypes(){
+    public String getTypes(){
         return types;
     }
 
-    public java.lang.String getSubtitle() { return subtitle; }
+    public String getSubtitle() { return subtitle; }
 
     public List<String> getScheduleTime(){ return scheduleTime; }
 

@@ -35,7 +35,6 @@ public class StationFragment extends BaseFragment {
             mFragment = new StationFragment();
         }
         mFragment.setLine(line_name);
-        mFragment.retrieveData();
         return mFragment;
     }
 
@@ -47,12 +46,11 @@ public class StationFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shift, container, false);
-
         RecyclerView mRecyclerView = view.findViewById(R.id.shift_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         mAdapter = new StationAdapter(mRecyclerView.getContext());
         mRecyclerView.setAdapter(mAdapter);
-
+        retrieveData();
         return view;
     }
 
