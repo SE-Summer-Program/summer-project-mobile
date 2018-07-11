@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:id="@+id/container">
+
+
+    <TextView
+        android:id="@+id/appointitem_shiftid"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="MXWD0745"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/appointitem_departureplace"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="始：闵行"/>
+        <TextView
+            android:id="@+id/appointitem_arriveplace"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="终：徐汇"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/appointitem_departuretime"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="07:45"/>
+        <TextView
+            android:id="@+id/appointitem_arrivetime"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="08:45"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/appointitem_remainseat"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="剩余5座"/>
+
+    <ImageView
+        android:id="@+id/appointitem_expand"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/more"/>
+
+    <!--<View-->
+        <!--android:id="@+id/parent_dashed_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2dp"-->
+        <!--android:layerType="software"-->
+        <!--android:layout_below="@id/appoint_parent"/>-->
+
+</LinearLayout>

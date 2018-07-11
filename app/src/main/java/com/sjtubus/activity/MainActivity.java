@@ -52,7 +52,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     public void initView(){
         mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
-        mToolbar.setTitleTextColor(getResources().getColor(R.color.primary_white,null));
         mToolbar.setNavigationIcon(R.mipmap.person);
 
         reserve_btn = findViewById(R.id.reserve_btn);
@@ -88,6 +87,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     public void onClick(View v){
         switch (v.getId()){
             case R.id.reserve_btn:
+                Intent reserveIntent = new Intent(MainActivity.this, AppointActivity.class);
+                startActivity(reserveIntent);
                 break;
             case R.id.record_btn:
                 break;

@@ -27,6 +27,7 @@
         <activity android:name=".activity.LineActivity"/>
         <activity android:name=".activity.MessageActivity"/>
         <activity android:name=".activity.ScheduleActivity"/>
+        <activity android:name=".activity.AppointActivity"/>
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
         </activity>
