@@ -2,31 +2,23 @@ package com.sjtubus.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Short4;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.sjtubus.R;
 
 import com.sjtubus.model.Schedule;
-import com.sjtubus.model.ScheduleAdapter;
+import com.sjtubus.activity.Adapter.ScheduleAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class ScheduleActivity extends BaseActivity implements View.OnClickListener{
@@ -35,7 +27,7 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
     RecyclerView recyclerView;
     LinearLayoutManager layoutManager;
     ScheduleAdapter adapter;
-    SwipeRefreshLayout swipeRefresh;
+    SwipeRefreshLayout swipeRefresh; //下拉刷新
     Calendar calendar;
 
     private List<Schedule> schedules = new ArrayList<>();
@@ -66,11 +58,9 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                putDialog();
+                showTypePickDlg();
             }
         });
-
-       // mToolbar.inflateMenu(R.menu.schedule_types);
 
         recyclerView = (RecyclerView)findViewById(R.id.recycle_schedule);
         layoutManager = new LinearLayoutManager(this);
@@ -91,8 +81,6 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
     }
 
     public void setAndShowSchedule(String type){
-        Toast.makeText(this, type, Toast.LENGTH_LONG).show();
-      //  Log.d("ScheduleActivity", type);
         Schedule MinToXu = new Schedule("闵行->徐汇", type);
         schedules.add(MinToXu);
         Schedule XuToMin = new Schedule("徐汇->闵行", type);
@@ -109,8 +97,7 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
 
     public String getTypes(){
         calendar = Calendar.getInstance();
-        Toast.makeText(this, calendar.toString(), Toast.LENGTH_SHORT).show();
-     //   date = calendar.getTime();
+
         boolean isWeekendFlag = isWeekend(calendar);
         boolean isHoildayFlag = isHoilday(calendar);
         if (!isHoildayFlag && !isWeekendFlag){
@@ -158,45 +145,35 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.schedule_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-    public void putDialog() {
-//        switch (item.getItemId()){
-//
-//            case R.id.setting:
-                AlertDialog.Builder builder = new AlertDialog.Builder((ScheduleActivity.this));
-                builder.setTitle("选择时间段");
-                builder.setIcon(R.drawable.type);
-                builder.setSingleChoiceItems(type_list, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                builder.setCancelable(false);
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String type = type_list[which];
-                        Toast.makeText(ScheduleActivity.this, type, Toast.LENGTH_SHORT).show();
-                        setAndShowSchedule(type_list_E[which]);
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+    public void showTypePickDlg() {
+        AlertDialog.Builder builder = new AlertDialog.Builder((ScheduleActivity.this));
+        builder.setTitle("选择时间段");
+         builder.setIcon(R.drawable.type);
 
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-//                break;
-//        }
-//        return true;
+        builder.setSingleChoiceItems(type_list, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String type = type_list[which];
+                Toast.makeText(ScheduleActivity.this, type, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ScheduleActivity.this, "确定", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ScheduleActivity.this, "取消", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     public void refreshSchedule(){
@@ -219,4 +196,5 @@ public class ScheduleActivity extends BaseActivity implements View.OnClickListen
             }
         }).start();
     }
+
 }

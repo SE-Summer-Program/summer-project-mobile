@@ -1,6 +1,7 @@
-package com.sjtubus.model;
+package com.sjtubus.activity.Adapter;
 
 import com.sjtubus.R;
+import com.sjtubus.model.Schedule;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -51,6 +52,9 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.ViewHo
         holder.scheduleTitle.setText(schedule.getLineName());
         holder.scheduleSubTitle.setText(schedule.getSubtitle());
         holder.scheduleDetail.setText(schedule.getDetail()); //这个不对的
+
+//        final String contact = contacts[position];
+//        holder.bind(position, contact);
     }
 
     @Override

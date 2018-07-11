@@ -23,7 +23,7 @@ public class Schedule {
     private List<String> scheduleComment = new ArrayList<>();
 
     public Schedule(String lineName, String types){
-        initScheduleTime(types);
+       // initScheduleTime(types);
 
         this.lineName = lineName;
         this.types = types;
@@ -39,6 +39,8 @@ public class Schedule {
         this.scheduleComment.add("none");
         this.scheduleComment.add("none");
         this.scheduleComment.add("none");
+
+
 
         //在这里get不同类型的数据，并且赋值给scheduleTime
     }
@@ -56,10 +58,17 @@ public class Schedule {
     public List<String> getSchedule(){ return scheduleTime; }
 
     public String getDetail() {
+        scheduleTime.add("8:00");
+        scheduleTime.add("9:00");
+        scheduleTime.add("20:00");
+
+        this.scheduleComment.add("none");
+        this.scheduleComment.add("none");
+        this.scheduleComment.add("none");
+
         String detail = "123";
-        for (int i = 0; i < scheduleTime.size(); i++){
-            detail.concat(scheduleTime.get(i));
-            detail.concat(scheduleComment.get(i));
+        for (String item:scheduleTime){
+            detail.concat(item);
             detail.concat("\n");
         }
         return detail;
