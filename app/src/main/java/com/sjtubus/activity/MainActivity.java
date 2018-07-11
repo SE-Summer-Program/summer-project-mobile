@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             case R.id.login_btn:
 //                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
 //                startActivity(loginIntent);
-                UMSGUI.showLogin(new OperationCallback<User>(){
+                  UMSGUI.showLogin(new OperationCallback<User>(){
                     public void onSuccess(User user) {
 
                         // 登录成功的操作
