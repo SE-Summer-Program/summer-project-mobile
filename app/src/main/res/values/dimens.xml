@@ -36,4 +36,14 @@
     <dimen name="editCornerSize">5dp</dimen>
     <dimen name="smallEditHeight">40dp</dimen>
     <dimen name="normalEditHeight">50dp</dimen>
+
+    <!--textview尺寸-->
+    <dimen name="xxxsmallTextSize">5dp</dimen>
+    <dimen name="xxsmallTextSize">10dp</dimen>
+    <dimen name="xsmallTextSize">15dp</dimen>
+    <dimen name="normalTextSize">20dp</dimen>
+    <dimen name="bigTextSize">25dp</dimen>
+    <dimen name="xbigTextSize">30dp</dimen>
+    <dimen name="xxbigTextSize">40dp</dimen>
+    <dimen name="xxxbigTextSize">50dp</dimen>
 </resources>

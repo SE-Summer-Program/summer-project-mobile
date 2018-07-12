@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     public void onClick(View v){
         switch (v.getId()){
             case R.id.reserve_btn:
-                Intent reserveIntent = new Intent(MainActivity.this, AppointActivity.class);
+                Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
                 break;
             case R.id.record_btn:

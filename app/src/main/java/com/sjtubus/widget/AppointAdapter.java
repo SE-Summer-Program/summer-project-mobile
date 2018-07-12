@@ -33,13 +33,13 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
         View view = null;
         switch (viewType) {
             case AppointDataBean.PARENT_ITEM:
-                view = layoutInflater.inflate(R.layout.appoint_parent_item, parent, false);
+                view = layoutInflater.inflate(R.layout.item_appoint_parent, parent, false);
                 return new AppointParentViewHolder(context, view);
             case AppointDataBean.CHILD_ITEM:
-                view = layoutInflater.inflate(R.layout.appoint_child_item, parent, false);
+                view = layoutInflater.inflate(R.layout.item_appoint_child, parent, false);
                 return new AppointChildViewHolder(context, view);
             default:
-                view = layoutInflater.inflate(R.layout.appoint_parent_item, parent, false);
+                view = layoutInflater.inflate(R.layout.item_appoint_parent, parent, false);
                 return new AppointParentViewHolder(context, view);
         }
     }
