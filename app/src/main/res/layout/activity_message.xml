@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:layout_marginTop="41dp">
 
@@ -19,11 +20,10 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
+            style="@style/toobar_base"
             android:id="@+id/toolbar_schedule"
-            android:layout_width="match_parent"
-            android:paddingTop="@dimen/toolbar_padding_top"
-            android:background="@color/primary_red"
-            android:layout_height="@dimen/toolbar_height">
+            app:titleTextColor="@color/primary_white"
+            android:layout_width="match_parent">
 
             <TextView
                 android:layout_width="wrap_content"

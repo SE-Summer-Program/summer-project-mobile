@@ -8,9 +8,9 @@
     android:clipToPadding="true">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_login"
-        android:layout_width="match_parent"
+        android:id="@+id/toolbar_register"
         style="@style/toobar_base"
+        android:layout_width="match_parent"
         app:titleTextColor="@color/primary_white"
         app:navigationIcon="@mipmap/icon_back_128">
 
@@ -20,13 +20,13 @@
             android:layout_gravity="center"
             android:textColor="@color/primary_white"
             android:textSize="20sp"
-            android:text="@string/login"/>
+            android:text="@string/register"/>
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         android:padding="@dimen/largePadding">
 
@@ -34,7 +34,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:src="@mipmap/icon"/>
 
         <com.sjtubus.widget.ClearEditText
@@ -53,19 +53,53 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/icon_lock_128"
-            android:hint="请输入登录密码"
-            android:inputType="textPassword"/>
+            android:hint="请输入6-16位密码"
+            android:inputType="textPassword"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/verify_code"
+                android:gravity="bottom"
+                android:textColor="@color/primary_red"
+                android:padding="@dimen/basePadding"
+                android:layout_gravity="bottom"
+                android:textSize="@dimen/middleText"/>
+            <com.sjtubus.widget.ClearEditText
+                android:id="@+id/verify_edit"
+                style="@style/editText_base"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:hint="请输入验证码"
+                android:inputType="textPassword"
+                />
+            <Button
+                android:id="@+id/verify_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/verify"
+                android:textSize="@dimen/smallText"
+                android:background="@color/primary_red"
+                android:textColor="@color/primary_white"
+                android:padding="2dp"/>
+        </LinearLayout>
     </LinearLayout>
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/register_btn"
         style="@style/bigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:layout_marginTop="30dp"
         android:background="@color/primary_red"
-        android:text="@string/login"
+        android:text="确认并注册"
         />
 
     <LinearLayout
@@ -78,28 +112,17 @@
         >
 
         <TextView
-            android:id="@+id/txt_register"
+            android:id="@+id/txt_protocol"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/register"
+            android:text="@string/protocol"
             android:textColor="@color/primary_red"
             android:textSize="14sp"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end"
-            android:text="@string/forget_password"
-            android:textColor="@color/primary_red"
-            android:textSize="14sp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            />
     </LinearLayout>
 
 </LinearLayout>

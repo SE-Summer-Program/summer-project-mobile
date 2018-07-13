@@ -1,12 +1,16 @@
 package com.sjtubus.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 
 import com.sjtubus.App;
@@ -24,7 +28,7 @@ import okhttp3.HttpUrl;
  * Created by Allen on 2018/7/3.
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements View.OnClickListener{
     WebView webview;
 
     String busUrlString, loginUrl;
@@ -32,13 +36,36 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        initViews();
         busUrlString = getString(R.string.sjtubus_host);
         loginUrl = getString(R.string.sjtubus_host) + "/user/login";
-        //initWebview();
+    }
+
+    public void initViews(){
+        TextView register_btn = findViewById(R.id.txt_register);
+        register_btn.setOnClickListener(this);
+        Toolbar toolbar = findViewById(R.id.toolbar_login);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     public int getContentViewId(){
         return R.layout.activity_login;
+    }
+
+    @Override
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.txt_register:
+                Intent registerIntent = new Intent(LoginActivity.this,RegisterActivity.class);
+                startActivity(registerIntent);
+                break;
+
+        }
     }
 
 //    private void initWebview() {

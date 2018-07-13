@@ -12,9 +12,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
-import com.mob.ums.OperationCallback;
-import com.mob.ums.User;
-import com.mob.ums.gui.UMSGUI;
 import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.utils.GlideImageLoader;
@@ -102,25 +99,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 break;
             case R.id.navigate_btn:
                 break;
-            case R.id.login_btn:
-//                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
-//                startActivity(loginIntent);
-                  UMSGUI.showLogin(new OperationCallback<User>(){
-                    public void onSuccess(User user) {
-
-                        // 登录成功的操作
-                    }
-
-                    public void onCancel() {
-                        // 执行取消的操作
-                    }
-
-                    public void onFailed(Throwable t) {
-                        // 提示错误信息
-                    }
-                });
+            case R.id.login_txt:
+                Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
+//              UMSGUI.showLogin(new OperationCallback<User>(){
+//                    public void onSuccess(User user) {
+//
+//                        // 登录成功的操作
+//                    }
+//
+//                    public void onCancel() {
+//                        // 执行取消的操作
+//                    }
+//
+//                    public void onFailed(Throwable t) {
+//                        // 提示错误信息
+//                    }
+//                });
                 break;
-            case R.id.register_btn:
+            case R.id.register_txt:
+                Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                startActivity(registerIntent);
                 break;
             default:
                 break;

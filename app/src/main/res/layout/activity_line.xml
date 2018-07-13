@@ -8,11 +8,10 @@
     tools:context=".activity.LineActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_schedule"
+        android:id="@+id/toolbar_line"
+        style="@style/toobar_base"
         android:layout_width="match_parent"
-        android:background="@color/primary_red"
-        android:paddingTop="@dimen/toolbar_padding_top"
-        android:layout_height="@dimen/toolbar_height">
+        app:titleTextColor="@color/primary_white">
 
         <TextView
             android:layout_width="wrap_content"

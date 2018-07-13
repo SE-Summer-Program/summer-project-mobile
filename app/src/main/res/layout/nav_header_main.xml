@@ -24,7 +24,7 @@
         android:gravity="center"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/login_btn"
+            android:id="@+id/login_txt"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -35,9 +35,9 @@
             android:clickable="true"
             android:onClick="onClick"
             android:textColor="@color/primary_white"
-            android:paddingEnd="8dp"/>
+            android:paddingEnd="12dp"/>
         <TextView
-            android:id="@+id/register_btn"
+            android:id="@+id/register_txt"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:focusable="true"
             android:clickable="true"
             android:onClick="onClick"
-            android:paddingEnd="8dp"/>
+            android:paddingStart="12dp"/>
     </LinearLayout>
 
 </LinearLayout>

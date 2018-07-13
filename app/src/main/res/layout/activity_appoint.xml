@@ -7,12 +7,9 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_appointment"
+        style="@style/toobar_base"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/primary_red"
-        app:titleTextColor="@color/primary_white"
-        app:popupTheme="@style/Theme.AppCompat.Light"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        app:titleTextColor="@color/primary_white">
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,7 +28,7 @@
         android:textSize="20dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:padding="@dimen/text_padding"/>
+        android:padding="@dimen/textPadding"/>
 
     <LinearLayout
         android:id="@+id/appoint_messagebar"
@@ -68,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:paddingTop="@dimen/text_padding">
+        android:paddingTop="@dimen/textPadding">
     </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

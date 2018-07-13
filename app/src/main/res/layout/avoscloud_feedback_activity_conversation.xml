@@ -7,7 +7,7 @@
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/feedback_toolbar"
-        android:paddingTop="@dimen/toolbar_padding_top"
+        android:paddingTop="@dimen/toolbarPaddingTop"
         android:background="@color/primary_red"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height">

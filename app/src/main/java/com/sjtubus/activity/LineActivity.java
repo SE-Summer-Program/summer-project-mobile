@@ -59,7 +59,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     }
 
     public void initViews(){
-        mToolbar = findViewById(R.id.toolbar_schedule);
+        mToolbar = findViewById(R.id.toolbar_line);
         //setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.menu);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {

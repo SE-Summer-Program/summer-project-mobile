@@ -1,6 +1,7 @@
 package com.sjtubus.activity;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -17,9 +18,9 @@ import io.reactivex.disposables.Disposable;
 public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(getContentViewId());
         App.translucentStatusBar(this,true);
-        //App.setStatusBarColor(this, R.color.primary_red);
     }
 
     private CompositeDisposable compositeDisposable;

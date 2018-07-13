@@ -35,11 +35,21 @@
     <style name="editText_base">
         <item name="android:textSize">16sp</item>
         <item name="android:padding">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:textCursorDrawable">@null</item>
         <item name="android:minHeight">@dimen/normalButtonHeight</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:textColorHint">@color/primary_white</item>
+        <item name="android:textColor">@color/primary_red</item>
+        <item name="android:textColorHint">@color/primary_gray</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:background">@null</item>
+        <item name="colorControlNormal">@color/primary_gray</item>
+        <item name="colorControlActivated">@color/primary_red</item>
+    </style>
+
+    <style name="toobar_base">
+        <item name="android:paddingTop">@dimen/toolbarPaddingTop</item>
+        <item name="android:background">@color/primary_red</item>
+        <item name="android:layout_height">@dimen/toolbar_height</item>
     </style>
 
     <style name="bigButton">
