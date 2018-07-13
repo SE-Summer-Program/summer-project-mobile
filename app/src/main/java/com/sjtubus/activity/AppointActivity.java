@@ -24,7 +24,7 @@ import java.util.List;
 
 public class AppointActivity extends BaseActivity implements View.OnClickListener{
 
-    private Toolbar toolbar;
+    private Toolbar mToolbar;
     private RecyclerView recyclerView;
     private AppointDataBean appointDataBean;
     private List<AppointDataBean> appointDataBeanList;
@@ -53,12 +53,12 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         departure_place = intent.getStringExtra("departure_place");
         arrive_place = intent.getStringExtra("arrive_place");
         date = intent.getStringExtra("singleway_date");
-        toastUtils.showShort(departure_place);
+        //toastUtils.showShort(departure_place);
     }
 
     private void initView(){
-        toolbar = findViewById(R.id.toolbar_appointment);
-        toolbar.setTitle("");
+        mToolbar = findViewById(R.id.toolbar_appointment);
+        mToolbar.setTitle("");
 
         recyclerView = (RecyclerView)findViewById(R.id.appoint_recycle);
         initData();
