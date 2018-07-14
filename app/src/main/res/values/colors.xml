@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="primary_red">#d81e06</color>
     <color name="primary_white">#ffffff</color>
-    <color name="primary_gray">#bfbfbf</color>
+    <color name="primary_gray">#cdcdcd</color>
     <color name="primary_black">#000000</color>
-    <color name="light_grey">#efefef</color>
+    <color name="light_gray">#e6e6e6</color>
+    <color name="dark_gray">#bfbfbf</color>
 </resources>
