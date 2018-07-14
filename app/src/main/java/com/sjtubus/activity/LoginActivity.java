@@ -4,46 +4,63 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
 import com.sjtubus.App;
 import com.sjtubus.R;
+import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.network.cookie.BusCookieJar;
+import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Cookie;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
+import okhttp3.RequestBody;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Allen on 2018/7/3.
  */
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
-    WebView webview;
-
-    String busUrlString, loginUrl;
+    EditText phone_edit,password_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         initViews();
-        busUrlString = getString(R.string.sjtubus_host);
-        loginUrl = getString(R.string.sjtubus_host) + "/user/login";
     }
 
     public void initViews(){
-        TextView register_btn = findViewById(R.id.txt_register);
-        register_btn.setOnClickListener(this);
+        TextView register_txt = findViewById(R.id.txt_register);
+        Button login_btn = findViewById(R.id.btn_login);
+        TextView jaccount_btn = findViewById(R.id.jaccount_btn);
+        phone_edit = findViewById(R.id.login_phone_edit);
+        password_edit =findViewById(R.id.login_pwd_edit);
+        jaccount_btn.setOnClickListener(this);
+        login_btn.setOnClickListener(this);
+        register_txt.setOnClickListener(this);
         Toolbar toolbar = findViewById(R.id.toolbar_login);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,87 +81,61 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 Intent registerIntent = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivity(registerIntent);
                 break;
-
+            case R.id.btn_login:
+                userLogin();
+                break;
+            case R.id.jaccount_btn:
+                Intent jaccountIntent = new Intent(LoginActivity.this,JaccountActivity.class);
+                startActivity(jaccountIntent);
+                break;
         }
     }
 
-//    private void initWebview() {
-//        webview.getSettings().setJavaScriptEnabled(true);
-//        webview.getSettings().setUserAgentString(((App) App.getInstance()).getUserAgent());
-//        CookieManager cookieManager = CookieManager.getInstance();
-//        cookieManager.removeAllCookies(new ValueCallback<Boolean>() {
-//            @Override
-//            public void onReceiveValue(Boolean value) {
-//
-//            }
-//        });
-//        Schedule cookieString = loadCookies();
-//        cookieManager.setCookie(busUrlString, cookieString);
-//        webview.setWebViewClient(new LoginWebClient());
-//        webview.loadUrl(loginUrl);
-//    }
-//
-//    private Schedule loadCookies() {
-//        BusCookieJar cookieJar = BusCookieJar.getInstance();
-//        Schedule cookies = cookieJar.getCookieString(HttpUrl.parse(busUrlString));
-//        return cookies;
-//    }
-//
-//    class LoginWebClient extends WebViewClient {
-//
-//        @Override
-//        public void onPageStarted(WebView view, Schedule url, Bitmap favicon) {
-//            super.onPageStarted(view, url, favicon);
-//            Log.d("LoginActivity", "Start loading: " + url);
-//
-//            List<Schedule> successList = Arrays.asList(
-//                    busUrlString,
-//                    busUrlString + '/',
-//                    busUrlString + "/index.html"
-//            );
-//
-//            if (!successList.contains(url)) {
-//                return;
-//            }
-//
-//            view.stopLoading();
-//            saveCookies();
-//            loadData();
-//        }
-//
-//        private void saveCookies() {
-//            CookieManager cookieManager = CookieManager.getInstance();
-//            BusCookieJar cookieJar = BusCookieJar.getInstance();
-//
-//            HttpUrl busUrl = HttpUrl.parse(busUrlString);
-//
-//            Schedule[] cookieStrings = cookieManager.getCookie(busUrlString).split(";");
-//
-//            List<Cookie> cookies = new ArrayList<>(cookieStrings.length);
-//            for (Schedule cookieString : cookieStrings) {
-//                Cookie cookie = Cookie.parse(busUrl, cookieString);
-//                cookies.add(cookie);
-//            }
-//            cookieJar.clear(); // prevent duplicated cookie names
-//            cookieJar.saveFromResponse(busUrl, cookies);
-//        }
-//
-//        private void loadData() {
-////            addSubscription(RetrofitClient.getTongquApi()
-////                    .getProfile()
-////                    .flatMap(NetworkErrorHandler.tongquErrorFilter)
-////                    .subscribeOn(Schedulers.io())
-////                    .observeOn(AndroidSchedulers.mainThread())
-////                    .subscribe(
-////                            response -> {
-////                                User user = ((UserProfileResponse) response).getResult();
-////                                UserManager.getInstance().login(user);
-////                                ToastUtils.showLong(R.string.login_success);
-////                                finish();
-////                            },
-////                            NetworkErrorHandler.basicErrorHandler
-////                    ));
-//        }
-//    }
+    public void userLogin(){
+        String phone = phone_edit.getText().toString().trim();
+        String password = password_edit.getText().toString().trim();
+        if(TextUtils.isEmpty(phone)){
+            ToastUtils.showShort("手机号码为空!");
+            return;
+        }
+        if(TextUtils.isEmpty(password)){
+            ToastUtils.showShort("密码不能为空!");
+        }
+        RequestBody requestBody = new FormBody.Builder()
+                .add("password", password)
+                .add("phone",phone).build();
+        //登录
+        RetrofitClient.getBusApi()
+                .login(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HttpResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(HttpResponse response) {
+                        if(response.getError()==0){
+                            //更新用户信息
+                            UserManager.getInstance().refresh();
+                            finish();
+                        }
+                        ToastUtils.showShort(response.getMsg());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                        //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
 }
 

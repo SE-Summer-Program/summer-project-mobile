@@ -14,7 +14,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String BASE_URL="http://106.14.181.49:8080/";
+    private static final String BASE_URL = "http://106.14.181.49:8080/";
 
     private static BusApi busApi;
 

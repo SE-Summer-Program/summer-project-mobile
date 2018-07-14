@@ -3,7 +3,6 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/navigation_item_person"
-            android:checked="true"
             android:icon="@mipmap/person_info"
             android:title="@string/person_info" />
         <item

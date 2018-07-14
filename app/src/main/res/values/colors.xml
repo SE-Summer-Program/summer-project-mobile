@@ -6,6 +6,9 @@
     <color name="primary_red">#d81e06</color>
     <color name="shallow_red">#FF3030</color>
     <color name="primary_white">#ffffff</color>
+    <color name="shallow_white">#FAFAFA</color>
     <color name="primary_gray">#bfbfbf</color>
+    <color name="shallow_gray">#F2F2F2</color>
     <color name="primary_black">#000000</color>
+    <color name="primary_blue">#0000CD</color>
 </resources>

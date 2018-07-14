@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SJTUBus</string>
-    <string name="sjtubus_host">localhost:8080</string>
+    <string name="sjtubus_host">http://106.14.181.49:8080</string>
     <string name="schedule_type1">在校期-周一到周五</string>
     <string name="schedule_type2">在校期-双休日、节假日</string>
     <string name="schedule_type3">寒暑假-周一到周五</string>
@@ -20,4 +20,13 @@
     <string name="title_schedule">班次信息</string>
     <string name="title_message">我的消息</string>
     <string name="message_none">无消息</string>
+    <string name="jaccount">jaccount统一身份认证</string>
+    <string name="title_personinfo">个人信息</string>
+    <string name="username">用户名</string>
+    <string name="phone">手机号</string>
+    <string name="credit">信用积分</string>
+    <string name="role">身份</string>
+    <string name="realname">真实姓名</string>
+    <string name="logout">退出登录</string>
+    <string name="studentnum">学号/工号</string>
 </resources>

@@ -4,25 +4,40 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.sjtubus.R;
+import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.model.response.LineInfoResponse;
+import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okio.BufferedSink;
+
+import static android.content.ContentValues.TAG;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
 
     private Button register_btn,verify_btn;
-    private EditText phonenum_edit, password_edit,verify_edit;
-    private String phoneNum,password;
+    private EditText username_edit,phonenum_edit, password_edit,verify_edit;
+    private String username,phoneNum,password;
     private boolean isVerifying = false;
 
     private EventHandler eventHandler = new EventHandler() {
@@ -37,24 +52,18 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     String phone = (String) mData.get("phone");//返回用户注册的手机号
 
                     if (phone.equals(phoneNum)) {
-                        runOnUiThread(new Runnable() {//更改ui的操作要放在主线程，实际可以发送hander
-                            @Override
-                            public void run() {
-                                ToastUtils.showShort("通过验证");
-                            }
-                        });
+                        userRegister();
                     } else {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtils.showShort("验证失败");
+                                ToastUtils.showShort("验证码不正确!");
                             }
                         });
                     }
                 } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     //获取验证码成功
                     changeBtnGetCode();
-//                    ToastUtils.showShort("发送成功:" + phoneNum);
                 } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
                     //返回支持发送验证码的国家列表
                 }
@@ -77,9 +86,47 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         initViews();
     }
 
+    public void userRegister() {
+        RequestBody requestBody = new FormBody.Builder()
+                .add("token","dks3824LHEBF92IUD2RG709")
+                .add("username", username)
+                .add("password", password)
+                .add("phone",phoneNum).build();
+        RetrofitClient.getBusApi()
+                .register(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HttpResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(HttpResponse response) {
+                        if(response.getError()==0){
+                            ToastUtils.showShort(response.getMsg());
+                            finish();
+                        }
+                        ToastUtils.showShort(response.getMsg());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                        //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
 
     public void initViews(){
         Toolbar toolbar = findViewById(R.id.toolbar_register);
+        username_edit = findViewById(R.id.username_edit);
         password_edit = findViewById(R.id.pwd_edit);
         phonenum_edit = findViewById(R.id.phone_edit);
         verify_edit = findViewById(R.id.verify_edit);
@@ -126,12 +173,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     public void testVerifyCode() {
         String verify_code = verify_edit.getText().toString().trim();
+        username = username_edit.getText().toString().trim();
         password = password_edit.getText().toString().trim();
-        if(TextUtils.isEmpty(password)){
-            ToastUtils.showShort("密码不能为空！");
+        if(TextUtils.isEmpty(username)){
+            ToastUtils.showShort("用户名不能为空!");
+        }
+        else if(TextUtils.isEmpty(password)){
+            ToastUtils.showShort("密码不能为空!");
         }
         else if (TextUtils.isEmpty(verify_code)) {
-            ToastUtils.showShort("验证码不能为空");
+            ToastUtils.showShort("验证码不能为空!");
         }else {
             //提交短信验证码
             SMSSDK.submitVerificationCode("86", phoneNum, verify_code);//国家号，手机号码，验证码
@@ -149,8 +200,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 int i = 60;
                 if (!isVerifying) {
                     isVerifying = true;
-                    verify_btn.setBackgroundColor(Color.parseColor("#949494"));
-                    verify_btn.setClickable(false);
                     while (i > 0) {
                         i--;
                         //如果活动为空
@@ -162,6 +211,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             @Override
                             public void run() {
                                 verify_btn.setText(index+"s后重新获取");
+                                verify_btn.setBackgroundColor(Color.parseColor("#949494"));
+                                verify_btn.setClickable(false);
                             }
                         });
                         //睡一秒

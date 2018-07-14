@@ -4,6 +4,7 @@ import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.model.response.LoginResponse;
 import com.sjtubus.model.response.MessageResponse;
+import com.sjtubus.model.response.ProfileResponse;
 import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.model.response.StationResponse;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -23,16 +25,19 @@ public interface BusApi {
     @GET("bus/buses")
     Observable<List<Object>> getBuses();
 
-    @POST("/login")
-    Observable<LoginResponse> login(RequestBody info);
+    @POST("account/login")
+    Observable<LoginResponse> login(@Body RequestBody info);
 
-    @POST("/logout")
+    @POST("account/logout")
     Observable<HttpResponse> logout();
 
-    @POST("/register")
-    Observable<HttpResponse> register(RequestBody info);
+    @POST("account/register")
+    Observable<HttpResponse> register(@Body RequestBody info);
 
-    @GET("/messages")
+    @GET("account/profile")
+    Observable<ProfileResponse> getProfile();
+
+    @GET("account/messages")
     Observable<MessageResponse> getMessages();
 
     @GET("/shift/schedule")

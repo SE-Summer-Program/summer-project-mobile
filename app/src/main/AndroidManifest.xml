@@ -30,6 +30,8 @@
         <activity android:name=".activity.ScheduleActivity"/>
         <activity android:name=".activity.AppointActivity"/>
         <activity android:name=".activity.RegisterActivity"/>
+        <activity android:name=".activity.JaccountActivity"/>
+        <activity android:name=".activity.PersonInfoActivity" />
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
         </activity>
