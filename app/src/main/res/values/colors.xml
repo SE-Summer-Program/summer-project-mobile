@@ -7,4 +7,5 @@
     <color name="primary_white">#ffffff</color>
     <color name="primary_gray">#bfbfbf</color>
     <color name="primary_black">#000000</color>
+    <color name="light_grey">#efefef</color>
 </resources>

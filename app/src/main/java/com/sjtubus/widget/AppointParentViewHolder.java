@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.os.Build;
 
 import com.sjtubus.R;
-import com.sjtubus.model.AppointDataBean;
+import com.sjtubus.model.Appointment;
 
 public class AppointParentViewHolder extends BaseViewHolder{
 
@@ -34,7 +34,7 @@ public class AppointParentViewHolder extends BaseViewHolder{
         this.view = view;
     }
 
-    public void bindView(final AppointDataBean bean, final int pos, final AppointItemClickListener appointItemClickListener){
+    public void bindView(final Appointment bean, final int pos, final AppointItemClickListener appointItemClickListener){
         container = (LinearLayout) view.findViewById(R.id.container);
 
         shiftid = (TextView)view.findViewById(R.id.appointitem_shiftid);

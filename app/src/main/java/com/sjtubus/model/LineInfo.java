@@ -33,9 +33,7 @@ public class LineInfo {
         this.lineName = lineName;
     }
 
-    public String getFirstTime() {
-        return firstTime;
-    }
+    public String getFirstTime() { return firstTime; }
 
     public void setFirstTime(String firstTime) {
         this.firstTime = firstTime;

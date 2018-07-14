@@ -1,12 +1,9 @@
 package com.sjtubus.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
-import android.graphics.YuvImage;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,22 +14,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointActivity;
-import com.sjtubus.activity.AppointNaviActivity;
-import com.sjtubus.activity.LineActivity;
-import com.sjtubus.activity.MainActivity;
 import com.sjtubus.utils.ToastUtils;
 
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class AppointFragment extends BaseFragment {
+import static android.app.Activity.RESULT_OK;
+
+public class AppointNaviFragment extends BaseFragment {
 
     private Toolbar toolbar;
     private TextView singleway;
@@ -47,9 +39,9 @@ public class AppointFragment extends BaseFragment {
     private String[] station_list = {"闵行校区", "徐汇校区", "七宝校区"};
     private int year, month, day;
 
-    public static AppointFragment getInstance() {
-        AppointFragment appointFragment = new AppointFragment();
-        return appointFragment;
+    public static AppointNaviFragment getInstance() {
+        AppointNaviFragment appointNaviFragment = new AppointNaviFragment();
+        return appointNaviFragment;
     }
 
     @Override
@@ -73,11 +65,6 @@ public class AppointFragment extends BaseFragment {
         singleway_date.setOnClickListener(new MyListener());
         doubleway_date.setOnClickListener(new MyListener());
         search_btn.setOnClickListener(new MyListener());
-
-//        departure_place.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG);
-//        arrive_place.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG);
-//        singleway_date.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG);
-//        doubleway_date.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG);
 
         getConrrentDay();
         singleway_date.setText(year+"年"+month+"月"+day+"日");
@@ -110,13 +97,11 @@ public class AppointFragment extends BaseFragment {
                 case R.id.appoint_singlewaydate:
                 case R.id.appoint_doublewaydate:
                     final TextView textView_date = (TextView) v.findViewById(v.getId());
-//                    getConrrentDay();
-//                    textView_date.setText(year+"年"+month+"月"+day+"日");
 
                     new DatePickerDialog(Objects.requireNonNull(getActivity()), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
-                            textView_date.setText(year_choose+"年"+(month_choose+1)+"月"+dayOfMonth_choose+"日");
+                            textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
                             year = year_choose;
                             month = month_choose+1;
                             day = dayOfMonth_choose;
@@ -125,6 +110,10 @@ public class AppointFragment extends BaseFragment {
                     break;
 
                 case R.id.appoint_searchbtn:
+                    if (departure_place.getText() == arrive_place.getText()){
+                        toastUtils.showShort("起点和终点不能相同！");
+                        break;
+                    }
                     String data1 = (String) departure_place.getText();
                     String data2 = (String) arrive_place.getText();
                     String data3 = (String) singleway_date.getText();
@@ -132,12 +121,27 @@ public class AppointFragment extends BaseFragment {
                     appointIntent.putExtra("departure_place", data1);
                     appointIntent.putExtra("arrive_place", data2);
                     appointIntent.putExtra("singleway_date", data3);
-                    startActivity(appointIntent);
+                    startActivityForResult(appointIntent, 1);
                     break;
             }
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if (resultCode == RESULT_OK){
+                   //Log.d("appointfragment", data.getStringExtra("singleway_date"));
+                    toastUtils.showShort(data.getStringExtra("singleway_date"));
+                    departure_place.setText(data.getStringExtra("departure_place"));
+                    arrive_place.setText(data.getStringExtra("arrive_place"));
+                    singleway_date.setText(data.getStringExtra("singleway_date"));
+                }
+            default:
+                break;
+        }
+    }
 
     private void getConrrentDay() {
         Calendar calendar = Calendar.getInstance();

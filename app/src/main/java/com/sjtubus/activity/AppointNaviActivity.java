@@ -4,16 +4,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
 
 import com.sjtubus.R;
-import com.sjtubus.fragment.AppointFragment;
-import com.sjtubus.utils.GlideImageLoader;
+import com.sjtubus.fragment.AppointNaviFragment;
 import com.sjtubus.widget.AppointPagerAdapter;
-import com.sjtubus.widget.SchedulePagerAdapter;
-import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +77,7 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
     private void initFragments(){
         mFragment = new ArrayList<>();
         for (String title : mTitles) {
-            mFragment.add(AppointFragment.getInstance());
+            mFragment.add(AppointNaviFragment.getInstance());
         }
     }
 

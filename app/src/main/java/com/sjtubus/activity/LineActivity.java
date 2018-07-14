@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 
 import com.sjtubus.R;
 
+import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.widget.LineAdapter;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
@@ -42,6 +43,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     LineAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
     Calendar calendar;
+    StringCalendarUtils stringCalendarUtils;
     MyDialogListener dialogListener = new MyDialogListener();
     private int select = 0;
 
@@ -207,12 +209,11 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         }
     }
 
-
     public String getTypes(){
         calendar = Calendar.getInstance();
         //date = calendar.getTime();
-        boolean isWeekendFlag = isWeekend(calendar);
-        boolean isHoildayFlag = isHoilday(calendar);
+        boolean isWeekendFlag = stringCalendarUtils.isWeekend(calendar);
+        boolean isHoildayFlag = stringCalendarUtils.isHoilday(calendar);
         if (!isHoildayFlag && !isWeekendFlag){
             return "NormalWorkday";
         }
@@ -225,15 +226,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         else{
             return "HoildayWeekend";
         }
-    }
-    public boolean isWeekend(Calendar calendar){
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-        return (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
-    }
-    public boolean isHoilday(Calendar calendar){
-        int month = calendar.get(Calendar.MONTH);
-        return (month == Calendar.FEBRUARY || month == Calendar.JUNE
-                || month == Calendar.JULY);
     }
 
     public void showDatePickDlg(){
