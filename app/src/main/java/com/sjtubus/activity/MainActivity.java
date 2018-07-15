@@ -99,9 +99,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             case R.id.map_btn: {
                 Intent intent = new Intent(MainActivity.this,MapActivity.class);
                 startActivity(intent);
-            }
-            case R.id.navigate_btn:
                 break;
+            }
+            case R.id.navigate_btn:{
+                Intent intent = new Intent(MainActivity.this,RouteActivity.class);
+                startActivity(intent);
+                break;
+            }
             default:
                 break;
         }
