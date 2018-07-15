@@ -107,4 +107,13 @@ public class JaccountActivity extends BaseActivity {
             cookieJar.saveFromResponse(authUrl, cookies);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (auth_webview.canGoBack()) {
+            auth_webview.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
