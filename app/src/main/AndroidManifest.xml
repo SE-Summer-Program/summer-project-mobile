@@ -21,7 +21,7 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="xTUOTn7g91izqNbAYtpDzj4bpVoC1fnE"/>
+            android:value="KbB236S4ZKG3vrrfCXLYOEi8aBfGIh5L"/>
 
         <activity android:name=".activity.MainActivity">
             <intent-filter>
@@ -31,6 +31,12 @@
         </activity>
 
         <activity android:name=".activity.MapActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.RouteActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
