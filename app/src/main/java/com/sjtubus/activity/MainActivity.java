@@ -106,6 +106,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         register_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
     }
     public void loadImages(){
+        //目前的图片是用的网上的传图网站
         images.add("http://chuantu.biz/t6/337/1530513364x-1566688664.jpg");
         images.add("http://chuantu.biz/t6/337/1530513397x-1566688664.jpg");
         images.add("http://chuantu.biz/t6/337/1530513420x-1566688664.jpg");
@@ -155,8 +156,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(scheduleIntent);
                 break;
             case R.id.map_btn:
+                Intent mapIntent = new Intent(MainActivity.this,MapActivity.class);
+                startActivity(mapIntent);
                 break;
             case R.id.navigate_btn:
+                Intent navigateIntent = new Intent(MainActivity.this,RouteActivity.class);
+                startActivity(navigateIntent);
                 break;
             case R.id.login_txt:
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);

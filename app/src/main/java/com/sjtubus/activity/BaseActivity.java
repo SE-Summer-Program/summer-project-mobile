@@ -45,7 +45,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         if (this.compositeDisposable != null) {
             this.compositeDisposable.clear();
