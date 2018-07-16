@@ -10,12 +10,13 @@ import android.view.ViewGroup;
 import com.sjtubus.R;
 import com.sjtubus.model.Appointment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
 
     private Context context;
-    private List<Appointment> appointmentList;
+    private List<Appointment> appointmentList = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private OnScrollListener onScrollListener;
 
@@ -139,7 +140,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
     private Appointment getChildDataBean(Appointment bean) {
         Appointment child = new Appointment();
         child.setType(1);
-        child.setChild_msg(bean.getChild_msg());
+    //    child.setChild_msg(bean.getChild_msg());
         return child;
     }
 

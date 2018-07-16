@@ -16,16 +16,15 @@ import android.widget.TextView;
 import com.sjtubus.R;
 import com.sjtubus.model.Appointment;
 import com.sjtubus.model.response.AppointResponse;
-import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.AppointAdapter;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -43,9 +42,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private List<Appointment> appointmentList;
     private AppointAdapter appointAdapter;
     private SwipeRefreshLayout swipeRefresh;
-    private ToastUtils toastUtils;
-    private StringCalendarUtils stringCalendarUtils;
-    private ShiftUtils shiftUtils;
 
     private String[] station_list = {"闵行校区", "徐汇校区", "七宝校区"};
     private String[] line_list = {"闵行到徐汇", "徐汇到闵行", "闵行到七宝", "七宝到闵行"};
@@ -57,6 +53,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private int year,month,day;
     private String line_name;
     private String line_type;
+    private Date appoint_date;
 
     private TextView yesterday_btn;
     private TextView nextday_btn;
@@ -85,7 +82,9 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         arrive_place_str = intent.getStringExtra("arrive_place");
         date_str = intent.getStringExtra("singleway_date");
 
-        line_name = shiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
+        line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
+//
+//        Log.d("alive-initpassdata", line_name);
     }
 
     private void initToolbar(){
@@ -108,6 +107,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 finish();
             }
         });
+
+        Log.d("alive-inittoolbar", (String) mToolbar.getTitle());
     }
 
     private void initView() {
@@ -116,6 +117,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         date = (TextView) findViewById(R.id.appoint_date);
         calendar_btn = (ImageView) findViewById(R.id.appoint_calendar);
         next_btn = (ImageView) findViewById(R.id.appoint_next);
+        recyclerView = findViewById(R.id.appoint_recycle) ;
 
         yesterday_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
@@ -147,8 +149,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
+        Log.d("alive-initview", date_str);
+
         retrieveData();
-        //initData();
+       // initData();
     }
 
     @Override
@@ -159,7 +163,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_date:
                 final TextView textView_date = (TextView) v.findViewById(R.id.appoint_date);
 
-              //  Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
@@ -197,10 +200,17 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private void refreshAppoint(){ retrieveData();}
 
     private void retrieveData() {
-        Calendar calendar = stringCalendarUtils.StringToCalendar((String) date.getText());
-        line_type = shiftUtils.getTypeByCalendar(calendar);
+        Log.d("retrivedata", "start");
+
+        Calendar calendar = StringCalendarUtils.StringToCalendar((String) date.getText());
+        line_type = ShiftUtils.getTypeByCalendar(calendar);
+        appoint_date = StringCalendarUtils.StringToDate((String) date.getText());
+
+        Log.d("alive-retrive", line_name);
+        Log.d("alive-retrive", line_type);
+
         RetrofitClient.getBusApi()
-            .getAppointment(line_name, line_type)
+            .getAppointment(line_name, line_type, appoint_date)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<AppointResponse>() {
@@ -231,22 +241,22 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             });
     }
 
-//    private void initData() {
-////        appointmentList = new ArrayList<>();
-////        for (int i = 1; i <= 20; i++) {
-////            appointment = new Appointment();
-////            appointment.setId(i + "");
-////            appointment.setType(0);
-////            appointment.setShiftid("MXWD0745");
-////            appointment.setDeparture_place("始：闵行");
-////            appointment.setArrive_place("终：徐汇");
-////            appointment.setDeparture_time("07:45");
-////            appointment.setArrive_time("08:45");
-////            appointment.setRemain_seat(5);
-////            appointmentList.add(appointment);
-////        }
-////        setData();
-////    }
+    private void initData() {
+        appointmentList = new ArrayList<>();
+        for (int i = 1; i <= 20; i++) {
+            appointment = new Appointment();
+            appointment.setId(i + "");
+            appointment.setType(0);
+            appointment.setShiftid("MXWD0745");
+            appointment.setDeparture_place("始：闵行");
+            appointment.setArrive_place("终：徐汇");
+            appointment.setDeparture_time("07:45");
+            appointment.setArrive_time("08:45");
+            appointment.setRemain_seat(5);
+            appointmentList.add(appointment);
+        }
+        setData();
+    }
 
     private void setData() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

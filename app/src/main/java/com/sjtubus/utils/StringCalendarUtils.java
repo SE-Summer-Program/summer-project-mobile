@@ -15,7 +15,7 @@ public class StringCalendarUtils {
 //
 //    private Calendar calendar;
 
-    public Calendar StringToCalendar(String datestr){
+    public static Calendar StringToCalendar(String datestr){
         Calendar calendar = new GregorianCalendar();
         @SuppressLint("SimpleDateFormat")
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -28,19 +28,36 @@ public class StringCalendarUtils {
         return calendar;
     }
 
-    public String CalendarToString(Calendar calendar){
+    public static Date StringToDate(String datestr){
+        Date date= new Date();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = dateFormat.parse(datestr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static String DateToString(Calendar calendar){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");// 设置你想要的格式
         String dateStr = dateFormat.format(calendar.getTime());
         return dateStr;
     }
 
-    public boolean isWeekend(Calendar calendar){
+    public static boolean isWeekend(Calendar calendar){
         int day = calendar.get(Calendar.DAY_OF_WEEK);
         return (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
     }
-    public boolean isHoilday(Calendar calendar){
+    public static boolean isHoilday(Calendar calendar){
         int month = calendar.get(Calendar.MONTH);
         return (month == Calendar.FEBRUARY || month == Calendar.JUNE
                 || month == Calendar.JULY);
+    }
+
+    public static String TimeToString(Calendar calendar){
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");// 设置你想要的格式
+        String timeStr = timeFormat.format(calendar.getTime());
+        return timeStr;
     }
 }

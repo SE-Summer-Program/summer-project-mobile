@@ -14,19 +14,19 @@ public class Appointment {
     private String id;
     private String linename;
 
-    @SerializedName("shiftid")
+    @SerializedName("shiftId")
     private String shiftid;
     private String departure_place;
     private String arrive_place;
-    @SerializedName("departure_time")
+    @SerializedName("departureTime")
     private String departure_time;
-    @SerializedName("arrive_time")
+    @SerializedName("arriveTime")
     private String arrive_time;
-    @SerializedName("remain_seat")
+    @SerializedName("remainSeat")
     private int remain_seat;
 
     private int appoint_status; //无座，预约
-    private String child_msg;
+//    private String child_msg;
 
     /****************************************/
 
@@ -116,11 +116,11 @@ public class Appointment {
         this.appoint_status = appoint_status;
     }
 
-    public String getChild_msg() {
-        return child_msg;
-    }
-
-    public void setChild_msg(String child_msg) {
-        this.child_msg = child_msg;
-    }
+//    public String getChild_msg() {
+//        return child_msg;
+//    }
+//
+//    public void setChild_msg(String child_msg) {
+//        this.child_msg = child_msg;
+//    }
 }

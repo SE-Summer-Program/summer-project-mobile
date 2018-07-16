@@ -32,8 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/banner"
-        android:layout_above="@+id/tabmenu"
         android:orientation="horizontal">
+        <!--android:layout_above="@+id/tabmenu"-->
 
         <LinearLayout
             android:layout_width="0dp"
@@ -112,69 +112,69 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/tabmenu"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-        <TextView
-            android:id="@+id/tabmenu_home"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@drawable/tab_menu_bg"
-            android:drawablePadding="@dimen/basicPaddingSize"
-            android:drawableTop="@drawable/tab_menu_home"
-            android:paddingVertical="6dp"
-            android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
-            android:text="首页"
-            android:clickable="true"
-            android:focusable="true" />
-        <!--android:focusableInTouchMode="true"-->
-        <!--android:focusable="true"/>-->
-        <TextView
-            android:id="@+id/tabmenu_message"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@drawable/tab_menu_bg"
-            android:drawablePadding="@dimen/basicPaddingSize"
-            android:drawableTop="@drawable/tab_menu_message"
-            android:paddingTop="6dp"
-            android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
-            android:text="消息"
-            android:clickable="true"
-            android:focusable="true" />
-        <TextView
-            android:id="@+id/tabmenu_user"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@drawable/tab_menu_bg"
-            android:drawablePadding="@dimen/basicPaddingSize"
-            android:drawableTop="@drawable/tab_menu_user"
-            android:paddingTop="6dp"
-            android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
-            android:text="我的"
-            android:clickable="true"
-            android:focusable="true" />
-        <TextView
-            android:id="@+id/tabmenu_setting"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:background="@drawable/tab_menu_bg"
-            android:drawablePadding="@dimen/basicPaddingSize"
-            android:drawableTop="@drawable/tab_menu_setting"
-            android:paddingTop="6dp"
-            android:gravity="center"
-            android:textColor="@drawable/tab_menu_text"
-            android:text="设置"
-            android:clickable="true"
-            android:focusable="true" />
-    </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/tabmenu"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_alignParentBottom="true">-->
+        <!--<TextView-->
+            <!--android:id="@+id/tabmenu_home"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/tab_menu_bg"-->
+            <!--android:drawablePadding="@dimen/basicPaddingSize"-->
+            <!--android:drawableTop="@drawable/tab_menu_home"-->
+            <!--android:paddingVertical="6dp"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="@drawable/tab_menu_text"-->
+            <!--android:text="首页"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true" />-->
+        <!--&lt;!&ndash;android:focusableInTouchMode="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:focusable="true"/>&ndash;&gt;-->
+        <!--<TextView-->
+            <!--android:id="@+id/tabmenu_message"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/tab_menu_bg"-->
+            <!--android:drawablePadding="@dimen/basicPaddingSize"-->
+            <!--android:drawableTop="@drawable/tab_menu_message"-->
+            <!--android:paddingTop="6dp"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="@drawable/tab_menu_text"-->
+            <!--android:text="消息"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/tabmenu_user"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/tab_menu_bg"-->
+            <!--android:drawablePadding="@dimen/basicPaddingSize"-->
+            <!--android:drawableTop="@drawable/tab_menu_user"-->
+            <!--android:paddingTop="6dp"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="@drawable/tab_menu_text"-->
+            <!--android:text="我的"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true" />-->
+        <!--<TextView-->
+            <!--android:id="@+id/tabmenu_setting"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@drawable/tab_menu_bg"-->
+            <!--android:drawablePadding="@dimen/basicPaddingSize"-->
+            <!--android:drawableTop="@drawable/tab_menu_setting"-->
+            <!--android:paddingTop="6dp"-->
+            <!--android:gravity="center"-->
+            <!--android:textColor="@drawable/tab_menu_text"-->
+            <!--android:text="设置"-->
+            <!--android:clickable="true"-->
+            <!--android:focusable="true" />-->
+    <!--</LinearLayout>-->
 </RelativeLayout>

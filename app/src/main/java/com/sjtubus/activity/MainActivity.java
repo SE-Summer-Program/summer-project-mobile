@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private List<String> images = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         Banner banner = findViewById(R.id.banner);
@@ -64,16 +64,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
 
         //获取顶层视图
-        decorView = getWindow().getDecorView();
-
-//        decorView = getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+     //   decorView = getWindow().getDecorView();
     }
 
-    @Override
-    protected void onStart() {
-        init();
-        super.onStart();
-    }
+//    @Override
+//    protected void onStart() {
+//        init();
+//        super.onStart();
+//    }
 
     public int getContentViewId(){
         return R.layout.activity_main;
@@ -90,10 +88,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         schedule_btn = findViewById(R.id.schedule_btn);
         map_btn = findViewById(R.id.map_btn);
         navigate_btn = findViewById(R.id.navigate_btn);
-        tab_home = findViewById(R.id.tabmenu_home);
-        tab_message = findViewById(R.id.tabmenu_message);
-        tab_user = findViewById(R.id.tabmenu_user);
-        tab_setting = findViewById(R.id.tabmenu_setting);
+//        tab_home = findViewById(R.id.tabmenu_home);
+//        tab_message = findViewById(R.id.tabmenu_message);
+//        tab_user = findViewById(R.id.tabmenu_user);
+//        tab_setting = findViewById(R.id.tabmenu_setting);
 
         reserve_btn.setOnClickListener(this);
         record_btn.setOnClickListener(this);
@@ -101,12 +99,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         schedule_btn.setOnClickListener(this);
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
-        tab_home.setOnClickListener(this);
-        tab_message.setOnClickListener(this);
-        tab_user.setOnClickListener(this);
-        tab_setting.setOnClickListener(this);
+//        tab_home.setOnClickListener(this);
+//        tab_message.setOnClickListener(this);
+//        tab_user.setOnClickListener(this);
+//        tab_setting.setOnClickListener(this);
 
-        initTabMenuSelected();
+        //initTabMenuSelected();
 
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
@@ -177,26 +175,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 break;
             case R.id.register_btn:
                 break;
-            case R.id.tabmenu_home:
-                resetTabMenuSelected();
-                tab_home.setSelected(true);
-                ToastUtils.showShort("home");
-                break;
-            case R.id.tabmenu_message:
-                resetTabMenuSelected();
-                tab_message.setSelected(true);
-                ToastUtils.showShort("message");
-                break;
-            case R.id.tabmenu_user:
-                resetTabMenuSelected();
-                tab_user.setSelected(true);
-                ToastUtils.showShort("user");
-                break;
-            case R.id.tabmenu_setting:
-                resetTabMenuSelected();
-                tab_setting.setSelected(true);
-                ToastUtils.showShort("setting");
-                break;
+//            case R.id.tabmenu_home:
+//                resetTabMenuSelected();
+//                tab_home.setSelected(true);
+//                ToastUtils.showShort("home");
+//                break;
+//            case R.id.tabmenu_message:
+//                resetTabMenuSelected();
+//                tab_message.setSelected(true);
+//                ToastUtils.showShort("message");
+//                break;
+//            case R.id.tabmenu_user:
+//                resetTabMenuSelected();
+//                tab_user.setSelected(true);
+//                ToastUtils.showShort("user");
+//                break;
+//            case R.id.tabmenu_setting:
+//                resetTabMenuSelected();
+//                tab_setting.setSelected(true);
+//                ToastUtils.showShort("setting");
+//                break;
             default:
                 break;
         }
