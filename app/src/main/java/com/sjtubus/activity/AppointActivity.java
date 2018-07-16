@@ -53,7 +53,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private int year,month,day;
     private String line_name;
     private String line_type;
-    private Date appoint_date;
 
     private TextView yesterday_btn;
     private TextView nextday_btn;
@@ -204,7 +203,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
         Calendar calendar = StringCalendarUtils.StringToCalendar((String) date.getText());
         line_type = ShiftUtils.getTypeByCalendar(calendar);
-        appoint_date = StringCalendarUtils.StringToDate((String) date.getText());
+        String appoint_date = (String) date.getText();
 
         Log.d("alive-retrive", line_name);
         Log.d("alive-retrive", line_type);
