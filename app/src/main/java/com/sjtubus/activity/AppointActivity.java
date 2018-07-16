@@ -43,9 +43,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private List<Appointment> appointmentList;
     private AppointAdapter appointAdapter;
     private SwipeRefreshLayout swipeRefresh;
-    private ToastUtils toastUtils;
-    private StringCalendarUtils stringCalendarUtils;
-    private ShiftUtils shiftUtils;
 
     private String[] station_list = {"闵行校区", "徐汇校区", "七宝校区"};
     private String[] line_list = {"闵行到徐汇", "徐汇到闵行", "闵行到七宝", "七宝到闵行"};
@@ -85,13 +82,13 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         arrive_place_str = intent.getStringExtra("arrive_place");
         date_str = intent.getStringExtra("singleway_date");
 
-        line_name = shiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
+        line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
     }
 
     private void initToolbar(){
         mToolbar = findViewById(R.id.toolbar_appointment);
         mToolbar.setTitle(departure_place_str + "->" + arrive_place_str);
-        mToolbar.setNavigationIcon(R.drawable.back_32);
+        mToolbar.setNavigationIcon(R.mipmap.icon_back_128);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,11 +108,11 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-        yesterday_btn = (TextView) findViewById(R.id.appoint_yesterday);
-        nextday_btn = (TextView) findViewById(R.id.appoint_nextday);
-        date = (TextView) findViewById(R.id.appoint_date);
-        calendar_btn = (ImageView) findViewById(R.id.appoint_calendar);
-        next_btn = (ImageView) findViewById(R.id.appoint_next);
+        yesterday_btn = findViewById(R.id.appoint_yesterday);
+        nextday_btn = findViewById(R.id.appoint_nextday);
+        date = findViewById(R.id.appoint_date);
+        calendar_btn = findViewById(R.id.appoint_calendar);
+        next_btn = findViewById(R.id.appoint_next);
 
         yesterday_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
@@ -197,8 +194,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private void refreshAppoint(){ retrieveData();}
 
     private void retrieveData() {
-        Calendar calendar = stringCalendarUtils.StringToCalendar((String) date.getText());
-        line_type = shiftUtils.getTypeByCalendar(calendar);
+        Calendar calendar = StringCalendarUtils.StringToCalendar((String) date.getText());
+        line_type = ShiftUtils.getTypeByCalendar(calendar);
         RetrofitClient.getBusApi()
             .getAppointment(line_name, line_type)
             .subscribeOn(Schedulers.io())

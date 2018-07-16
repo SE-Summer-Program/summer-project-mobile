@@ -54,7 +54,7 @@
             android:textColor="@color/primary_black"
             android:layout_gravity="center"
             android:gravity="center"
-            android:padding="@dimen/text_padding"
+            android:padding="@dimen/textPadding"
             android:clickable="true" />
 
         <ImageView
@@ -73,7 +73,7 @@
             android:textColor="@color/primary_black"
             android:layout_gravity="center"
             android:gravity="center"
-            android:padding="@dimen/text_padding"
+            android:padding="@dimen/textPadding"
             android:clickable="true" />
 
     </LinearLayout>
@@ -92,7 +92,7 @@
             android:textColor="@color/primary_black"
             android:layout_gravity="center"
             android:gravity="center"
-            android:padding="@dimen/text_padding"
+            android:padding="@dimen/textPadding"
             android:clickable="true"/>
 
         <TextView
@@ -105,7 +105,7 @@
             android:textColor="@color/primary_black"
             android:layout_gravity="center"
             android:gravity="center"
-            android:padding="@dimen/text_padding"
+            android:padding="@dimen/textPadding"
             android:clickable="true" />
 
     </LinearLayout>

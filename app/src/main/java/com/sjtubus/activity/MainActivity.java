@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -59,12 +60,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private TextView login_txt;
     private TextView register_txt;
 
-
-    private TextView tab_home;
-    private TextView tab_message;
-    private TextView tab_user;
-    private TextView tab_setting;
-
     private View decorView;
 
     private List<String> images = new ArrayList<>();
@@ -105,10 +100,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         schedule_btn = findViewById(R.id.schedule_btn);
         map_btn = findViewById(R.id.map_btn);
         navigate_btn = findViewById(R.id.navigate_btn);
-        tab_home = findViewById(R.id.tabmenu_home);
-        tab_message = findViewById(R.id.tabmenu_message);
-        tab_user = findViewById(R.id.tabmenu_user);
-        tab_setting = findViewById(R.id.tabmenu_setting);
 
         reserve_btn.setOnClickListener(this);
         record_btn.setOnClickListener(this);
@@ -116,12 +107,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         schedule_btn.setOnClickListener(this);
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
-        tab_home.setOnClickListener(this);
-        tab_message.setOnClickListener(this);
-        tab_user.setOnClickListener(this);
-        tab_setting.setOnClickListener(this);
-
-        initTabMenuSelected();
 
         setSupportActionBar(mToolbar);
         final ActionBar actionBar = getSupportActionBar();
@@ -138,6 +123,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         login_tips = nav_header_layout.findViewById(R.id.login_tips);
         login_txt = nav_header_layout.findViewById(R.id.login_txt);
         register_txt = nav_header_layout.findViewById(R.id.register_txt);
+        //设置下划线
         login_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
         register_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
     }
@@ -184,7 +170,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                Intent reserveIntent = new Intent(MainActivity.this, AppointActivity.class);
+                Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
                 break;
             case R.id.record_btn:
@@ -210,26 +196,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             case R.id.register_txt:
                 Intent registerIntent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(registerIntent);
-                break;
-            case R.id.tabmenu_home:
-                resetTabMenuSelected();
-                tab_home.setSelected(true);
-                ToastUtils.showShort("home");
-                break;
-            case R.id.tabmenu_message:
-                resetTabMenuSelected();
-                tab_message.setSelected(true);
-                ToastUtils.showShort("message");
-                break;
-            case R.id.tabmenu_user:
-                resetTabMenuSelected();
-                tab_user.setSelected(true);
-                ToastUtils.showShort("user");
-                break;
-            case R.id.tabmenu_setting:
-                resetTabMenuSelected();
-                tab_setting.setSelected(true);
-                ToastUtils.showShort("setting");
                 break;
             default:
                 break;
@@ -279,27 +245,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         //判断当前版本在4.0以上并且存在虚拟按键，否则不做操作
-        if (Build.VERSION.SDK_INT < 19 || !checkDeviceHasNavigationBar()) {
+        if (!checkDeviceHasNavigationBar()) {
             //一定要判断是否存在按键，否则在没有按键的手机调用会影响别的功能。如之前没有考虑到，导致图传全屏变成小屏显示。
             return;
         } else {
             // 获取属性
             decorView.setSystemUiVisibility(flag);
         }
-    }
-
-    public void initTabMenuSelected(){
-        tab_home.setSelected(true);
-        tab_message.setSelected(false);
-        tab_user.setSelected(false);
-        tab_setting.setSelected(false);
-    }
-
-    public void resetTabMenuSelected(){
-        tab_home.setSelected(false);
-        tab_message.setSelected(false);
-        tab_user.setSelected(false);
-        tab_setting.setSelected(false);
     }
 
     /**
@@ -328,11 +280,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         return hasNavigationBar;
     }
 
-
-//    @Override
-//    public boolean onTouch(View v, MotionEvent event) {
-//        return false;
-//    }
 
     @Override
     public void onDestroy() {

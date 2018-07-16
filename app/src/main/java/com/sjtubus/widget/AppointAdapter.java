@@ -10,19 +10,18 @@ import android.view.ViewGroup;
 import com.sjtubus.R;
 import com.sjtubus.model.Appointment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
 
     private Context context;
-    private List<Appointment> appointmentList;
+    private List<Appointment> appointmentList = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private OnScrollListener onScrollListener;
 
- //   public AppointAdapter(Context context, List<Appointment> appointmentList){
     public AppointAdapter(Context context){
         this.context = context;
-       // this.appointmentList = appointmentList;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
