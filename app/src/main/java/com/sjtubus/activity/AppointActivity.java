@@ -205,9 +205,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         line_type = ShiftUtils.getTypeByCalendar(calendar);
         String appoint_date = (String) date.getText();
 
-        Log.d("alive-retrive", line_name);
-        Log.d("alive-retrive", line_type);
-
         RetrofitClient.getBusApi()
             .getAppointment(line_name, line_type, appoint_date)
             .subscribeOn(Schedulers.io())
