@@ -8,7 +8,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_appointment"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/toolbar_height"
         android:background="@color/primary_red"
         app:titleTextColor="@color/primary_white"
         app:popupTheme="@style/Theme.AppCompat.Light"
@@ -38,7 +38,9 @@
             android:layout_height="match_parent"
             android:text="前一天"
             android:textColor="@color/primary_white"
-            android:paddingLeft="@dimen/largePadding"/>
+            android:paddingLeft="@dimen/largePadding"
+            android:clickable="true"
+            android:focusable="true"/>
         <ImageView
             android:id="@+id/appoint_calendar"
             android:layout_width="0dp"
@@ -68,7 +70,9 @@
             android:layout_gravity="end"
             android:gravity="end"
             android:textColor="@color/primary_white"
-            android:paddingRight="@dimen/largePadding"/>
+            android:paddingRight="@dimen/largePadding"
+            android:clickable="true"
+            android:focusable="true"/>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

@@ -50,6 +50,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private String departure_place_str;
     private String arrive_place_str;
     private String date_str;
+
     private int year,month,day;
     private String line_name;
     private String line_type;
@@ -93,10 +94,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String data1 = (String) parseDeparturePlace(mToolbar);
-//                String data2 = (String) parseArrivePlace(mToolbar);
-                String data1 = "闵行校区";
-                String data2 = "徐汇校区";
+                String data1 = departure_place_str;
+                String data2 = arrive_place_str;
                 String data3 = (String) date.getText();
                 Intent intent = new Intent(AppointActivity.this, AppointNaviActivity.class);
                 intent.putExtra("departure_place", data1);
@@ -165,7 +164,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
-                        textView_date.setText(year_choose+"年"+(month_choose+1)+"月"+dayOfMonth_choose+"日");
+                        textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
                         year = year_choose;
                         month = month_choose+1;
                         day = dayOfMonth_choose;
@@ -174,11 +173,23 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.appoint_yesterday:
                 ToastUtils.showShort("前一天");
-                modifyDate(-1);
+                //modifyDate(-1);
+
+                //临时写在这里的
+                String data1 = departure_place_str;
+                String data2 = arrive_place_str;
+                String data3 = (String) date.getText();
+                Intent orderIntent = new Intent(AppointActivity.this, OrderActivity.class);
+                orderIntent.putExtra("departure_place", data1);
+                orderIntent.putExtra("arrive_place", data2);
+                orderIntent.putExtra("departure_date", data3);
+                startActivity(orderIntent);
                 break;
             case R.id.appoint_nextday:
                 ToastUtils.showShort("后一天");
-                modifyDate(1);
+//                modifyDate(1);
+//                Intent orderIntent = new Intent(AppointActivity.this, OrderActivity.class);
+//                startActivity(orderIntent);
                 break;
         }
     }
@@ -225,7 +236,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
-                    ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                    //ToastUtils.showShort("网络请求失败！请检查你的网络！");
                     swipeRefresh.setRefreshing(false);
                 }
 
@@ -280,7 +291,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private void modifyDate(int offset){
         switch(offset){
             case 1:
-                //...后一天
+
                 break;
             case -1:
                 //...前一天

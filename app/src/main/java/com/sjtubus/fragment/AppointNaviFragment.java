@@ -68,7 +68,7 @@ public class AppointNaviFragment extends BaseFragment {
         search_btn.setOnClickListener(new MyListener());
 
         getConrrentDay();
-        singleway_date.setText(year+"年"+month+"月"+day+"日");
+        singleway_date.setText(year+"-"+month+"-"+day);
 
         return view;
     }

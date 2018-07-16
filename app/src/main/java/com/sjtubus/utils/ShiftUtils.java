@@ -5,14 +5,12 @@ import java.util.Calendar;
 public class ShiftUtils {
 
     private static String[] line_list = {"闵行到徐汇", "徐汇到闵行", "闵行到七宝", "七宝到闵行"};
-    private static String[] line_list_E = {"MinToXu", "XuToMin", "MinToQi", "QiToMin"};
+    private static String[] line_list_E = {"MinHangToXuHui", "XuHuiToMinHang", "MinHangToQiBao", "QiBaoToMinHang"};
 
     private static String[] type_list = {"在校期-工作日", "在校期-双休日、节假日", "寒暑假-工作日","寒暑假-双休日"};
     private static String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
 
     public static String ERROR = "error";
-
-  //  private static StringCalendarUtils stringCalendarUtils;
 
     public static String getTypeByCalendar(Calendar calendar){
         //date = calendar.getTime();
