@@ -34,7 +34,7 @@ public class ScheduleActivity extends BaseActivity {
     public void initView(){
         initFragments();
         initViewPager();
-        CoordinatorTabLayout mCoordinatorTabLayout = findViewById(R.id.coordinatortablayout);
+        CoordinatorTabLayout mCoordinatorTabLayout = findViewById(R.id.schedule_coordinatortablayout);
         int[] mImageArray = new int[]{
                 R.drawable.bus_background,
                 R.drawable.bus_background};

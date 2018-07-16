@@ -61,8 +61,8 @@ public class StationFragment extends BaseFragment {
     private void retrieveData() {
         RetrofitClient.getBusApi()
             .getLineStation(line_name)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io()) //在子线程里运行请求
+            .observeOn(AndroidSchedulers.mainThread()) //请求结束 主线程回调
             .subscribe(new Observer<StationResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {

@@ -1,22 +1,28 @@
 package com.sjtubus.model;
 
-public class AppointDataBean {
+import com.google.gson.annotations.SerializedName;
+
+public class Appointment {
 
     public static final int PARENT_ITEM = 0; //父布局
     public static final int CHILD_ITEM = 1; //子布局
 
     private int type; //显示类型
     private boolean isExpand; //是否展开
-    private AppointDataBean childBean;
+    private Appointment childBean;
 
     private String id;
     private String linename;
 
+    @SerializedName("shiftid")
     private String shiftid;
     private String departure_place;
     private String arrive_place;
+    @SerializedName("departure_time")
     private String departure_time;
+    @SerializedName("arrive_time")
     private String arrive_time;
+    @SerializedName("remain_seat")
     private int remain_seat;
 
     private int appoint_status; //无座，预约
@@ -48,11 +54,11 @@ public class AppointDataBean {
         this.type = type;
     }
 
-    public AppointDataBean getChildBean() {
+    public Appointment getChildBean() {
         return childBean;
     }
 
-    public void setChildBean(AppointDataBean childBean) {
+    public void setChildBean(Appointment childBean) {
         this.childBean = childBean;
     }
 
@@ -68,9 +74,7 @@ public class AppointDataBean {
         return departure_place;
     }
 
-    public void setDeparture_place(String departure_place) {
-        this.departure_place = departure_place;
-    }
+    public void setDeparture_place(String departure_place) { this.departure_place = departure_place; }
 
     public String getArrive_place() {
         return arrive_place;

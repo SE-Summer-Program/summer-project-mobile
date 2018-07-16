@@ -41,6 +41,7 @@
         <activity android:name=".activity.MessageActivity"/>
         <activity android:name=".activity.ScheduleActivity"/>
         <activity android:name=".activity.AppointActivity"/>
+        <activity android:name=".activity.AppointNaviActivity"/>
         <activity android:name=".activity.RegisterActivity"/>
         <activity android:name=".activity.JaccountActivity"/>
         <activity android:name=".activity.PersonInfoActivity" />

@@ -1,5 +1,6 @@
 package com.sjtubus.network;
 
+import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.model.response.LoginResponse;
@@ -48,4 +49,7 @@ public interface BusApi {
 
     @GET("/line/infos")
     Observable<LineInfoResponse> getLineInfos(@Query("type")String type);
+
+    @GET("/shift/appointment")
+    Observable<AppointResponse> getAppointment(@Query("line_name")String line_name, @Query("type")String type);
 }

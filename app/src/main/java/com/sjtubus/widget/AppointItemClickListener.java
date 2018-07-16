@@ -1,11 +1,11 @@
 package com.sjtubus.widget;
 
-import com.sjtubus.model.AppointDataBean;
+import com.sjtubus.model.Appointment;
 
 public interface AppointItemClickListener {
 
-    void onExpandChildItem(AppointDataBean appointDataBean);
+    void onExpandChildItem(Appointment appointment);
 
-    void onHideChildItem(AppointDataBean appointDataBean);
+    void onHideChildItem(Appointment appointment);
 
 }
