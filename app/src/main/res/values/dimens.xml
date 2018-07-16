@@ -20,7 +20,7 @@
     <dimen name="basePadding">12dp</dimen>
     <dimen name="footerPadding">11dp</dimen>
     <dimen name="noPadding">0dp</dimen>
-    <dimen name="iconPadding">25dp</dimen>
+    <dimen name="icon_padding">25dp</dimen>
     <dimen name="textPadding">5dp</dimen>
     <dimen name="toolbarPaddingTop">15dp</dimen>
 

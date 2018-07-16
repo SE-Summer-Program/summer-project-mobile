@@ -144,6 +144,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     public void onClick(View v){
         switch (v.getId()){
             case R.id.reserve_btn:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 Intent reserveIntent = new Intent(MainActivity.this, AppointActivity.class);
                 startActivity(reserveIntent);
                 break;
@@ -198,6 +202,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 agent.startDefaultThreadActivity();
                 break;
             case R.id.navigation_item_person:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 Intent person_intent = new Intent(MainActivity.this,PersonInfoActivity.class);
                 startActivity(person_intent);
                 break;

@@ -1,6 +1,7 @@
 package com.sjtubus.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,12 +34,14 @@ public class JaccountActivity extends BaseActivity {
 
     private String redirect_url;
     private String auth_url;
+    private String bus_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        redirect_url = getString(R.string.sjtubus_host)+"/auth/redirect";
-        auth_url = getString(R.string.sjtubus_host)+"/auth/jaccount";
+        bus_url = getString(R.string.sjtubus_host);
+        redirect_url = bus_url + "auth/redirect";
+        auth_url = bus_url + "auth/jaccount";
         initWebview();
     }
 
@@ -53,6 +56,8 @@ public class JaccountActivity extends BaseActivity {
         auth_webview.getSettings().setJavaScriptEnabled(true);
         auth_webview.getSettings().setUserAgentString(((App) App.getInstance()).getUserAgent());
         CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.setAcceptThirdPartyCookies(auth_webview,true);
         cookieManager.removeAllCookies(new ValueCallback<Boolean>() {
             @Override
             public void onReceiveValue(Boolean value) {
@@ -67,7 +72,7 @@ public class JaccountActivity extends BaseActivity {
 
     private String loadCookies() {
         BusCookieJar cookieJar = BusCookieJar.getInstance();
-        return cookieJar.getCookieString(HttpUrl.parse(auth_url));
+        return cookieJar.getCookieString(HttpUrl.parse(redirect_url));
     }
 
     class AuthWebClient extends WebViewClient {
@@ -75,13 +80,11 @@ public class JaccountActivity extends BaseActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
-            Log.d("JaccountActivity", "Start loading: " + url);
+            Log.i("JaccountActivity", "Start loading: " + url);
 
-            List<String> successList = Arrays.asList(
-                    redirect_url
-            );
+            String successUrl = redirect_url;
 
-            if (!successList.contains(url)) {
+            if (true || !url.split("\\?")[0].equals(successUrl)){
                 return;
             }
             view.stopLoading();
@@ -90,21 +93,40 @@ public class JaccountActivity extends BaseActivity {
             finish();
         }
 
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            CookieManager cookieManager = CookieManager.getInstance();
+            String CookieStr = cookieManager.getCookie(url);
+            if(CookieStr!=null)
+            {
+                Log.i("cookie", CookieStr);
+            }
+            if(url.split("\\?")[0].equals(redirect_url)){
+                saveCookies();
+                UserManager.getInstance().refresh();
+                Intent mainIntent = new Intent(JaccountActivity.this,MainActivity.class);
+                startActivity(mainIntent);
+            }
+            super.onPageFinished(view, url);
+        }
+
         private void saveCookies() {
             CookieManager cookieManager = CookieManager.getInstance();
             BusCookieJar cookieJar = BusCookieJar.getInstance();
 
-            HttpUrl authUrl = HttpUrl.parse(auth_url);
+            HttpUrl busUrl = HttpUrl.parse(bus_url);
 
-            String[] cookieStrings = cookieManager.getCookie(auth_url).split(";");
+            String[] cookieStrings = cookieManager.getCookie(redirect_url)!=null?
+                    cookieManager.getCookie(redirect_url).split(";"):new String[0];
 
             List<Cookie> cookies = new ArrayList<>(cookieStrings.length);
             for (String cookieString : cookieStrings) {
-                Cookie cookie = Cookie.parse(authUrl, cookieString);
+                Log.i("JACCOUNT-COOKIE",cookieString);
+                Cookie cookie = Cookie.parse(busUrl, cookieString);
                 cookies.add(cookie);
             }
             cookieJar.clear(); // prevent duplicated cookie names
-            cookieJar.saveFromResponse(authUrl, cookies);
+            cookieJar.saveFromResponse(busUrl, cookies);
         }
     }
 
