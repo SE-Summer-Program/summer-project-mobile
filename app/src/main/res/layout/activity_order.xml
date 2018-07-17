@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/shallow_gray"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -32,7 +33,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/screenPadding"
-        android:paddingBottom="@dimen/smallPadding"
+        android:paddingVertical="@dimen/smallPadding"
         android:background="@color/primary_red">
 
         <LinearLayout
@@ -54,7 +55,6 @@
                 android:layout_weight="2"
                 android:textColor="@color/primary_white"
                 android:textStyle="bold"
-                android:text="12:15"
                 android:gravity="center"
                 android:textSize="@dimen/normalTextSize"/>
             <TextView
@@ -78,7 +78,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/primary_white"
-                android:text="MXHD1215"
                 android:gravity="center"/>
             <TextView
                 android:id="@+id/order_shifttype"
@@ -86,7 +85,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/primary_white"
-                android:text="寒暑假工作日"
                 android:gravity="center"/>
             <TextView
                 android:id="@+id/order_comment"
@@ -117,7 +115,6 @@
                 android:layout_weight="2"
                 android:textColor="@color/primary_white"
                 android:textStyle="bold"
-                android:text="13:15"
                 android:gravity="center"
                 android:textSize="@dimen/normalTextSize"/>
             <TextView
@@ -135,12 +132,347 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/icon_clock_128"
+            android:layout_gravity="center"/>
         <TextView
+            android:id="@+id/order_setremind"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text=""/>
-
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:text="设置预约提醒"/>
+        <ImageView
+            android:id="@+id/order_setremind_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/more_48"
+            android:layout_gravity="center"/>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_remind_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="match_parent"
+            android:text="提醒时间 :"
+            android:textSize="14sp"
+            android:layout_gravity="right"
+            android:gravity="right" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:textSize="14sp"/>
+        <TextView
+            android:id="@+id/order_setremindtime"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent"
+            android:text="提前30分钟"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawableRight="@drawable/more_8"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_remind_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <TextView
+            android:id="@+id/order_phonelocation"
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:text="大陆手机 :"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:drawableLeft="@drawable/more_8">
+        </TextView>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"/>
+        <EditText
+            android:id="@+id/order_phoneedit"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:maxLength="11"
+            android:hint="请输入手机号"
+            android:focusable="true"/>
+        <ImageView
+            android:id="@+id/order_phoneclear"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="20dp"
+            android:src="@mipmap/clear_48"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_remind_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2.5"
+            android:layout_height="match_parent"
+            android:text="邮箱地址 :"
+            android:textSize="14sp"
+            android:layout_gravity="right"
+            android:gravity="right">
+        </TextView>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:textSize="14sp"/>
+        <EditText
+            android:id="@+id/order_mailedit"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"
+            android:maxLength="20"
+            android:hint="请输入邮箱"
+            android:focusable="true"/>
+        <ImageView
+            android:id="@+id/order_mailclear"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="20dp"
+            android:src="@mipmap/clear_48"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/icon_need_128"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/order_setneed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:text="设置特殊要求"/>
+        <ImageView
+            android:id="@+id/order_setneed_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/more_48"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_need1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <CheckBox
+            android:id="@+id/order_need_checkbox1"
+            android:layout_width="0dp"
+            android:layout_weight="3.5"
+            android:layout_height="match_parent"
+            android:text="前排座位"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/dark_gray"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:text="备注 :"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="20dp"
+            android:src="@mipmap/clear_48"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_need2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <CheckBox
+            android:id="@+id/order_need_checkbox2"
+            android:layout_width="0dp"
+            android:layout_weight="3.5"
+            android:layout_height="match_parent"
+            android:text="后排座位"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/dark_gray"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:text="备注 :"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="20dp"
+            android:src="@mipmap/clear_48"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_need3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <CheckBox
+            android:id="@+id/order_need_checkbox3"
+            android:layout_width="0dp"
+            android:layout_weight="3.5"
+            android:layout_height="match_parent"
+            android:text="靠窗座位"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/dark_gray"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1.5"
+            android:layout_height="match_parent"
+            android:text="备注 :"
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="20dp"
+            android:src="@mipmap/clear_48"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/order_need4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/shallow_white"
+        android:layout_marginBottom="2dp"
+        android:padding="@dimen/smallPadding">
+        <CheckBox
+            android:id="@+id/order_need_checkbox4"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="match_parent"
+            android:text="其他特殊要求 ："
+            android:textSize="14sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/dark_gray"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:textSize="14sp"/>
+        <EditText
+            android:layout_width="0dp"
+            android:layout_weight="4.5"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:layout_gravity="bottom"
+            android:gravity="bottom"/>
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="20dp"
+            android:src="@mipmap/clear_48"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/order_confirm"
+        style="@style/bigButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/primary_red"
+        android:text="预约" />
 
 </LinearLayout>

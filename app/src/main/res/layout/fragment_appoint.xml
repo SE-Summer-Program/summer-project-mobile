@@ -110,16 +110,26 @@
 
     </LinearLayout>
 
+    <!--<Button-->
+        <!--android:id="@+id/appoint_searchbtn"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text= "查 询"-->
+        <!--android:textSize="@dimen/normalTextSize"-->
+        <!--android:layout_marginTop="@dimen/largePadding"-->
+        <!--android:textColor="@color/primary_white"-->
+        <!--android:background="@color/primary_red"-->
+        <!--android:paddingVertical="@dimen/smallPadding"-->
+        <!--android:layout_marginHorizontal="@dimen/smallPadding" />-->
+
     <Button
         android:id="@+id/appoint_searchbtn"
+        style="@style/bigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text= "查 询"
-        android:textSize="@dimen/normalTextSize"
-        android:layout_marginTop="@dimen/largePadding"
-        android:textColor="@color/primary_white"
+        android:layout_margin="20dp"
+        android:layout_marginTop="30dp"
         android:background="@color/primary_red"
-        android:paddingVertical="@dimen/smallPadding"
-        android:layout_marginHorizontal="@dimen/smallPadding" />
+        android:text="查询" />
 
 </LinearLayout >

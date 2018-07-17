@@ -174,13 +174,22 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 //临时写在这里的
                 String data1 = departure_place_str;
                 String data2 = arrive_place_str;
-                String data3 = (String) date.getText();
+                String data3 = "12:15";
+                String data4 = "13:15";
+                String data5 = (String) date.getText();
+                String data6 = "MXHD1215";
+                String data7 = "寒暑假工作日";
                 Intent orderIntent = new Intent(AppointActivity.this, OrderActivity.class);
                 orderIntent.putExtra("departure_place", data1);
                 orderIntent.putExtra("arrive_place", data2);
-                orderIntent.putExtra("departure_date", data3);
+                orderIntent.putExtra("departure_time", data3);
+                orderIntent.putExtra("arrive_time", data4);
+                orderIntent.putExtra("departure_date", data5);
+                orderIntent.putExtra("shiftid", data6);
+                orderIntent.putExtra("shift_type", data7);
                 startActivity(orderIntent);
                 break;
+
             case R.id.appoint_nextday:
                 ToastUtils.showShort("后一天");
                 modifyDate(1);
@@ -239,21 +248,21 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     }
 
 //    private void initData() {
-////        appointmentList = new ArrayList<>();
-////        for (int i = 1; i <= 20; i++) {
-////            appointment = new Appointment();
-////            appointment.setId(i + "");
-////            appointment.setType(0);
-////            appointment.setShiftid("MXWD0745");
-////            appointment.setDeparture_place("始：闵行");
-////            appointment.setArrive_place("终：徐汇");
-////            appointment.setDeparture_time("07:45");
-////            appointment.setArrive_time("08:45");
-////            appointment.setRemain_seat(5);
-////            appointmentList.add(appointment);
-////        }
-////        setData();
-////    }
+//        appointmentList = new ArrayList<>();
+//        for (int i = 1; i <= 20; i++) {
+//            appointment = new Appointment();
+//            appointment.setId(i + "");
+//            appointment.setType(0);
+//            appointment.setShiftid("MXWD0745");
+//            appointment.setDeparture_place("始：闵行");
+//            appointment.setArrive_place("终：徐汇");
+//            appointment.setDeparture_time("07:45");
+//            appointment.setArrive_time("08:45");
+//            appointment.setRemain_seat(5);
+//            appointmentList.add(appointment);
+//        }
+//        setData();
+//    }
 
     private void setData() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
