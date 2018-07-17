@@ -14,17 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.model.Appointment;
+import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.response.AppointResponse;
-import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.AppointAdapter;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -39,14 +36,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
-    private Appointment appointment;
-    private List<Appointment> appointmentList;
+    private AppointInfo appointInfo;
+    private List<AppointInfo> appointInfoList;
     private AppointAdapter appointAdapter;
     private SwipeRefreshLayout swipeRefresh;
-
-    private String[] station_list = {"闵行校区", "徐汇校区", "七宝校区"};
-    private String[] line_list = {"闵行到徐汇", "徐汇到闵行", "闵行到七宝", "七宝到闵行"};
-    private String[] line_list_E = {"MinToXu", "XuToMin", "MinToQi", "QiToMin"};
 
     private String departure_place_str;
     private String arrive_place_str;
@@ -81,8 +74,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         departure_place_str = intent.getStringExtra("departure_place");
         arrive_place_str = intent.getStringExtra("arrive_place");
         date_str = intent.getStringExtra("singleway_date");
-
         line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
+        if(line_name.equals("error")) ToastUtils.showShort("地址翻译出现错误！");
     }
 
     private void initToolbar(){
@@ -92,14 +85,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                String data1 = (String) parseDeparturePlace(mToolbar);
-//                String data2 = (String) parseArrivePlace(mToolbar);
-                String data1 = "闵行校区";
-                String data2 = "徐汇校区";
                 String data3 = (String) date.getText();
                 Intent intent = new Intent(AppointActivity.this, AppointNaviActivity.class);
-                intent.putExtra("departure_place", data1);
-                intent.putExtra("arrive_place", data2);
+                intent.putExtra("departure_place", departure_place_str);
+                intent.putExtra("arrive_place", arrive_place_str);
                 intent.putExtra("singleway_date", data3);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -115,16 +104,15 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         next_btn = findViewById(R.id.appoint_next);
 
         yesterday_btn.setOnClickListener(this);
-        next_btn.setOnClickListener(this);
+        nextday_btn.setOnClickListener(this);
         date.setOnClickListener(this);
         calendar_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
 
         date.setText(date_str);
 
-        recyclerView = (RecyclerView) findViewById(R.id.appoint_recycle);
+        recyclerView = findViewById(R.id.appoint_recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // appointAdapter = new AppointAdapter(this, appointmentList);
         appointAdapter = new AppointAdapter(this);
         recyclerView.setAdapter(appointAdapter);
 
@@ -136,16 +124,15 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.refresh_appoint);
+        swipeRefresh = findViewById(R.id.refresh_appoint);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshAppoint();
+                retrieveData();
             }
         });
 
         retrieveData();
-        //initData();
     }
 
     @Override
@@ -154,7 +141,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_calendar:
             case R.id.appoint_next:
             case R.id.appoint_date:
-                final TextView textView_date = (TextView) v.findViewById(R.id.appoint_date);
+                final TextView textView_date = v.findViewById(R.id.appoint_date);
 
               //  Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -169,25 +156,24 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.appoint_yesterday:
                 ToastUtils.showShort("前一天");
-                //modifyDate(-1);
-
-                //临时写在这里的
-                String data1 = departure_place_str;
-                String data2 = arrive_place_str;
-                String data3 = "12:15";
-                String data4 = "13:15";
-                String data5 = (String) date.getText();
-                String data6 = "MXHD1215";
-                String data7 = "寒暑假工作日";
-                Intent orderIntent = new Intent(AppointActivity.this, OrderActivity.class);
-                orderIntent.putExtra("departure_place", data1);
-                orderIntent.putExtra("arrive_place", data2);
-                orderIntent.putExtra("departure_time", data3);
-                orderIntent.putExtra("arrive_time", data4);
-                orderIntent.putExtra("departure_date", data5);
-                orderIntent.putExtra("shiftid", data6);
-                orderIntent.putExtra("shift_type", data7);
-                startActivity(orderIntent);
+                modifyDate(-1);
+                //临时数据
+//                String data1 = departure_place_str;
+//                String data2 = arrive_place_str;
+//                String data3 = "12:15";
+//                String data4 = "13:15";
+//                String data5 = (String) date.getText();
+//                String data6 = "MXHD1215";
+//                String data7 = "寒暑假工作日";
+//                Intent orderIntent = new Intent(AppointActivity.this, OrderActivity.class);
+//                orderIntent.putExtra("departure_place", data1);
+//                orderIntent.putExtra("arrive_place", data2);
+//                orderIntent.putExtra("departure_time", data3);
+//                orderIntent.putExtra("arrive_time", data4);
+//                orderIntent.putExtra("departure_date", data5);
+//                orderIntent.putExtra("shiftid", data6);
+//                orderIntent.putExtra("shift_type", data7);
+//                startActivity(orderIntent);
                 break;
 
             case R.id.appoint_nextday:
@@ -210,16 +196,19 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         finish();
     }
 
-    private void refreshAppoint(){ retrieveData();}
 
     private void retrieveData() {
+        Log.d("retrivedata", "start");
+
         Calendar calendar = StringCalendarUtils.StringToCalendar((String) date.getText());
         line_type = ShiftUtils.getTypeByCalendar(calendar);
+        String appoint_date = (String) date.getText();
+
         RetrofitClient.getBusApi()
-            .getAppointment(line_name, line_type)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Observer<AppointResponse>() {
+                .getAppointment(line_name, line_type, appoint_date)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AppointResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
                     addDisposable(d);
@@ -228,6 +217,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onNext(AppointResponse response) {
                     Log.d(TAG, "onNext: ");
+                    for(AppointInfo info:response.getAppointment()){
+                        info.setArrive_place(arrive_place_str);
+                        info.setDeparture_place(departure_place_str);
+                    }
                     mAdapter.setDataList(response.getAppointment());
                     swipeRefresh.setRefreshing(false);
                 }
@@ -245,39 +238,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                     //mProgressBar.setVisibility(View.GONE);
                 }
             });
-    }
-
-//    private void initData() {
-//        appointmentList = new ArrayList<>();
-//        for (int i = 1; i <= 20; i++) {
-//            appointment = new Appointment();
-//            appointment.setId(i + "");
-//            appointment.setType(0);
-//            appointment.setShiftid("MXWD0745");
-//            appointment.setDeparture_place("始：闵行");
-//            appointment.setArrive_place("终：徐汇");
-//            appointment.setDeparture_time("07:45");
-//            appointment.setArrive_time("08:45");
-//            appointment.setRemain_seat(5);
-//            appointmentList.add(appointment);
-//        }
-//        setData();
-//    }
-
-    private void setData() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-       // appointAdapter = new AppointAdapter(this, appointmentList);
-
-        appointAdapter = new AppointAdapter(this);
-        recyclerView.setAdapter(appointAdapter);
-
-        //滚动监听
-        appointAdapter.setOnScrollListener(new AppointAdapter.OnScrollListener() {
-            @Override
-            public void scrollTo(int pos) {
-                recyclerView.scrollToPosition(pos);
-            }
-        });
     }
 
     private void getConrrentDay() {

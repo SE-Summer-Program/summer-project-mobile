@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -115,6 +116,7 @@ public class App extends Application {
                     // 保存成功
                     installationId = AVInstallation.getCurrentInstallation().getInstallationId();
                     // 关联  installationId 到用户表等操作……
+                    Log.i("LEANCLOUD",installationId);
                 } else {
                     // 保存失败，输出错误信息
                 }

@@ -1,21 +1,21 @@
 package com.sjtubus.model.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.sjtubus.model.Appointment;
+import com.sjtubus.model.AppointInfo;
 
 import java.util.List;
 
 public class AppointResponse extends HttpResponse {
 
-    @SerializedName("appointment")
-    private List<Appointment> appointmentList;
+    @SerializedName("appointInfos")
+    private List<AppointInfo> appointInfoList;
 
-    public List<Appointment> getAppointment() {
-        return appointmentList;
+    public List<AppointInfo> getAppointment() {
+        return appointInfoList;
     }
 
-    public void setAppointment(List<Appointment> appointmentList) {
-        this.appointmentList = appointmentList;
+    public void setAppointment(List<AppointInfo> appointInfoList) {
+        this.appointInfoList = appointInfoList;
     }
 
 }

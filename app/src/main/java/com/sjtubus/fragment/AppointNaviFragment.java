@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
@@ -25,8 +27,8 @@ import java.util.Objects;
 import static android.app.Activity.RESULT_OK;
 
 public class AppointNaviFragment extends BaseFragment {
+    private static AppointNaviFragment fragment;
 
-    private Toolbar toolbar;
     private TextView singleway;
     private TextView doubleway;
     private TextView departure_place;
@@ -34,14 +36,22 @@ public class AppointNaviFragment extends BaseFragment {
     private TextView singleway_date;
     private TextView doubleway_date;
     private Button search_btn;
+    private ImageView revert_btn;
 
-    private ToastUtils toastUtils;
+    private int departure_index = 0;//闵行校区
+    private int arrive_index = 1;  //徐汇校区
+
+    private MyListener listener = new MyListener();
+
     private String[] station_list = {"闵行校区", "徐汇校区", "七宝校区"};
     private int year, month, day;
 
-    public static AppointNaviFragment getInstance() {
-        AppointNaviFragment appointNaviFragment = new AppointNaviFragment();
-        return appointNaviFragment;
+    public static AppointNaviFragment getInstance(String title) {
+        if(fragment == null){
+            fragment = new AppointNaviFragment();
+        }
+        return new AppointNaviFragment();
+        //FIXME： 这里需要利用传过来的参数，由于暂时没啥用就先这样返回了
     }
 
     @Override
@@ -59,12 +69,14 @@ public class AppointNaviFragment extends BaseFragment {
         singleway_date = view.findViewById(R.id.appoint_singlewaydate);
         doubleway_date = view.findViewById(R.id.appoint_doublewaydate);
         search_btn = view.findViewById(R.id.appoint_searchbtn);
+        revert_btn = view.findViewById(R.id.revert_place_btn);
 
-        departure_place.setOnClickListener(new MyListener());
-        arrive_place.setOnClickListener(new MyListener());
-        singleway_date.setOnClickListener(new MyListener());
-        doubleway_date.setOnClickListener(new MyListener());
-        search_btn.setOnClickListener(new MyListener());
+        departure_place.setOnClickListener(listener);
+        arrive_place.setOnClickListener(listener);
+        singleway_date.setOnClickListener(listener);
+        doubleway_date.setOnClickListener(listener);
+        search_btn.setOnClickListener(listener);
+        revert_btn.setOnClickListener(listener);
 
         getConrrentDay();
         singleway_date.setText(year+"年"+month+"月"+day+"日");
@@ -76,27 +88,46 @@ public class AppointNaviFragment extends BaseFragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
+                //交换目的地与出发地
+                case R.id.revert_place_btn:
+                    int temp = departure_index;
+                    departure_index = arrive_index;
+                    arrive_index = temp;
+                    departure_place.setText(station_list[departure_index]);
+                    arrive_place.setText(station_list[arrive_index]);
+                    break;
                 case R.id.appoint_departureplace:
-                case R.id.appoint_arriveplace:
-                    //  toastUtils.showShort("hello");
-                    final TextView textView_place = (TextView) v.findViewById(v.getId());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle("选择站点");
-                    builder.setSingleChoiceItems(station_list, 0, new DialogInterface.OnClickListener() {
+                    final TextView depart_txt = v.findViewById(v.getId());
+                    new AlertDialog.Builder(getActivity())
+                        .setTitle("选择出发地")
+                        .setNegativeButton("取消", null)
+                        .setSingleChoiceItems(station_list, departure_index, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            depart_txt.setText(station_list[which]);
+                            departure_index = which;
                             dialog.dismiss();
-                            textView_place.setText(station_list[which]);
                         }
-                    });
-                    builder.setNegativeButton("取消", null);
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
+                    }).create().show();
+                    break;
+                case R.id.appoint_arriveplace:
+                    final TextView arrive_txt = v.findViewById(v.getId());
+                    new AlertDialog.Builder(getActivity())
+                        .setTitle("选择目的地")
+                        .setNegativeButton("取消", null)
+                        .setSingleChoiceItems(station_list, arrive_index, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            arrive_txt.setText(station_list[which]);
+                            arrive_index = which;
+                            dialog.dismiss();
+                        }
+                    }).create().show();
                     break;
 
                 case R.id.appoint_singlewaydate:
                 case R.id.appoint_doublewaydate:
-                    final TextView textView_date = (TextView) v.findViewById(v.getId());
+                    final TextView textView_date = v.findViewById(v.getId());
 
                     new DatePickerDialog(Objects.requireNonNull(getActivity()), new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -110,17 +141,14 @@ public class AppointNaviFragment extends BaseFragment {
                     break;
 
                 case R.id.appoint_searchbtn:
-                    if (departure_place.getText() == arrive_place.getText()){
-                        toastUtils.showShort("起点和终点不能相同！");
+                    if (departure_index == arrive_index){
+                        ToastUtils.showShort("起点和终点不能相同！");
                         break;
                     }
-                    String data1 = (String) departure_place.getText();
-                    String data2 = (String) arrive_place.getText();
-                    String data3 = (String) singleway_date.getText();
                     Intent appointIntent = new Intent(getActivity(), AppointActivity.class);
-                    appointIntent.putExtra("departure_place", data1);
-                    appointIntent.putExtra("arrive_place", data2);
-                    appointIntent.putExtra("singleway_date", data3);
+                    appointIntent.putExtra("departure_place", (String) departure_place.getText());
+                    appointIntent.putExtra("arrive_place", (String) arrive_place.getText());
+                    appointIntent.putExtra("singleway_date", (String) singleway_date.getText());
                     startActivityForResult(appointIntent, 1);
                     break;
             }
@@ -133,7 +161,7 @@ public class AppointNaviFragment extends BaseFragment {
             case 1:
                 if (resultCode == RESULT_OK){
                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));
-                    toastUtils.showShort(data.getStringExtra("singleway_date"));
+                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
                     departure_place.setText(data.getStringExtra("departure_place"));
                     arrive_place.setText(data.getStringExtra("arrive_place"));
                     singleway_date.setText(data.getStringExtra("singleway_date"));
