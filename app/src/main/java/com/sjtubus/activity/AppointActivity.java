@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.AppointInfo;
+import com.sjtubus.model.AppointShortInfo;
 import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ShiftUtils;
@@ -22,6 +23,7 @@ import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.AppointAdapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -53,8 +55,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private TextView date;
     private ImageView calendar_btn;
     private ImageView next_btn;
-
-    private AppointAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,11 +217,23 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 @Override
                 public void onNext(AppointResponse response) {
                     Log.d(TAG, "onNext: ");
-                    for(AppointInfo info:response.getAppointment()){
+                    List<AppointInfo> infos = new ArrayList<>();
+                    int i = 0;
+                    for(AppointShortInfo shortinfo:response.getAppointment()){
+                        AppointInfo info = new AppointInfo();
+                        info.setShiftid(shortinfo.getShiftid());
+                        info.setArrive_time(shortinfo.getArrive_time());
+                        info.setDeparture_time(shortinfo.getDeparture_time());
+                        info.setRemain_seat(shortinfo.getRemain_seat());
+                        info.setId(i+"");
+                        info.setType(0);
                         info.setArrive_place(arrive_place_str);
                         info.setDeparture_place(departure_place_str);
+                        info.setAppoint_status(shortinfo.getRemain_seat()>0?1:0) ;
+                        i++;
+                        infos.add(info);
                     }
-                    mAdapter.setDataList(response.getAppointment());
+                    appointAdapter.setDataList(infos);
                     swipeRefresh.setRefreshing(false);
                 }
 

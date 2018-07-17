@@ -12,20 +12,14 @@ public class AppointInfo {
     private AppointInfo childBean;
 
     private String id;
-
-    @SerializedName("shiftId")
     private String shiftid;
-    private String departure_place;
-    private String arrive_place;
-    @SerializedName("departureTime")
     private String departure_time;
-    @SerializedName("arriveTime")
     private String arrive_time;
-    @SerializedName("remainSeat")
     private int remain_seat;
 
+    private String departure_place;
+    private String arrive_place;
     private int appoint_status; //无座，预约
-    private String child_msg;
 
     /****************************************/
 
@@ -113,13 +107,5 @@ public class AppointInfo {
 
     public void setAppoint_status(int appoint_status) {
         this.appoint_status = appoint_status;
-    }
-
-    public String getChild_msg() {
-        return child_msg;
-    }
-
-    public void setChild_msg(String child_msg) {
-        this.child_msg = child_msg;
     }
 }

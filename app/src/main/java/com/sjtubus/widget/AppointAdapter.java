@@ -138,7 +138,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
     private AppointInfo getChildDataBean(AppointInfo bean) {
         AppointInfo child = new AppointInfo();
         child.setType(1);
-        child.setChild_msg(bean.getChild_msg());
+        //child.setChild_msg(bean.getChild_msg());
         return child;
     }
 
