@@ -43,4 +43,21 @@ public class StringCalendarUtils {
         return (month == Calendar.FEBRUARY || month == Calendar.JUNE
                 || month == Calendar.JULY);
     }
+
+    public static String getCurrrentDate(){
+        String current_date="";
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        current_date=simpleDateFormat.format(date);
+        return current_date;
+    }
+
+    public static String getCurrentTime(){
+        String current_time="";
+        Date date = new Date();
+        //最后的aa表示“上午”或“下午” HH表示24小时制  如果换成hh表示12小时制
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        current_time=simpleDateFormat.format(date);
+        return current_time;
+    }
 }

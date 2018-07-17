@@ -1,5 +1,7 @@
 package com.sjtubus.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author wxw
  * @date 2018/7/18 10:09
@@ -7,12 +9,66 @@ package com.sjtubus.model;
 
 public class RecordInfo {
 
-    private String confirm_date; //提交预约申请的时间
+    private String confirmDate; //提交预约申请的时间
 
-    private String departure_date;
-    private String departure_time; //预约的日期和时间
+    @SerializedName("lineName")
+    private String lineName;
 
-    private String line_name;
+    @SerializedName("departureDate")
+    private String departureDate;
+    @SerializedName("departureTime")
+    private String departureTime; //预约的日期和时间
+    @SerializedName("shiftid")
     private String shiftid;
 
+    private String departureMsg; //根据item_record的格式来的
+
+    public String getConfirmDate() {
+        return confirmDate;
+    }
+
+    public void setConfirmDate(String confirmDate) {
+        this.confirmDate = confirmDate;
+    }
+
+    public String getLineName() {
+        return lineName;
+    }
+
+    public void setLineName(String lineName) {
+        this.lineName = lineName;
+    }
+
+    public String getDepartureDate() {
+        return departureDate;
+    }
+
+    public void setDepartureDate(String departureDate) {
+        this.departureDate = departureDate;
+    }
+
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public String getShiftid() {
+        return shiftid;
+    }
+
+    public void setShiftid(String shiftid) {
+        this.shiftid = shiftid;
+    }
+
+    public String getDepartureMsg() {
+        departureMsg = getDepartureDate() + " " + getDepartureTime() + getShiftid();
+        return departureMsg;
+    }
+
+    public void setDepartureMsg(String departureMsg) {
+        this.departureMsg = departureMsg;
+    }
 }
