@@ -166,7 +166,9 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         day = dayOfMonth_choose;
                     }
                 }, year,month,day).show();
+
                 break;
+
             case R.id.appoint_yesterday:
                 ToastUtils.showShort("前一天");
                 //modifyDate(-1);
