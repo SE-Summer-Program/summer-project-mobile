@@ -43,7 +43,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     LineAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
     Calendar calendar;
-    StringCalendarUtils stringCalendarUtils;
     MyDialogListener dialogListener = new MyDialogListener();
     private int select = 0;
 
@@ -89,7 +88,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
 
             }
-
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
@@ -194,6 +192,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
             });
     }
 
+
     private class MyDialogListener implements DialogInterface.OnClickListener{
         private int temp_select = 0;
         @Override
@@ -212,8 +211,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     public String getTypes(){
         calendar = Calendar.getInstance();
         //date = calendar.getTime();
-        boolean isWeekendFlag = stringCalendarUtils.isWeekend(calendar);
-        boolean isHoildayFlag = stringCalendarUtils.isHoilday(calendar);
+        boolean isWeekendFlag = StringCalendarUtils.isWeekend(calendar);
+        boolean isHoildayFlag = StringCalendarUtils.isHoilday(calendar);
         if (!isHoildayFlag && !isWeekendFlag){
             return "NormalWorkday";
         }

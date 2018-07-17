@@ -174,6 +174,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(reserveIntent);
                 break;
             case R.id.record_btn:
+                Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
+                startActivity(recordIntent);
                 break;
             case R.id.position_btn:
                 break;
@@ -231,6 +233,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 Intent person_intent = new Intent(MainActivity.this,PersonInfoActivity.class);
                 startActivity(person_intent);
                 break;
+            case R.id.navigation_item_reserve:
+                Intent reserveIntent = new Intent(MainActivity.this, RecordActivity.class);
+                startActivity(reserveIntent);
             default:
                 break;
         }
