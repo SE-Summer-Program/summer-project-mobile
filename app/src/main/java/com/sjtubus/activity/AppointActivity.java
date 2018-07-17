@@ -169,7 +169,17 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 break;
             case R.id.appoint_yesterday:
                 ToastUtils.showShort("前一天");
-                modifyDate(-1);
+                //modifyDate(-1);
+
+                //临时写在这里的
+                String data1 = departure_place_str;
+                String data2 = arrive_place_str;
+                String data3 = (String) date.getText();
+                Intent orderIntent = new Intent(AppointActivity.this, OrderActivity.class);
+                orderIntent.putExtra("departure_place", data1);
+                orderIntent.putExtra("arrive_place", data2);
+                orderIntent.putExtra("departure_date", data3);
+                startActivity(orderIntent);
                 break;
             case R.id.appoint_nextday:
                 ToastUtils.showShort("后一天");
