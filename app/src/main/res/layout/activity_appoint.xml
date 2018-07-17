@@ -67,7 +67,9 @@
             android:layout_gravity="end"
             android:gravity="end"
             android:textColor="@color/primary_white"
-            android:paddingRight="@dimen/largePadding"/>
+            android:paddingRight="@dimen/largePadding"
+            android:clickable="true"
+            android:focusable="true"/>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

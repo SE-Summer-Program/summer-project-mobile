@@ -115,7 +115,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         next_btn = findViewById(R.id.appoint_next);
 
         yesterday_btn.setOnClickListener(this);
-        next_btn.setOnClickListener(this);
+        nextday_btn.setOnClickListener(this);
         date.setOnClickListener(this);
         calendar_btn.setOnClickListener(this);
         next_btn.setOnClickListener(this);
@@ -194,7 +194,38 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
             case R.id.appoint_nextday:
                 ToastUtils.showShort("后一天");
-                modifyDate(1);
+
+//                Calendar calendar = Calendar.getInstance();
+//                int year = calendar.get(Calendar.YEAR);
+//                int month = calendar.get(Calendar.MONTH);
+//                int day = calendar.get(Calendar.DAY_OF_MONTH);
+//                datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+//
+//                @Override
+//                public void onDateChanged(DatePicker view, int year,
+//                                          int monthOfYear, int dayOfMonth) {
+//
+//                    if (isDateAfter(view)) {
+//                        Calendar mCalendar = Calendar.getInstance();
+//                        view.init(mCalendar.get(Calendar.YEAR),
+//                                mCalendar.get(Calendar.MONTH),
+//                                mCalendar.get(Calendar.DAY_OF_MONTH), this);
+//                    }
+//                }
+//
+//                private boolean isDateAfter(DatePicker tempView) {
+//                    Calendar mCalendar = Calendar.getInstance();
+//                    Calendar tempCalendar = Calendar.getInstance();
+//                    tempCalendar.set(tempView.getYear(), tempView.getMonth(),
+//                            tempView.getDayOfMonth(), 0, 0, 0);
+//                    if (tempCalendar.after(mCalendar))
+//                        return true;
+//                    else
+//                        return false;
+//                }
+
+
+                //modifyDate(1);
                 break;
         }
     }
