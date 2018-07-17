@@ -13,16 +13,18 @@
         android:background="@color/primary_red"
         app:titleTextColor="@color/primary_white"
         app:popupTheme="@style/Theme.AppCompat.Light"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:paddingTop="@dimen/smallPadding">
 
         <TextView
-            android:id="@+id/appoint_toolbar_title"
+            android:id="@+id/order_toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/primary_white"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:text="@string/title_order"/>
     </android.support.v7.widget.Toolbar>
     
     <LinearLayout
@@ -30,7 +32,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/screenPadding"
-        android:paddingVertical="@dimen/largePadding"
+        android:paddingBottom="@dimen/smallPadding"
         android:background="@color/primary_red">
 
         <LinearLayout
@@ -41,17 +43,28 @@
             <TextView
                 android:id="@+id/order_departureplace"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:textColor="@color/primary_white"
                 android:gravity="center"/>
             <TextView
                 android:id="@+id/order_departuretime"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="2"
                 android:textColor="@color/primary_white"
                 android:textStyle="bold"
                 android:text="12:15"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textSize="@dimen/normalTextSize"/>
+            <TextView
+                android:id="@+id/order_departuredate"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/primary_white" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,22 +75,26 @@
             <TextView
                 android:id="@+id/order_shiftid"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:textColor="@color/primary_white"
                 android:text="MXHD1215"
                 android:gravity="center"/>
             <TextView
-                android:id="@+id/order_comment"
+                android:id="@+id/order_shifttype"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:textColor="@color/primary_white"
-                android:text="备注"
+                android:text="寒暑假工作日"
                 android:gravity="center"/>
             <TextView
-                android:id="@+id/order_date"
+                android:id="@+id/order_comment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:textColor="@color/primary_white"
+                android:text="备注信息"
                 android:gravity="center"/>
         </LinearLayout>
 
@@ -89,19 +106,41 @@
             <TextView
                 android:id="@+id/order_arriveplace"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:textColor="@color/primary_white"
                 android:gravity="center"/>
             <TextView
                 android:id="@+id/order_arrivetime"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="2"
                 android:textColor="@color/primary_white"
                 android:textStyle="bold"
                 android:text="13:15"
-                android:gravity="center"/>
+                android:gravity="center"
+                android:textSize="@dimen/normalTextSize"/>
+            <TextView
+                android:id="@+id/order_arrivedate"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/primary_white" />
         </LinearLayout>
         
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=""/>
+
     </LinearLayout>
 
 </LinearLayout>

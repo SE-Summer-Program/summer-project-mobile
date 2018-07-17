@@ -12,7 +12,8 @@
         android:background="@color/primary_red"
         app:titleTextColor="@color/primary_white"
         app:popupTheme="@style/Theme.AppCompat.Light"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:paddingTop="@dimen/smallPadding">
 
         <TextView
             android:id="@+id/appoint_toolbar_title"

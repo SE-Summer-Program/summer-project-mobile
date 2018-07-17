@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
@@ -20,6 +21,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     private TextView departure_date;
     private TextView arrive_place;
     private TextView arrive_time;
+    private TextView yesterday_btn;
+    private TextView nextday_btn;
+    private TextView date;
+    private ImageView calendar_btn;
+    private ImageView next_btn;
 
     private String departure_place_str;
     private String arrive_place_str;
@@ -47,7 +53,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
     private void initToolbar(){
         mToolbar = findViewById(R.id.toolbar_order);
-        mToolbar.setTitle("订单填写");
+        mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.drawable.back_32);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +69,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         departure_time = findViewById(R.id.order_departuretime);
         shiftid = findViewById(R.id.order_shiftid);
         comment = findViewById(R.id.order_comment);
-        departure_date = findViewById(R.id.order_date);
+        departure_date = findViewById(R.id.order_departuredate);
         arrive_place = findViewById(R.id.order_arriveplace);
         arrive_time = findViewById(R.id.order_arrivetime);
 
