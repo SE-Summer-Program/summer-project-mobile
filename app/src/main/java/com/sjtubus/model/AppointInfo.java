@@ -1,7 +1,5 @@
 package com.sjtubus.model;
 
-import com.google.gson.annotations.SerializedName;
-
 public class AppointInfo {
 
     public static final int PARENT_ITEM = 0; //父布局
@@ -15,6 +13,9 @@ public class AppointInfo {
     private String shiftid;
     private String departure_time;
     private String arrive_time;
+
+    private String date;
+    private String line_type;
     private int remain_seat;
 
     private String departure_place;
@@ -99,6 +100,23 @@ public class AppointInfo {
 
     public void setRemain_seat(int remain_seat) {
         this.remain_seat = remain_seat;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+
+    public String getLine_type() {
+        return line_type;
+    }
+
+    public void setLine_type(String line_type) {
+        this.line_type = line_type;
     }
 
     public int getAppoint_status() {

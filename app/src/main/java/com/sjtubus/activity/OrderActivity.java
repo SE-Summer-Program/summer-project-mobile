@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -43,7 +42,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
     private TextView time_set, phone_location;
     private EditText phone_edit, mail_edit;
-    private ImageView phone_clear, mail_clear;
     private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     private EditText comment1, comment2, comment3, comment4;
     private ImageView comment1_clear, comment2_clear, comment3_clear, comment4_clear;
@@ -84,13 +82,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
     private void initToolbar(){
         mToolbar = findViewById(R.id.toolbar_order);
-        mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.drawable.back_32);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent appointIntent = new Intent(OrderActivity.this, AppointActivity.class);
-                startActivity(appointIntent);
+                finish();
             }
         });
 
@@ -125,9 +121,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         time_set = findViewById(R.id.order_setremindtime);
         phone_location = findViewById(R.id.order_phonelocation);
         phone_edit = findViewById(R.id.order_phoneedit);
-        phone_clear = findViewById(R.id.order_phoneclear);
         mail_edit = findViewById(R.id.order_mailedit);
-        mail_clear = findViewById(R.id.order_mailclear);
 
         remind_time = findViewById(R.id.order_remind_time);
         remind_phone = findViewById(R.id.order_remind_phone);
@@ -138,9 +132,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         time_set.setOnClickListener(this);
         phone_location.setOnClickListener(this);
         phone_edit.setOnClickListener(this);
-        phone_clear.setOnClickListener(this);
         mail_edit.setOnClickListener(this);
-        mail_clear.setOnClickListener(this);
     }
 
     private void initNeedView(){

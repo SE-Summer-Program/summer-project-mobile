@@ -30,7 +30,7 @@
     <string name="logout">退出登录</string>
     <string name="studentnum">学号/工号</string>
     <string name="title_record">预约记录</string>
-    <string name="title_order">订单填写</string>
+    <string name="title_order">信息填写</string>
     <string name="xuhui">徐汇校区</string>
     <string name="minhang">闵行校区</string>
 </resources>

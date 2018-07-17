@@ -1,6 +1,7 @@
 package com.sjtubus.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sjtubus.R;
+import com.sjtubus.activity.OrderActivity;
 import com.sjtubus.model.AppointInfo;
 
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
                 break;
             case AppointInfo.CHILD_ITEM:
                 AppointChildViewHolder childViewHolder = (AppointChildViewHolder)holder;
-                childViewHolder.bindView(appointInfoList.get(position), position);
+                childViewHolder.bindView(appointInfoList.get(position), position, ChildListener);
                 break;
         }
     }
@@ -98,6 +100,28 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
             remove(position + 1); //删除
             if (onScrollListener != null){
                 onScrollListener.scrollTo(position);
+            }
+        }
+    };
+
+    private View.OnClickListener ChildListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v){
+            switch (v.getId()){
+                case R.id.appointitem_reservebtn:
+                    AppointInfo info = appointInfoList.get((int)v.getTag());
+                    Intent orderIntent = new Intent(context, OrderActivity.class);
+                    orderIntent.putExtra("departure_place", info.getDeparture_place());
+                    orderIntent.putExtra("arrive_place", info.getArrive_place());
+                    orderIntent.putExtra("departure_time", info.getDeparture_time());
+                    orderIntent.putExtra("arrive_time", info.getArrive_time());
+                    orderIntent.putExtra("departure_date", info.getDate());
+                    orderIntent.putExtra("shiftid", info.getShiftid());
+                    orderIntent.putExtra("shift_type", info.getLine_type());
+                    context.startActivity(orderIntent);
+                    break;
+                case R.id.appointitem_infobtn:
+                    break;
             }
         }
     };

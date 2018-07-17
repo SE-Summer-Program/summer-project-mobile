@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/shallow_gray"
     android:orientation="vertical">
 
@@ -170,14 +173,10 @@
             android:layout_weight="2.5"
             android:layout_height="match_parent"
             android:text="提醒时间 :"
+            android:layout_marginStart="8dp"
             android:textSize="14sp"
-            android:layout_gravity="right"
-            android:gravity="right" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:textSize="14sp"/>
+            android:layout_gravity="end"
+            android:gravity="center|end" />
         <TextView
             android:id="@+id/order_setremindtime"
             android:layout_width="0dp"
@@ -187,7 +186,7 @@
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:drawableRight="@drawable/more_8"/>
+            android:drawableEnd="@drawable/more_8"/>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="4"
@@ -211,14 +210,14 @@
             android:textSize="14sp"
             android:text="大陆手机 :"
             android:layout_gravity="right"
-            android:gravity="right"
+            android:gravity="center|end"
             android:drawableLeft="@drawable/more_8">
         </TextView>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.5"
             android:layout_height="match_parent"/>
-        <EditText
+        <com.sjtubus.widget.ClearEditText
             android:id="@+id/order_phoneedit"
             android:layout_width="0dp"
             android:layout_weight="6"
@@ -229,12 +228,6 @@
             android:maxLength="11"
             android:hint="请输入手机号"
             android:focusable="true"/>
-        <ImageView
-            android:id="@+id/order_phoneclear"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="20dp"
-            android:src="@mipmap/clear_48"/>
     </LinearLayout>
 
     <LinearLayout
@@ -251,15 +244,16 @@
             android:layout_height="match_parent"
             android:text="邮箱地址 :"
             android:textSize="14sp"
-            android:layout_gravity="right"
-            android:gravity="right">
+            android:layout_gravity="center"
+            android:gravity="center|right">
         </TextView>
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.5"
+            android:gravity="center"
             android:layout_height="match_parent"
             android:textSize="14sp"/>
-        <EditText
+        <com.sjtubus.widget.ClearEditText
             android:id="@+id/order_mailedit"
             android:layout_width="0dp"
             android:layout_weight="6"
@@ -270,14 +264,6 @@
             android:maxLength="20"
             android:hint="请输入邮箱"
             android:focusable="true"/>
-        <ImageView
-            android:id="@+id/order_mailclear"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="20dp"
-            android:src="@mipmap/clear_48"
-            android:layout_gravity="center"
-            android:gravity="center"/>
     </LinearLayout>
 
     <LinearLayout
@@ -334,18 +320,13 @@
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"/>
-        <EditText
+        <com.sjtubus.widget.ClearEditText
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
             android:textSize="14sp"
             android:layout_gravity="bottom"
             android:gravity="bottom"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="20dp"
-            android:src="@mipmap/clear_48"/>
     </LinearLayout>
 
     <LinearLayout
@@ -374,18 +355,13 @@
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"/>
-        <EditText
+        <com.sjtubus.widget.ClearEditText
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
             android:textSize="14sp"
             android:layout_gravity="bottom"
             android:gravity="bottom"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="20dp"
-            android:src="@mipmap/clear_48"/>
     </LinearLayout>
 
     <LinearLayout
@@ -414,18 +390,13 @@
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"/>
-        <EditText
+        <com.sjtubus.widget.ClearEditText
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
             android:textSize="14sp"
             android:layout_gravity="bottom"
             android:gravity="bottom"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="20dp"
-            android:src="@mipmap/clear_48"/>
     </LinearLayout>
 
     <LinearLayout
@@ -458,11 +429,6 @@
             android:textSize="14sp"
             android:layout_gravity="bottom"
             android:gravity="bottom"/>
-        <ImageView
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="20dp"
-            android:src="@mipmap/clear_48"/>
     </LinearLayout>
 
     <Button
@@ -476,3 +442,4 @@
         android:text="预约" />
 
 </LinearLayout>
+</ScrollView>

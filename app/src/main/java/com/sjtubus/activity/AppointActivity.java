@@ -226,7 +226,9 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         info.setDeparture_time(shortinfo.getDeparture_time());
                         info.setRemain_seat(shortinfo.getRemain_seat());
                         info.setId(i+"");
+                        info.setLine_type(line_type);
                         info.setType(0);
+                        info.setDate(date_str);
                         info.setArrive_place(arrive_place_str);
                         info.setDeparture_place(departure_place_str);
                         info.setAppoint_status(shortinfo.getRemain_seat()>0?1:0) ;
