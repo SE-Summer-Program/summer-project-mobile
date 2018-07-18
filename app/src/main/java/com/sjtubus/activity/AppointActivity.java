@@ -50,6 +50,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private String line_name;
     private String line_type;
 
+    private TextView left_appoint;
     private TextView yesterday_btn;
     private TextView nextday_btn;
     private TextView date;
@@ -102,6 +103,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         date = findViewById(R.id.appoint_date);
         calendar_btn = findViewById(R.id.appoint_calendar);
         next_btn = findViewById(R.id.appoint_next);
+        left_appoint = findViewById(R.id.appoint_left);
 
         yesterday_btn.setOnClickListener(this);
         nextday_btn.setOnClickListener(this);
@@ -139,9 +141,11 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.appoint_calendar:
+                break;
             case R.id.appoint_next:
+                break;
             case R.id.appoint_date:
-                final TextView textView_date = v.findViewById(R.id.appoint_date);
+                final TextView textView_date = (TextView) v;
 
               //  Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -155,10 +159,9 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         year = year_choose;
                         month = month_choose+1;
                         day = dayOfMonth_choose;
+                        retrieveData();
                     }
                 }, year,month,day).show();
-
-                retrieveData();
 
                 break;
             case R.id.appoint_yesterday:
@@ -225,6 +228,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         i++;
                         infos.add(info);
                     }
+                    left_appoint.setText("当日剩余可预约班次:"+infos.size());
                     appointAdapter.setDataList(infos);
                     swipeRefresh.setRefreshing(false);
                 }

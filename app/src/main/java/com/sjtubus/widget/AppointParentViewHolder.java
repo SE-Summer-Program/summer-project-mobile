@@ -3,12 +3,12 @@ package com.sjtubus.widget;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.os.Build;
 
 import com.sjtubus.R;
 import com.sjtubus.model.AppointInfo;
@@ -55,7 +55,7 @@ public class AppointParentViewHolder extends BaseViewHolder{
         arrive_place.setText(bean.getArrive_place());
         departure_time.setText(bean.getDeparture_time());
         arrive_time.setText(bean.getArrive_time());
-      //  remain_seat.setText(((String) bean.getRemain_seat()));
+        remain_seat.setText("剩余"+bean.getRemain_seat()+"座");
 
         if (bean.isExpand()) {
             expand.setRotation(90);

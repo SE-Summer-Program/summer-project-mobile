@@ -23,6 +23,7 @@ import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.ToastUtils;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -245,20 +246,25 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                     public void onNext(HttpResponse response) {
                         if(response.getError()==0){
                             //显示预约成功
-                            String message = "您已成功预约" + date_str + departure_time_str + "从" + departure_place_str
+                            String message = "您已成功预约" + date_str +" "+ departure_time_str + "从" + departure_place_str
                                     + "开往" + arrive_place_str + "的" + shiftid_str +"号校区巴士，请记得按时前去乘坐哦~";
-                            new AlertDialog.Builder(OrderActivity.this)
-                                    .setTitle("预约成功！")
-                                    .setMessage(message)
-                                    .setPositiveButton("确定", null)
+                            new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("预约成功~")
+                                    .setContentText(message)
+                                    .setConfirmText("确定")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog) {
+                                            OrderActivity.this.startActivity(new Intent(OrderActivity.this,MainActivity.class));
+                                        }
+                                    })
                                     .show();
-
-                            /*
-                             * 这里可以停几秒再返回
-                             */
-
-                            OrderActivity.this.startActivity(new Intent(OrderActivity.this,MainActivity.class));
-                        }else ToastUtils.showShort(response.getMsg());
+                        }else{
+                            new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("预约失败!")
+                                    .setContentText("没有剩余座位或网络出错!")
+                                    .show();
+                        }
                     }
                     @Override
                     public void onError(Throwable e) {

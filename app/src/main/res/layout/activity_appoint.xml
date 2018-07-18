@@ -70,6 +70,15 @@
             android:paddingRight="@dimen/largePadding"/>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/appoint_left"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary_gray"
+        android:textSize="@dimen/middleText"
+        android:gravity="center"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_appoint"
         android:layout_width="match_parent"

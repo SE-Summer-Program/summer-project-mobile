@@ -42,33 +42,33 @@ MobSDK {
     appKey "26b5786c3909c"
     appSecret "7a1856615364cf66ead4d76019bee5ad"
     SMSSDK {}
-    ShareSDK {
-        devInfo {
-            SinaWeibo {
-                appKey "568898243"
-                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
-                callbackUri "http://www.sharesdk.cn"
-                shareByAppClient true
-            }
-            ShortMessage {}
-            Wechat {
-                appId "wx4868b35061f87885"
-                appSecret "64020361b8ec4c99936c0e3999a9f249"
-                userName "gh_afb25ac019c9"
-                path "pages/index/index.html?id=1"
-                withShareTicket true
-                miniprogramType 2
-                bypassApproval false
-            }
-            QQ {
-                appId "100371282"
-                appKey "aed9b0303e3ed1e27bae87c33761161d"
-                shareByAppClient true
-                bypassApproval false
-            }
-        }
-    }
-    UMSSDK {}
+//    ShareSDK {
+//        devInfo {
+//            SinaWeibo {
+//                appKey "568898243"
+//                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+//                callbackUri "http://www.sharesdk.cn"
+//                shareByAppClient true
+//            }
+//            ShortMessage {}
+//            Wechat {
+//                appId "wx4868b35061f87885"
+//                appSecret "64020361b8ec4c99936c0e3999a9f249"
+//                userName "gh_afb25ac019c9"
+//                path "pages/index/index.html?id=1"
+//                withShareTicket true
+//                miniprogramType 2
+//                bypassApproval false
+//            }
+//            QQ {
+//                appId "100371282"
+//                appKey "aed9b0303e3ed1e27bae87c33761161d"
+//                shareByAppClient true
+//                bypassApproval false
+//            }
+//        }
+//    }
+//    UMSSDK {}
 }
 
 dependencies {
@@ -88,16 +88,21 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.google.zxing:core:3.3.0'
+
     //自定义的view
     implementation 'com.youth.banner:banner:1.4.10'
     implementation 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
     implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
+    implementation 'com.github.f0ris.sweetalert:library:1.5.1'
+
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
     // LeanCloud 用户反馈包
     implementation 'cn.leancloud.android:avoscloud-feedback:v4.6.4@aar'
     // 推送与实时聊天需要的包
     implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

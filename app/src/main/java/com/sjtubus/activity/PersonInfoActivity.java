@@ -4,15 +4,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.User;
 import com.sjtubus.model.response.HttpResponse;
-import com.sjtubus.model.response.ProfileResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ToastUtils;
+import com.sjtubus.utils.ZxingUtils;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,6 +30,7 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
     private TextView realname;
     private TextView credit;
     private TextView studentnum;
+    private ImageView qrcode;
     private Button logout_btn;
 
     @Override
@@ -46,6 +48,7 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         realname = findViewById(R.id.person_realname);
         studentnum = findViewById(R.id.person_studentnum);
         logout_btn = findViewById(R.id.btn_logout);
+        qrcode = findViewById(R.id.user_qrcode);
         logout_btn.setOnClickListener(this);
     }
 
@@ -57,6 +60,8 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         credit.setText(String.valueOf(user.getCredit()));
         realname.setText(user.getRealname());
         studentnum.setText(user.getStudentNumber());
+        qrcode.setImageBitmap(ZxingUtils.createQRImage(user.getUsername(),250,250));
+
     }
 
     @Override
