@@ -74,7 +74,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL); //设置为垂直布局，默认
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); //分割线
+       // recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); //分割线
         adapter = new LineAdapter(this);
         adapter.setItemClickListener(this);
         recyclerView.setAdapter(adapter);

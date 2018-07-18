@@ -65,4 +65,16 @@ public class StringCalendarUtils {
         date_str = sdf.format(date);
         return date_str;
     }
+
+    public static String HHmmssToHHmm(String timestr){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(timestr);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return dateFormat2.format(date);
+    }
 }

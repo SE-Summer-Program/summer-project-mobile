@@ -84,8 +84,6 @@ public class AppointParentViewHolder extends BaseViewHolder{
                 }
             }
         });
-
-
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)

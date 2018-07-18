@@ -76,9 +76,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         String confirm_time = recordInfos.get(position).getConfirmDate();
         String line_name = recordInfos.get(position).getLineName();
         String departure_msg = recordInfos.get(position).getDepartureMsg();
+        String shift_id = recordInfos.get(position).getShiftid();
         holder.confirmtime.setText(confirm_time);
         holder.linename.setText(line_name);
         holder.departuremsg.setText(departure_msg);
+        holder.shiftid.setText(shift_id);
     }
 
     @Override
