@@ -25,15 +25,15 @@ import java.util.List;
 
 public class DateUtils {
 	
-	public static final String[] zodiacArr = { "猴", "鸡", "狗", "猪", "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊" };
+	private static final String[] zodiacArr = { "猴", "鸡", "狗", "猪", "鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊" };
 	 
-	public static final String[] constellationArr = { "水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "魔羯座" };
+	private static final String[] constellationArr = { "水瓶座", "双鱼座", "白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", "天秤座", "天蝎座", "射手座", "魔羯座" };
 	 
-	public static final int[] constellationEdgeDay = { 20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22 };
+	private static final int[] constellationEdgeDay = { 20, 19, 21, 21, 21, 22, 23, 23, 23, 23, 22, 22 };
 	 
 	/**
 	 * 根据日期获取生肖
-	 * @return
+	 * @ return
 	 */
 	public static String getZodica(Date date) {
 	    Calendar cal = Calendar.getInstance();
@@ -43,7 +43,7 @@ public class DateUtils {
 	 
 	/**
 	 * 根据日期获取星座
-	 * @return
+	 * @ return
 	 */
 	public static String getConstellation(Date date) {
 	    if (date == null) {
@@ -243,9 +243,9 @@ public class DateUtils {
     
     /**
      * 获取某年某月的第一天
-     * @param year
-     * @param month
-     * @return
+     * @ param year
+     * @ param month
+     * @ return
      */
     public static Date getStartMonthDate(int year, int month) {
         Calendar calendar = Calendar.getInstance();
@@ -255,9 +255,9 @@ public class DateUtils {
     
     /**
      * 获取某年某月的最后一天
-     * @param year
-     * @param month
-     * @return
+     * @ param year
+     * @ param month
+     * @ return
      */
     public static Date getEndMonthDate(int year, int month) {
         Calendar calendar = Calendar.getInstance();
@@ -269,7 +269,7 @@ public class DateUtils {
     
     /**
      * 获取今年是哪一年
-     * @return
+     * @ return
      */
      @SuppressLint("WrongConstant")
      public static Integer getNowYear() {
@@ -281,7 +281,7 @@ public class DateUtils {
      
      /**
       * 获取本月是哪一月
-      * @return
+      * @ return
       */
      @SuppressLint("WrongConstant")
      public static int getNowMonth() {
@@ -293,9 +293,9 @@ public class DateUtils {
      
      /**
       * 两个日期相减得到的天数
-      * @param beginDate
-      * @param endDate
-      * @return
+      * @ param beginDate
+      * @ param endDate
+      * @ return
       */
      public static int getDiffDays(Date beginDate, Date endDate) {
 
@@ -313,9 +313,9 @@ public class DateUtils {
      
     /**
      * 两个日期相减得到的毫秒数
-     * @param beginDate
-     * @param endDate
-     * @return
+     * @ param beginDate
+     * @ param endDate
+     * @ return
      */
      public static long dateDiff(Date beginDate, Date endDate) {
             long date1ms = beginDate.getTime();
@@ -325,9 +325,9 @@ public class DateUtils {
      
      /**
       * 获取两个日期中的最大日期
-      * @param beginDate
-      * @param endDate
-      * @return
+      * @ param beginDate
+      * @ param endDate
+      * @ return
       */
      public static Date max(Date beginDate, Date endDate) {
             if (beginDate == null) {
@@ -344,9 +344,9 @@ public class DateUtils {
      
      /**
       * 获取两个日期中的最小日期
-      * @param beginDate
-      * @param endDate
-      * @return
+      * @ param beginDate
+      * @ param endDate
+      * @ return
       */
      public static Date min(Date beginDate, Date endDate) {
             if (beginDate == null) {
@@ -363,8 +363,8 @@ public class DateUtils {
      
      /**
       * 返回某月该季度的第一个月
-      * @param date
-      * @return
+      * @ param date
+      * @ return
       */
      public static Date getFirstSeasonDate(Date date) {
              final int[] SEASON = { 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4 };
@@ -377,9 +377,9 @@ public class DateUtils {
      
      /**
       * 返回某个日期下几天的日期
-      * @param date
-      * @param i
-      * @return
+      * @ param date
+      * @ param i
+      * @ return
       */
      public static Date getNextDay(Date date, int i) {
             Calendar cal = new GregorianCalendar();
@@ -390,9 +390,9 @@ public class DateUtils {
      
      /**
       * 返回某个日期前几天的日期
-      * @param date
-      * @param i
-      * @return
+      * @ param date
+      * @ param i
+      * @ return
       */
      public static Date getFrontDay(Date date, int i) {
             Calendar cal = new GregorianCalendar();
@@ -403,12 +403,12 @@ public class DateUtils {
      
      /**
       * 获取某年某月到某年某月按天的切片日期集合（间隔天数的日期集合）
-      * @param beginYear
-      * @param beginMonth
-      * @param endYear
-      * @param endMonth
-      * @param k
-      * @return
+      * @ param beginYear
+      * @ param beginMonth
+      * @ param endYear
+      * @ param endMonth
+      * @ param k
+      * @ return
       */
      public static List<List<Date>> getTimeList(int beginYear, int beginMonth, int endYear,
                 int endMonth, int k) {
@@ -439,10 +439,10 @@ public class DateUtils {
      
      /**
       * 获取某年某月按天切片日期集合（某个月间隔多少天的日期集合）
-      * @param beginYear
-      * @param beginMonth
-      * @param k
-      * @return
+      * @ param beginYear
+      * @ param beginMonth
+      * @ param k
+      * @ return
       */
      public static List<Date> getTimeList(int beginYear, int beginMonth, int k) {
             List<Date> list = new ArrayList<Date>();
@@ -459,13 +459,14 @@ public class DateUtils {
      /**
       * 格式化日期
      * yyyy-MM-dd HH:mm:ss
-     * @Description: 
-     * @param @param date
-     * @param @return     
+     * @ Description:
+     * @ param @param date
+     * @ param @return
      *
       */
      private static Date format(Date date) {
-    	 SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    	 @SuppressLint("SimpleDateFormat")
+         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     	 try {
 			date = sd.parse(sd.format(date));
 		} catch (ParseException e) {

@@ -122,10 +122,12 @@ public class JaccountActivity extends BaseActivity {
             List<Cookie> cookies = new ArrayList<>(cookieStrings.length);
             for (String cookieString : cookieStrings) {
                 Log.i("JACCOUNT-COOKIE",cookieString);
+                assert busUrl != null;
                 Cookie cookie = Cookie.parse(busUrl, cookieString);
                 cookies.add(cookie);
             }
             cookieJar.clear(); // prevent duplicated cookie names
+            assert busUrl != null;
             cookieJar.saveFromResponse(busUrl, cookies);
         }
     }

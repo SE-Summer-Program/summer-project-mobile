@@ -1,9 +1,11 @@
 package com.sjtubus.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -36,16 +38,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
-    private Toolbar mToolbar;
-    private Button reserve_btn;
-    private Button record_btn;
-    private Button position_btn;
-    private Button schedule_btn;
-    private Button map_btn;
-    private Button navigate_btn;
     private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private LinearLayout nav_header_layout;
     private TextView username;
     private TextView userinfo;
     private TextView login_tips;
@@ -82,16 +75,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     public void initView(){
-        mToolbar = findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.mipmap.person);
 
-        reserve_btn = findViewById(R.id.reserve_btn);
-        record_btn = findViewById(R.id.record_btn);
-        position_btn = findViewById(R.id.position_btn);
-        schedule_btn = findViewById(R.id.schedule_btn);
-        map_btn = findViewById(R.id.map_btn);
-        navigate_btn = findViewById(R.id.navigate_btn);
+        Button reserve_btn = findViewById(R.id.reserve_btn);
+        Button record_btn = findViewById(R.id.record_btn);
+        Button position_btn = findViewById(R.id.position_btn);
+        Button schedule_btn = findViewById(R.id.schedule_btn);
+        Button map_btn = findViewById(R.id.map_btn);
+        Button navigate_btn = findViewById(R.id.navigate_btn);
 
         reserve_btn.setOnClickListener(this);
         record_btn.setOnClickListener(this);
@@ -106,10 +99,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        nav_header_layout = (LinearLayout) navigationView.getHeaderView(0);
+        LinearLayout nav_header_layout = (LinearLayout) navigationView.getHeaderView(0);
         username = nav_header_layout.findViewById(R.id.username_txt);
         userinfo = nav_header_layout.findViewById(R.id.shortinfo_txt);
         login_tips = nav_header_layout.findViewById(R.id.login_tips);
@@ -139,7 +132,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             username.setText(user.getUsername());
             username.setVisibility(View.VISIBLE);
             String role = user.getTeacher()?"教工":"普通用户";
-            userinfo.setText("身份:"+role+"   "+"信用积分:"+user.getCredit());
+            String userinfo_str = "身份:"+role+"   "+"信用积分:"+user.getCredit();
+            userinfo.setText(userinfo_str);
             userinfo.setVisibility(View.VISIBLE);
             login_tips.setVisibility(View.GONE);
             login_txt.setVisibility(View.GONE);
@@ -166,6 +160,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(reserveIntent);
                 break;
             case R.id.record_btn:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
                 startActivity(recordIntent);
                 break;
@@ -207,7 +205,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem menuItem) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.navigation_item_message:
                 Intent message_intent = new Intent(MainActivity.this,MessageActivity.class);
@@ -228,6 +226,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             case R.id.navigation_item_reserve:
                 Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
                 startActivity(recordIntent);
+            case R.id.navigation_item_setting:
+                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(settingIntent);
             default:
                 break;
         }
@@ -244,6 +245,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         //判断当前版本在4.0以上并且存在虚拟按键，否则不做操作
         if (!checkDeviceHasNavigationBar()) {
             //一定要判断是否存在按键，否则在没有按键的手机调用会影响别的功能。如之前没有考虑到，导致图传全屏变成小屏显示。
+
             return;
         } else {
             // 获取属性
@@ -253,7 +255,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
 
     /**
      * 判断是否存在虚拟按键
-     * @return
+     * @ return
      */
     public boolean checkDeviceHasNavigationBar() {
         boolean hasNavigationBar = false;
@@ -263,7 +265,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             hasNavigationBar = rs.getBoolean(id);
         }
         try {
-            Class<?> systemPropertiesClass = Class.forName("android.os.SystemProperties");
+            /*
+             * 不是很清楚这个注解加了是干嘛的
+             */
+            @SuppressLint("PrivateApi") Class<?> systemPropertiesClass = Class.forName("android.os.SystemProperties");
             Method m = systemPropertiesClass.getMethod("get", String.class);
             String navBarOverride = (String) m.invoke(systemPropertiesClass, "qemu.hw.mainkeys");
             if ("1".equals(navBarOverride)) {
@@ -272,7 +277,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 hasNavigationBar = true;
             }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return hasNavigationBar;
     }

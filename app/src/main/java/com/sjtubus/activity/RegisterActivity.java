@@ -210,7 +210,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         RegisterActivity.this.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                verify_btn.setText(index+"s后重新获取");
+                                String verify_text = index+"s后重新获取";
+                                verify_btn.setText(verify_text);
                                 verify_btn.setBackgroundColor(Color.parseColor("#949494"));
                                 verify_btn.setClickable(false);
                             }

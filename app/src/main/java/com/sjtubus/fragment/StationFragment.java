@@ -1,6 +1,7 @@
 package com.sjtubus.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,7 +45,7 @@ public class StationFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shift, container, false);
         RecyclerView mRecyclerView = view.findViewById(R.id.shift_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));

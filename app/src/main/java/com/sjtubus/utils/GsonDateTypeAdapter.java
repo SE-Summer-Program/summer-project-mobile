@@ -1,5 +1,7 @@
 package com.sjtubus.utils;
 
+import android.annotation.SuppressLint;
+
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -22,6 +24,7 @@ public class GsonDateTypeAdapter extends TypeAdapter<Date> {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     @Override
     public Date read(JsonReader in) throws IOException {
         if (in.peek() == null) {
@@ -32,6 +35,7 @@ public class GsonDateTypeAdapter extends TypeAdapter<Date> {
         try {
             d = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(str);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return d;
     }

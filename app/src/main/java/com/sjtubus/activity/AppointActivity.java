@@ -38,7 +38,6 @@ import static android.content.ContentValues.TAG;
 
 public class AppointActivity extends BaseActivity implements View.OnClickListener {
 
-    private Toolbar mToolbar;
     private RecyclerView recyclerView;
     private AppointInfo appointInfo;
     private List<AppointInfo> appointInfoList;
@@ -84,7 +83,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initToolbar(){
-        mToolbar = findViewById(R.id.toolbar_appointment);
+        Toolbar mToolbar = findViewById(R.id.toolbar_appointment);
         mToolbar.setTitle(departure_place_str + "->" + arrive_place_str);
         mToolbar.setNavigationIcon(R.mipmap.icon_back_128);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -176,7 +175,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         //textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
                         String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
                         String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
-                        textView_date.setText(year_choose+"-"+monthStr+"-"+dayStr);
+                        String dateStr = year_choose+"-"+monthStr+"-"+dayStr; //格式2018-07-19
+                        textView_date.setText(dateStr);
                         /*
                          * 统一日期格式为 yyyy-MM-dd
                          */
@@ -277,7 +277,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         i++;
                         infos.add(info);
                     }
-                    left_appoint.setText("当日剩余可预约班次:"+infos.size());
+                    String left_appoint_info = "当日剩余可预约班次:"+infos.size();
+                    left_appoint.setText(left_appoint_info);
                     appointAdapter.setDataList(infos);
                     swipeRefresh.setRefreshing(false);
                 }

@@ -28,7 +28,6 @@ import static android.content.ContentValues.TAG;
 public class MessageActivity extends BaseActivity {
 
     private ProgressBar mProgressBar;
-    private RecyclerView messageView;
     MessageAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -37,7 +36,7 @@ public class MessageActivity extends BaseActivity {
     }
 
     public void initView(){
-        messageView = findViewById(R.id.message_list);
+        RecyclerView messageView = findViewById(R.id.message_list);
         mProgressBar = findViewById(R.id.message_progress);
         mAdapter = new MessageAdapter(this);
         mProgressBar.setVisibility(View.VISIBLE);

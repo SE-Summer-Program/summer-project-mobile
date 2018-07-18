@@ -43,11 +43,11 @@ public class ScheduleActivity extends BaseActivity {
                 R.color.primary_red,
                 R.color.primary_red};
 
-        //........................
-        line_type = ShiftUtils.getChiType(line_type);
+        String line_name_cn = ShiftUtils.getChiLineName(line_name);
+        String line_type_cn = ShiftUtils.getChiType(line_type);
 
         mCoordinatorTabLayout.setTranslucentStatusBar(this);
-        mCoordinatorTabLayout.setTitle(line_name+"("+line_type+")")
+        mCoordinatorTabLayout.setTitle(line_name_cn+"("+line_type_cn+")")
         .setImageArray(mImageArray, mColorArray)
         .setupWithViewPager(mViewPager);
     }

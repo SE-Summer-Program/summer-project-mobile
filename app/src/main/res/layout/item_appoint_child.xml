@@ -15,7 +15,7 @@
             android:background="@color/primary_red"
             android:textColor="@color/primary_white"
             android:layout_marginEnd="20dp"
-            android:text="预约"/>
+            android:text="@string/child_reserve"/>
 
         <Button
             android:id="@+id/appointitem_infobtn"
@@ -24,5 +24,5 @@
             android:minHeight="0dp"
             android:background="@color/primary_red"
             android:textColor="@color/primary_white"
-            android:text="班次信息"/>
+            android:text="@string/schedule_btn"/>
 </LinearLayout>

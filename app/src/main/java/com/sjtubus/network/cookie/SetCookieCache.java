@@ -17,6 +17,8 @@ package com.sjtubus.network.cookie;
  */
 
 
+import android.support.annotation.NonNull;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,6 +47,7 @@ public class SetCookieCache implements CookieCache {
         cookies.clear();
     }
 
+    @NonNull
     @Override
     public Iterator<Cookie> iterator() {
         return new SetCookieCacheIterator();

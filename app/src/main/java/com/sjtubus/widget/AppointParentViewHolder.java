@@ -20,12 +20,6 @@ public class AppointParentViewHolder extends BaseViewHolder{
     private LinearLayout container;
     private View parentDashedView;
 
-    private TextView shiftid;
-    private TextView departure_place;
-    private TextView arrive_place;
-    private TextView departure_time;
-    private TextView arrive_time;
-    private TextView remain_seat;
     private ImageView expand;
 
     public AppointParentViewHolder(Context context, View view){
@@ -37,12 +31,12 @@ public class AppointParentViewHolder extends BaseViewHolder{
     public void bindView(final AppointInfo bean, final int pos, final AppointItemClickListener appointItemClickListener){
         container = view.findViewById(R.id.container);
 
-        shiftid = view.findViewById(R.id.appointitem_shiftid);
-        departure_place = view.findViewById(R.id.appointitem_departureplace);
-        arrive_place = view.findViewById(R.id.appointitem_arriveplace);
-        departure_time = view.findViewById(R.id.appointitem_departuretime);
-        arrive_time = view.findViewById(R.id.appointitem_arrivetime);
-        remain_seat = view.findViewById(R.id.appointitem_remainseat);
+        TextView shiftid = view.findViewById(R.id.appointitem_shiftid);
+        TextView departure_place = view.findViewById(R.id.appointitem_departureplace);
+        TextView arrive_place = view.findViewById(R.id.appointitem_arriveplace);
+        TextView departure_time = view.findViewById(R.id.appointitem_departuretime);
+        TextView arrive_time = view.findViewById(R.id.appointitem_arrivetime);
+        TextView remain_seat = view.findViewById(R.id.appointitem_remainseat);
         expand = view.findViewById(R.id.appointitem_expand);
 
        // parentDashedView = view.findViewById(R.id.parent_dashed_view);
@@ -55,7 +49,8 @@ public class AppointParentViewHolder extends BaseViewHolder{
         arrive_place.setText(bean.getArrive_place());
         departure_time.setText(bean.getDeparture_time());
         arrive_time.setText(bean.getArrive_time());
-        remain_seat.setText("剩余"+bean.getRemain_seat()+"座");
+        String remain_text = "剩余"+bean.getRemain_seat()+"座";
+        remain_seat.setText(remain_text);
 
         if (bean.isExpand()) {
             expand.setRotation(90);

@@ -17,6 +17,10 @@
             android:id="@+id/navigation_item_idea"
             android:icon="@mipmap/idea"
             android:title="@string/idea" />
+        <item
+            android:id="@+id/navigation_item_setting"
+            android:icon="@mipmap/setting"
+            android:title="@string/setting" />
     </group>
     <!--<item-->
         <!--android:id="@+id/navigation_subheader"-->

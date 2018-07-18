@@ -63,7 +63,7 @@ public class ZxingUtils {
     /**
      * 生成条形码
      *
-     * @param context
+     * @ param context
      * @param contents
      *            需要生成的内容
      * @param desiredWidth
@@ -123,6 +123,7 @@ public class ZxingUtils {
             e.printStackTrace();
         }
 
+        assert result != null;
         int width = result.getWidth();
         int height = result.getHeight();
         int[] pixels = new int[width * height];

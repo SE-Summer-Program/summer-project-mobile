@@ -23,7 +23,6 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.ContentValues.TAG;
 
 public class PersonInfoActivity extends BaseActivity implements View.OnClickListener{
-    private User user;
     private TextView username;
     private TextView isteacher;
     private TextView phone;
@@ -31,7 +30,6 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
     private TextView credit;
     private TextView studentnum;
     private ImageView qrcode;
-    private Button logout_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -47,13 +45,13 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         credit = findViewById(R.id.person_credit);
         realname = findViewById(R.id.person_realname);
         studentnum = findViewById(R.id.person_studentnum);
-        logout_btn = findViewById(R.id.btn_logout);
+        Button logout_btn = findViewById(R.id.btn_logout);
         qrcode = findViewById(R.id.user_qrcode);
         logout_btn.setOnClickListener(this);
     }
 
     public void initUser(){
-        user = UserManager.getInstance().getUser();
+        User user = UserManager.getInstance().getUser();
         username.setText(user.getUsername());
         isteacher.setText(user.getTeacher()?"教工":"非教工");
         phone.setText(user.getPhone());
