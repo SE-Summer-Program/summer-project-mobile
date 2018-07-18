@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointActivity;
+import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
 import java.util.Calendar;
@@ -78,8 +79,10 @@ public class AppointNaviFragment extends BaseFragment {
         search_btn.setOnClickListener(listener);
         revert_btn.setOnClickListener(listener);
 
-        getConrrentDay();
-        singleway_date.setText(year+"-"+month+"-"+day);
+        getCurrentDay();
+        String monthStr = StringCalendarUtils.getDoubleDigitMonth(month);
+        String dayStr = StringCalendarUtils.getDoubleDigitDay(day);
+        singleway_date.setText(year+"-"+monthStr+"-"+dayStr);
         /*
          * 统一日期格式为 yyyy-MM-dd
          */
@@ -135,9 +138,14 @@ public class AppointNaviFragment extends BaseFragment {
                     new DatePickerDialog(Objects.requireNonNull(getActivity()), new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
-                            textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
+
+                            /* 这里改过 */
+                            String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
+                            String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
+                            textView_date.setText(year_choose+"-"+monthStr+"-"+dayStr);
+
                             year = year_choose;
-                            month = month_choose+1;
+                            month = month_choose;
                             day = dayOfMonth_choose;
                         }
                     }, year,month,day).show();
@@ -174,10 +182,11 @@ public class AppointNaviFragment extends BaseFragment {
         }
     }
 
-    private void getConrrentDay() {
+    private void getCurrentDay() {
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);       //获取年月日时分秒
-        month = calendar.get(Calendar.MONTH)+1;   //获取到的月份是从0开始计数
+        month = calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = calendar.get(Calendar.DAY_OF_MONTH);
     }
+
 }

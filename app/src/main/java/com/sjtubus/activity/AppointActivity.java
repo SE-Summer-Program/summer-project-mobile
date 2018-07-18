@@ -18,6 +18,7 @@ import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.AppointShortInfo;
 import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.MyDateUtils;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
@@ -25,6 +26,7 @@ import com.sjtubus.widget.AppointAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -56,6 +58,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private TextView date;
     private ImageView calendar_btn;
     private ImageView next_btn;
+
+    private boolean isTodayFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +117,12 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
         date.setText(date_str);
 
+        if (StringCalendarUtils.isToday((String) date.getText())){
+           // yesterday_btn.setEnabled(false);
+            yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+            isTodayFlag = true;
+        }
+
         recyclerView = findViewById(R.id.appoint_recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         appointAdapter = new AppointAdapter(this);
@@ -134,6 +144,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
+        getCurrentDay();
         retrieveData();
     }
 
@@ -145,33 +156,71 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_next:
                 break;
             case R.id.appoint_date:
-                final TextView textView_date = (TextView) v;
+                yesterday_btn.setEnabled(true);
+                yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
+                isTodayFlag = false;
+
+                final TextView textView_date = v.findViewById(R.id.appoint_date);
 
               //  Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
-                        textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
+
+                        String datestr = year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose;
+
+                        if (StringCalendarUtils.isBeforeCurrentDate(datestr)){
+                            ToastUtils.showShort("不能预约已经发出的班次哦~");
+                            return;
+                        }
+                        //textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
+                        String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
+                        String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
+                        textView_date.setText(year_choose+"-"+monthStr+"-"+dayStr);
                         /*
                          * 统一日期格式为 yyyy-MM-dd
                          */
-
                         year = year_choose;
                         month = month_choose+1;
                         day = dayOfMonth_choose;
-                        retrieveData();
                     }
                 }, year,month,day).show();
+                retrieveData();
+
+                //如果当前日期是今天，则前一天不可用
+                if (StringCalendarUtils.isToday((String) date.getText())){
+                   // yesterday_btn.setEnabled(false);
+                    yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                    isTodayFlag = true;
+                }
 
                 break;
             case R.id.appoint_yesterday:
+                if (isTodayFlag){
+                    yesterday_btn.setEnabled(false);
+                    ToastUtils.showShort("不能预约更前面的班次了哦~");
+                    break;
+                }
+//                modifyDate(-1);
                 ToastUtils.showShort("前一天");
-                modifyDate(-1);
+                String yesterday = MyDateUtils.getYesterdayStr((String) date.getText());
+                date.setText(yesterday);
+                if (StringCalendarUtils.isToday((String) date.getText())){
+                    //yesterday_btn.setEnabled(false);
+                    yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                    isTodayFlag = true;
+                }
+                retrieveData();
                 break;
-
             case R.id.appoint_nextday:
                 ToastUtils.showShort("后一天");
-                modifyDate(1);
+//                modifyDate(1);
+                String tomorrow = MyDateUtils.getTomorrowStr((String) date.getText());
+                date.setText(tomorrow);
+                yesterday_btn.setEnabled(true);
+                yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
+                isTodayFlag = false;
+                retrieveData();
                 break;
         }
     }
@@ -248,21 +297,22 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             });
     }
 
-    private void getConrrentDay() {
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);       //获取年月日时分秒
-        month = calendar.get(Calendar.MONTH)+1;   //获取到的月份是从0开始计数
-        day = calendar.get(Calendar.DAY_OF_MONTH);
+    private void getCurrentDay() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(MyDateUtils.getBeginOfDay((String) date.getText()));
+        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day = cal.get(Calendar.DAY_OF_MONTH);
     }
 
-    private void modifyDate(int offset){
-        switch(offset){
-            case 1:
-                //...后一天
-                break;
-            case -1:
-                //...前一天
-                break;
-        }
-    }
+//    private void modifyDate(int offset){
+//        switch(offset){
+//            case 1:
+//                //...后一天
+//                break;
+//            case -1:
+//                //...前一天
+//                break;
+//        }
+//    }
 }

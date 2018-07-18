@@ -16,9 +16,9 @@
         android:paddingHorizontal="@dimen/screenPadding">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/icon_shift_128"
             android:layout_marginTop="@dimen/fab_margin"/>
 
         <LinearLayout
