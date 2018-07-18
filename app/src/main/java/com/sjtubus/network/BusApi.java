@@ -50,6 +50,6 @@ public interface BusApi {
     @GET("/line/infos")
     Observable<LineInfoResponse> getLineInfos(@Query("type")String type);
 
-    @GET("/shift/appointment")
-    Observable<AppointResponse> getAppointment(@Query("line_name")String line_name, @Query("type")String type);
+    @GET("/appointment/infos")
+    Observable<AppointResponse> getAppointment(@Query("line_name")String line_name, @Query("type")String type, @Query("appoint_date")String appoint_date);
 }

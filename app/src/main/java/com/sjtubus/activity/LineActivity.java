@@ -96,7 +96,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         String type = "NormalWorkday";
         setAndShowSchedule(type);
 
-        swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.refresh_schedule);
+        swipeRefresh = findViewById(R.id.refresh_schedule);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

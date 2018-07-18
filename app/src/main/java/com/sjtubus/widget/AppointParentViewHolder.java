@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.os.Build;
 
 import com.sjtubus.R;
-import com.sjtubus.model.Appointment;
+import com.sjtubus.model.AppointInfo;
 
 public class AppointParentViewHolder extends BaseViewHolder{
 
@@ -34,16 +34,16 @@ public class AppointParentViewHolder extends BaseViewHolder{
         this.view = view;
     }
 
-    public void bindView(final Appointment bean, final int pos, final AppointItemClickListener appointItemClickListener){
-        container = (LinearLayout) view.findViewById(R.id.container);
+    public void bindView(final AppointInfo bean, final int pos, final AppointItemClickListener appointItemClickListener){
+        container = view.findViewById(R.id.container);
 
-        shiftid = (TextView)view.findViewById(R.id.appointitem_shiftid);
-        departure_place = (TextView)view.findViewById(R.id.appointitem_departureplace);
-        arrive_place = (TextView)view.findViewById(R.id.appointitem_arriveplace);
-        departure_time = (TextView)view.findViewById(R.id.appointitem_departuretime);
-        arrive_time = (TextView)view.findViewById(R.id.appointitem_arrivetime);
-        remain_seat = (TextView)view.findViewById(R.id.appointitem_remainseat);
-        expand = (ImageView)view.findViewById(R.id.appointitem_expand);
+        shiftid = view.findViewById(R.id.appointitem_shiftid);
+        departure_place = view.findViewById(R.id.appointitem_departureplace);
+        arrive_place = view.findViewById(R.id.appointitem_arriveplace);
+        departure_time = view.findViewById(R.id.appointitem_departuretime);
+        arrive_time = view.findViewById(R.id.appointitem_arrivetime);
+        remain_seat = view.findViewById(R.id.appointitem_remainseat);
+        expand = view.findViewById(R.id.appointitem_expand);
 
        // parentDashedView = view.findViewById(R.id.parent_dashed_view);
 

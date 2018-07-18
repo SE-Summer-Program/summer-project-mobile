@@ -22,8 +22,6 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
     private ArrayList<Fragment> mFragment;
     private final String[] mTitles = {"单程", "往返"};
 
-    private Toolbar toolbar;
-
     private List<String> images = new ArrayList<>();
 
     @Override
@@ -54,30 +52,12 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
                 .setBackEnable(true)
                 .setImageArray(mImageArray, mColorArray)
                 .setupWithViewPager(mViewPager);
-
-//        toolbar = findViewById(R.id.toolbar_appointnavi);
-//        toolbar.setTitle("");
-
-     //   initBanner();
-
     }
-
-//    private void initBanner(){
-//        Banner banner = findViewById(R.id.banner);
-//        loadImages();
-//        banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
-//    }
-//
-//    private void loadImages(){
-//        images.add("http://chuantu.biz/t6/337/1530513364x-1566688664.jpg");
-//        images.add("http://chuantu.biz/t6/337/1530513397x-1566688664.jpg");
-//        images.add("http://chuantu.biz/t6/337/1530513420x-1566688664.jpg");
-//    }
 
     private void initFragments(){
         mFragment = new ArrayList<>();
         for (String title : mTitles) {
-            mFragment.add(AppointNaviFragment.getInstance());
+            mFragment.add(AppointNaviFragment.getInstance(title));
         }
     }
 
