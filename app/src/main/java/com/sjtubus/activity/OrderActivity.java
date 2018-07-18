@@ -252,6 +252,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                     .setMessage(message)
                                     .setPositiveButton("确定", null)
                                     .show();
+
+                            /*
+                             * 这里可以停几秒再返回
+                             */
+
                             OrderActivity.this.startActivity(new Intent(OrderActivity.this,MainActivity.class));
                         }else ToastUtils.showShort(response.getMsg());
                     }

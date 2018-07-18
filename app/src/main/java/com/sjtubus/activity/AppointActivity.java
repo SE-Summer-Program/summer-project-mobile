@@ -147,12 +147,19 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
-                        textView_date.setText(year_choose+"年"+(month_choose+1)+"月"+dayOfMonth_choose+"日");
+                        textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
+                        /*
+                         * 统一日期格式为 yyyy-MM-dd
+                         */
+
                         year = year_choose;
                         month = month_choose+1;
                         day = dayOfMonth_choose;
                     }
                 }, year,month,day).show();
+
+                retrieveData();
+
                 break;
             case R.id.appoint_yesterday:
                 ToastUtils.showShort("前一天");

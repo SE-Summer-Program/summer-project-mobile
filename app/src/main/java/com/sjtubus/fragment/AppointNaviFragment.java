@@ -79,7 +79,10 @@ public class AppointNaviFragment extends BaseFragment {
         revert_btn.setOnClickListener(listener);
 
         getConrrentDay();
-        singleway_date.setText(year+"年"+month+"月"+day+"日");
+        singleway_date.setText(year+"-"+month+"-"+day);
+        /*
+         * 统一日期格式为 yyyy-MM-dd
+         */
 
         return view;
     }
