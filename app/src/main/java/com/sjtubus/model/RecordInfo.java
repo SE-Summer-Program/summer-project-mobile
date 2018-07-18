@@ -21,6 +21,9 @@ public class RecordInfo {
     @SerializedName("shiftid")
     private String shiftid;
 
+    @SerializedName("status")
+    private String status;
+
     private String departureMsg; //根据item_record的格式来的
 
     public String getConfirmDate() {
@@ -62,6 +65,10 @@ public class RecordInfo {
     public void setShiftid(String shiftid) {
         this.shiftid = shiftid;
     }
+
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
 
     public String getDepartureMsg() {
         departureMsg = getDepartureDate() + " " + getDepartureTime() + getShiftid();

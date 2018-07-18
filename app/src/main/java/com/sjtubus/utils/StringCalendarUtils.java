@@ -11,10 +11,6 @@ import java.util.GregorianCalendar;
 
 public class StringCalendarUtils {
 
-//    private String datestr;
-//
-//    private Calendar calendar;
-
     public static Calendar StringToCalendar(String datestr){
         Calendar calendar = new GregorianCalendar();
         @SuppressLint("SimpleDateFormat")
@@ -59,5 +55,14 @@ public class StringCalendarUtils {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         current_time=simpleDateFormat.format(date);
         return current_time;
+    }
+
+    public static String DateToString(Date date){
+//        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        String date_str;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        date_str = sdf.format(date);
+        return date_str;
     }
 }
