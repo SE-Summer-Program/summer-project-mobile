@@ -160,7 +160,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
                 isTodayFlag = false;
 
-                final TextView textView_date = v.findViewById(R.id.appoint_date);
+                final TextView textView_date = (TextView)v;
 
               //  Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
