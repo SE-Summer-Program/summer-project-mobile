@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.sjtubus.R;
 
@@ -37,18 +38,19 @@ import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class LineActivity extends BaseActivity implements LineAdapter.OnItemClickListener{
 
-    Toolbar mToolbar;
-    RecyclerView recyclerView;
-    LinearLayoutManager layoutManager;
-    LineAdapter adapter;
-    SwipeRefreshLayout swipeRefresh;
-    Calendar calendar;
-    StringCalendarUtils stringCalendarUtils;
-    MyDialogListener dialogListener = new MyDialogListener();
+    private Toolbar mToolbar;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
+    private LineAdapter adapter;
+    private SwipeRefreshLayout swipeRefresh;
+    private Calendar calendar;
+    private MyDialogListener dialogListener = new MyDialogListener();
+    private TextView line_type;
     private int select = 0;
 
     private String[] type_list = {"在校期-工作日", "在校期-双休日、节假日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +73,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
             }
         });
 
+//        line_type = findViewById(R.id.line_type);
+
         recyclerView = findViewById(R.id.recycle_schedule);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
@@ -89,13 +93,12 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
 
             }
-
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
         });
-        String type = "NormalWorkday";
+        type = "NormalWorkday";
         setAndShowSchedule(type);
 
         swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.refresh_schedule);
@@ -107,7 +110,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         });
     }
 
-    public void setAndShowSchedule(String type){
+    public void setAndShowSchedule(final String type){
         //Log.d("LineActivity", type);
         RetrofitClient.getBusApi()
             .getLineInfos(type)
@@ -122,6 +125,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 @Override
                 public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
+                    line_type.setText(type);
                     adapter.setDataList(response.getLineInfos());
                 }
 
@@ -175,6 +179,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 @Override
                 public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
+                    line_type.setText(type);
                     adapter.setDataList(response.getLineInfos());
                     swipeRefresh.setRefreshing(false);
                 }
@@ -212,8 +217,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     public String getTypes(){
         calendar = Calendar.getInstance();
         //date = calendar.getTime();
-        boolean isWeekendFlag = stringCalendarUtils.isWeekend(calendar);
-        boolean isHoildayFlag = stringCalendarUtils.isHoilday(calendar);
+        boolean isWeekendFlag = StringCalendarUtils.isWeekend(calendar);
+        boolean isHoildayFlag = StringCalendarUtils.isHoilday(calendar);
         if (!isHoildayFlag && !isWeekendFlag){
             return "NormalWorkday";
         }

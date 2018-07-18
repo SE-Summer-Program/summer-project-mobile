@@ -65,8 +65,8 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String line_name = mLineList.get(position).getLineNameCN();
-        String first_time = mLineList.get(position).getFirstTime();
-        String last_time = mLineList.get(position).getLastTime();
+        String first_time = "首班车： " + mLineList.get(position).getFirstTime();
+        String last_time = "末班车： " + mLineList.get(position).getLastTime();
         holder.linename.setText(line_name);
         holder.firsttime.setText(first_time);
         holder.lasttime.setText(last_time);
