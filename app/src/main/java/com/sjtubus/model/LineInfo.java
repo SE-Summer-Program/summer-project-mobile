@@ -16,6 +16,8 @@ public class LineInfo {
     private String lastTime;
     @SerializedName("lineNameCN")
     private String lineNameCN;
+    @SerializedName("remainShift")
+    private int remainShift;
 
     public String getLineNameCN() {
         return lineNameCN;
@@ -47,4 +49,11 @@ public class LineInfo {
         this.lastTime = lastTime;
     }
 
+    public int getRemainShift() {
+        return remainShift;
+    }
+
+    public void setRemainShift(int remainShift) {
+        this.remainShift = remainShift;
+    }
 }
