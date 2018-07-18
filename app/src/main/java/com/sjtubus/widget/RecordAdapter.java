@@ -36,7 +36,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView confirmtime;
+        TextView submittime;
         TextView linename;
         TextView departuremsg;
         TextView shiftid;
@@ -45,7 +45,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
         public ViewHolder(View view){
             super(view);
-            confirmtime = view.findViewById(R.id.record_confirmtime);
+            submittime = view.findViewById(R.id.record_submittime);
             linename = view.findViewById(R.id.record_linename);
             departuremsg = view.findViewById(R.id.record_departuremsg);
             shiftid = view.findViewById(R.id.record_shiftid);
@@ -74,12 +74,13 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         String line_name = recordInfos.get(position).getLineName();
         String departure_msg = recordInfos.get(position).getDepartureMsg();
         String shift_id = recordInfos.get(position).getShiftid();
-        holder.confirmtime.setText(confirm_time);
+        String submit_time = recordInfos.get(position).getSubmiTime();
+        holder.submittime.setText(confirm_time);
         holder.linename.setText(line_name);
         holder.departuremsg.setText(departure_msg);
         holder.shiftid.setText(shift_id);
+        holder.submittime.setText(submit_time);
     }
-
 
     @Override
     public int getItemCount(){

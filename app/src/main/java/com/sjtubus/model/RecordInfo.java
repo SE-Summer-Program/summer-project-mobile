@@ -25,6 +25,9 @@ public class RecordInfo {
     @SerializedName("status")
     private String status;
 
+    @SerializedName("submitTime")
+    private String submitTime;
+
     private String departureMsg; //根据item_record的格式来的
 
     public String getConfirmDate() {
@@ -70,6 +73,10 @@ public class RecordInfo {
     public String getStatus() { return status; }
 
     public void setStatus(String status) { this.status = status; }
+
+    public String getSubmiTime() { return submitTime; }
+
+    public void setSubmitTime(String submitTime) { this.submitTime = submitTime; }
 
     public String getDepartureMsg() {
         departureMsg = getDepartureDate() + " " + StringCalendarUtils.HHmmssToHHmm(getDepartureTime()) + "发车";
