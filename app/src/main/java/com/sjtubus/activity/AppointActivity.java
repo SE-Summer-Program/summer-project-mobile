@@ -18,6 +18,7 @@ import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.AppointShortInfo;
 import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.MyDateUtils;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
@@ -111,6 +112,11 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
         date.setText(date_str);
 
+        if (StringCalendarUtils.isToday((String) date.getText())){
+            yesterday_btn.setEnabled(false);
+            yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+        }
+
         recyclerView = findViewById(R.id.appoint_recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         appointAdapter = new AppointAdapter(this);
@@ -141,34 +147,62 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_calendar:
             case R.id.appoint_next:
             case R.id.appoint_date:
+                yesterday_btn.setEnabled(true);
+                yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
+
                 final TextView textView_date = v.findViewById(R.id.appoint_date);
 
               //  Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
-                        textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
+
+                        String datestr = year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose;
+
+                        if (StringCalendarUtils.isBeforeCurrentDate(datestr)){
+                            ToastUtils.showShort("不能预约已经发出的班次哦~");
+                            return;
+                        }
+                        //textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
+                        String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
+                        String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
+                        textView_date.setText(year_choose+"-"+monthStr+"-"+dayStr);
                         /*
                          * 统一日期格式为 yyyy-MM-dd
                          */
-
                         year = year_choose;
                         month = month_choose+1;
                         day = dayOfMonth_choose;
                     }
                 }, year,month,day).show();
-
                 retrieveData();
+
+                //如果当前日期是今天，则前一天不可用
+                if (StringCalendarUtils.isToday((String) date.getText())){
+                    yesterday_btn.setEnabled(false);
+                    yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                }
 
                 break;
             case R.id.appoint_yesterday:
-                ToastUtils.showShort("前一天");
-                modifyDate(-1);
+//                modifyDate(-1);
+                String yesterday = MyDateUtils.getYesterdayStr((String) date.getText());
+                ToastUtils.showShort(yesterday);
+                date.setText(yesterday);
+                if (StringCalendarUtils.isToday((String) date.getText())){
+                    yesterday_btn.setEnabled(false);
+                    yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                }
+                retrieveData();
                 break;
-
             case R.id.appoint_nextday:
                 ToastUtils.showShort("后一天");
-                modifyDate(1);
+//                modifyDate(1);
+                String tomorrow = MyDateUtils.getTomorrowStr((String) date.getText());
+                date.setText(tomorrow);
+                yesterday_btn.setEnabled(true);
+                yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
+                retrieveData();
                 break;
         }
     }
@@ -251,14 +285,14 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
-    private void modifyDate(int offset){
-        switch(offset){
-            case 1:
-                //...后一天
-                break;
-            case -1:
-                //...前一天
-                break;
-        }
-    }
+//    private void modifyDate(int offset){
+//        switch(offset){
+//            case 1:
+//                //...后一天
+//                break;
+//            case -1:
+//                //...前一天
+//                break;
+//        }
+//    }
 }
