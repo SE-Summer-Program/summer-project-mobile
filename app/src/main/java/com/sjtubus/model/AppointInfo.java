@@ -1,6 +1,6 @@
 package com.sjtubus.model;
 
-public class AppointInfo {
+public class AppointInfo implements Cloneable{
 
     public static final int PARENT_ITEM = 0; //父布局
     public static final int CHILD_ITEM = 1; //子布局

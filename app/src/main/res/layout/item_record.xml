@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/shallow_gray"
     android:orientation="vertical">
 
@@ -82,7 +82,6 @@
                 android:layout_width="0sp"
                 android:layout_weight="3"
                 android:layout_height="match_parent"
-                android:text="MXHD1215"
                 android:textSize="14sp"/>
             <TextView
                 android:id="@+id/record_status"

@@ -1,10 +1,8 @@
 package com.sjtubus.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Paint;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,10 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,7 +24,6 @@ import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.GlideImageLoader;
 import com.sjtubus.utils.ToastUtils;
-import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,9 +32,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.EventListener;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
@@ -234,8 +226,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(person_intent);
                 break;
             case R.id.navigation_item_reserve:
-                Intent reserveIntent = new Intent(MainActivity.this, RecordActivity.class);
-                startActivity(reserveIntent);
+                Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
+                startActivity(recordIntent);
             default:
                 break;
         }

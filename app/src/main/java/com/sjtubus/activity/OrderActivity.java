@@ -46,7 +46,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     private EditText comment1, comment2, comment3, comment4;
     private ImageView comment1_clear, comment2_clear, comment3_clear, comment4_clear;
 
-    private Button button;
+    private Button submit_btn;
 
     private boolean isRemindExtend, isNeedExtend;
     private String[] remind_list = {"提前10分钟","提前30分钟","提前1小时","提前2小时","不提醒"};
@@ -111,8 +111,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
         comment.setOnClickListener(this);
 
-        button = findViewById(R.id.order_confirm);
-        button.setOnClickListener(this);
+        submit_btn = findViewById(R.id.order_confirm);
+        submit_btn.setOnClickListener(this);
     }
 
     private void initRemindView() {
@@ -207,6 +207,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 setAlertDialog("手机区域", phone_location_list, location, " :");
                 break;
             case R.id.order_confirm:
+                submitAppoint();
                 String message = "您已成功预约" + date_str + departure_time_str + "从" + departure_place_str
                         + "开往" + arrive_place_str + "的" + shiftid_str +"号校区巴士，请记得按时前去乘坐哦~";
                 new AlertDialog.Builder(this)
@@ -216,6 +217,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                         .show();
                 break;
         }
+    }
+
+    public void submitAppoint(){
+
     }
 
 

@@ -1,6 +1,7 @@
 package com.sjtubus.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.sjtubus.utils.StringCalendarUtils;
 
 /**
  * @author wxw
@@ -71,7 +72,7 @@ public class RecordInfo {
     public void setStatus(String status) { this.status = status; }
 
     public String getDepartureMsg() {
-        departureMsg = getDepartureDate() + " " + getDepartureTime() + getShiftid();
+        departureMsg = getDepartureDate() + " " + StringCalendarUtils.HHmmssToHHmm(getDepartureTime()) + "发车";
         return departureMsg;
     }
 

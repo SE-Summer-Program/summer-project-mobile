@@ -90,6 +90,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     //自定义的view
     implementation 'com.youth.banner:banner:1.4.10'
+    implementation 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
     implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
