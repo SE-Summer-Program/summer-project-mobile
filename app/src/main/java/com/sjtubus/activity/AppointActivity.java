@@ -26,6 +26,7 @@ import com.sjtubus.widget.AppointAdapter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import io.reactivex.Observer;
@@ -56,6 +57,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private TextView date;
     private ImageView calendar_btn;
     private ImageView next_btn;
+
+    private boolean isTodayFlag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,8 +116,9 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         date.setText(date_str);
 
         if (StringCalendarUtils.isToday((String) date.getText())){
-            yesterday_btn.setEnabled(false);
+           // yesterday_btn.setEnabled(false);
             yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+            isTodayFlag = true;
         }
 
         recyclerView = findViewById(R.id.appoint_recycle);
@@ -138,6 +142,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
+        getCurrentDay();
         retrieveData();
     }
 
@@ -149,6 +154,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_date:
                 yesterday_btn.setEnabled(true);
                 yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
+                isTodayFlag = false;
 
                 final TextView textView_date = v.findViewById(R.id.appoint_date);
 
@@ -179,19 +185,26 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
                 //如果当前日期是今天，则前一天不可用
                 if (StringCalendarUtils.isToday((String) date.getText())){
-                    yesterday_btn.setEnabled(false);
+                   // yesterday_btn.setEnabled(false);
                     yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                    isTodayFlag = true;
                 }
 
                 break;
             case R.id.appoint_yesterday:
+                if (isTodayFlag){
+                    yesterday_btn.setEnabled(false);
+                    ToastUtils.showShort("不能预约更前面的班次了哦~");
+                    break;
+                }
 //                modifyDate(-1);
+                ToastUtils.showShort("前一天");
                 String yesterday = MyDateUtils.getYesterdayStr((String) date.getText());
-                ToastUtils.showShort(yesterday);
                 date.setText(yesterday);
                 if (StringCalendarUtils.isToday((String) date.getText())){
-                    yesterday_btn.setEnabled(false);
+                    //yesterday_btn.setEnabled(false);
                     yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                    isTodayFlag = true;
                 }
                 retrieveData();
                 break;
@@ -202,6 +215,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 date.setText(tomorrow);
                 yesterday_btn.setEnabled(true);
                 yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
+                isTodayFlag = false;
                 retrieveData();
                 break;
         }
@@ -278,11 +292,12 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             });
     }
 
-    private void getConrrentDay() {
-        Calendar calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);       //获取年月日时分秒
-        month = calendar.get(Calendar.MONTH)+1;   //获取到的月份是从0开始计数
-        day = calendar.get(Calendar.DAY_OF_MONTH);
+    private void getCurrentDay() {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(MyDateUtils.getBeginOfDay((String) date.getText()));
+        year = cal.get(Calendar.YEAR);       //获取年月日时分秒
+        month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+        day = cal.get(Calendar.DAY_OF_MONTH);
     }
 
 //    private void modifyDate(int offset){

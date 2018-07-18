@@ -79,7 +79,7 @@ public class AppointNaviFragment extends BaseFragment {
         search_btn.setOnClickListener(listener);
         revert_btn.setOnClickListener(listener);
 
-        getConrrentDay();
+        getCurrentDay();
         String monthStr = StringCalendarUtils.getDoubleDigitMonth(month);
         String dayStr = StringCalendarUtils.getDoubleDigitDay(day);
         singleway_date.setText(year+"-"+monthStr+"-"+dayStr);
@@ -145,7 +145,7 @@ public class AppointNaviFragment extends BaseFragment {
                             textView_date.setText(year_choose+"-"+monthStr+"-"+dayStr);
 
                             year = year_choose;
-                            month = month_choose+1;
+                            month = month_choose;
                             day = dayOfMonth_choose;
                         }
                     }, year,month,day).show();
@@ -182,10 +182,10 @@ public class AppointNaviFragment extends BaseFragment {
         }
     }
 
-    private void getConrrentDay() {
+    private void getCurrentDay() {
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);       //获取年月日时分秒
-        month = calendar.get(Calendar.MONTH)+1;   //获取到的月份是从0开始计数
+        month = calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
