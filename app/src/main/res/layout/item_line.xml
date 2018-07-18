@@ -43,13 +43,14 @@
                 android:id="@+id/line_last_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/fab_margin"/>
-            <TextView
-                android:id="@+id/line_remain_shift"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/fab_margin"
                 android:layout_marginBottom="@dimen/fab_margin"/>
+            <!--<TextView-->
+                <!--android:id="@+id/line_remain_shift"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/fab_margin"-->
+                <!--android:layout_marginBottom="@dimen/fab_margin"/>-->
         </LinearLayout>
     </LinearLayout>
 

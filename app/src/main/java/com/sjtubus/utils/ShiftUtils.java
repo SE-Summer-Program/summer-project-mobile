@@ -27,8 +27,6 @@ public class ShiftUtils {
 
     public static String ERROR = "error";
 
-    private StringCalendarUtils stringCalendarUtils;
-
     public static String getTypeByCalendar(Calendar calendar){
         //date = calendar.getTime();
         boolean isWeekendFlag = StringCalendarUtils.isWeekend(calendar);

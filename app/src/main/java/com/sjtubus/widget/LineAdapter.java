@@ -36,7 +36,7 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
             linename = (TextView) view.findViewById(R.id.line_name);
             firsttime = (TextView) view.findViewById(R.id.line_first_time);
             lasttime = (TextView) view.findViewById(R.id.line_last_time);
-            remainShift = (TextView) view.findViewById(R.id.line_remain_shift);
+//            remainShift = (TextView) view.findViewById(R.id.line_remain_shift);
         }
     }
 
@@ -69,21 +69,23 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder>{
         String line_name = mLineList.get(position).getLineNameCN();
         String first_time = "首班车 ： " + mLineList.get(position).getFirstTime();
         String last_time = "末班车 ： " + mLineList.get(position).getLastTime();
-        int remain_shift = mLineList.get(position).getRemainShift();
-        String remain_shift_str;
-        if (remain_shift > 0)
-            remain_shift_str = "今日剩余" + remain_shift + "班车未发";
-        else
-            remain_shift_str = "已超过末班时间";
+//        int remain_shift = mLineList.get(position).getRemainShift();
+//        String remain_shift_str;
+//        if (remain_shift > 0)
+//            remain_shift_str = "今日剩余" + remain_shift + "班车未发";
+//        else
+//            remain_shift_str = "已超过末班时间";
         holder.linename.setText(line_name);
         holder.firsttime.setText(first_time);
         holder.lasttime.setText(last_time);
-        holder.remainShift.setText(remain_shift_str);
+//        holder.remainShift.setText(remain_shift_str);
     }
 
     public String getLinename(int index){
         return mLineList.get(index).getLineName();
     }
+
+    public String getLinenameCn(int index) { return  mLineList.get(index).getLineNameCN(); }
 
     @Override
     public int getItemCount() {

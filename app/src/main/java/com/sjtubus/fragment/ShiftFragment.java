@@ -29,8 +29,10 @@ import static android.content.ContentValues.TAG;
 public class ShiftFragment extends BaseFragment {
     private static ShiftFragment mFragment = null;
 
-    private String type = "NormalWorkday";
-    private String line_name = "MinToXu";
+//    private String type = "NormalWorkday";
+//    private String line_name = "MinToXu";
+    private String type;
+    private String line_name;
 
     private ShiftAdapter mAdapter;
 

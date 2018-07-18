@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import com.sjtubus.R;
 import com.sjtubus.fragment.ShiftFragment;
 import com.sjtubus.fragment.StationFragment;
+import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.widget.SchedulePagerAdapter;
 
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class ScheduleActivity extends BaseActivity {
         int[] mColorArray = new int[]{
                 R.color.primary_red,
                 R.color.primary_red};
+
+        //........................
+        line_type = ShiftUtils.getChiType(line_type);
+
         mCoordinatorTabLayout.setTranslucentStatusBar(this);
         mCoordinatorTabLayout.setTitle(line_name+"("+line_type+")")
         .setImageArray(mImageArray, mColorArray)
