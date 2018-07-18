@@ -57,4 +57,6 @@ public interface BusApi {
     @GET("/appointment/record")
     Observable<RecordInfoResponse> getRecordInfos(@Query("username")String username, @Query("currenttime")String currenttime);
 
+    @POST("/appointment/appoint")
+    Observable<HttpResponse> appoint(@Body RequestBody appointinfo);
 }

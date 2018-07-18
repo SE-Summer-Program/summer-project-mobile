@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,11 +17,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sjtubus.R;
+import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.ToastUtils;
 
-public class OrderActivity extends BaseActivity implements View.OnClickListener{
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
-    private Toolbar mToolbar;
+import static android.content.ContentValues.TAG;
+
+public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
     private TextView departure_place, departure_time, departure_date;
     private TextView arrive_place, arrive_time, arrive_date;
@@ -81,7 +93,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void initToolbar(){
-        mToolbar = findViewById(R.id.toolbar_order);
+        Toolbar mToolbar = findViewById(R.id.toolbar_order);
         mToolbar.setNavigationIcon(R.drawable.back_32);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,19 +220,52 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.order_confirm:
                 submitAppoint();
-                String message = "您已成功预约" + date_str + departure_time_str + "从" + departure_place_str
-                        + "开往" + arrive_place_str + "的" + shiftid_str +"号校区巴士，请记得按时前去乘坐哦~";
-                new AlertDialog.Builder(this)
-                        .setTitle("预约成功！")
-                        .setMessage(message)
-                        .setPositiveButton("确定", null)
-                        .show();
                 break;
         }
     }
 
     public void submitAppoint(){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("line_name", ShiftUtils.getLineByDepartureAndArrive(departure_place_str,arrive_place_str))
+                .add("shift_id",shiftid_str)
+                .add("appoint_date",date_str)
+                .add("username",UserManager.getInstance().getUser().getUsername())
+                .build();
+        RetrofitClient.getBusApi()
+                .appoint(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HttpResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
 
+                    @Override
+                    public void onNext(HttpResponse response) {
+                        if(response.getError()==0){
+                            //显示预约成功
+                            String message = "您已成功预约" + date_str + departure_time_str + "从" + departure_place_str
+                                    + "开往" + arrive_place_str + "的" + shiftid_str +"号校区巴士，请记得按时前去乘坐哦~";
+                            new AlertDialog.Builder(OrderActivity.this)
+                                    .setTitle("预约成功！")
+                                    .setMessage(message)
+                                    .setPositiveButton("确定", null)
+                                    .show();
+                            OrderActivity.this.startActivity(new Intent(OrderActivity.this,MainActivity.class));
+                        }else ToastUtils.showShort(response.getMsg());
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                        //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
     }
 
 
