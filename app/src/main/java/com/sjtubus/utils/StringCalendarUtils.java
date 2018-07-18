@@ -3,7 +3,6 @@ package com.sjtubus.utils;
 import android.annotation.SuppressLint;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +21,18 @@ public class StringCalendarUtils {
             e.printStackTrace();
         }
         return calendar;
+    }
+
+    public static String HHmmssToHHmm(String timestr){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(timestr);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return dateFormat2.format(date);
     }
 
     public static String CalendarToString(Calendar calendar){

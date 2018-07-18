@@ -1,13 +1,11 @@
 package com.sjtubus.widget;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sjtubus.R;
@@ -19,7 +17,7 @@ import java.util.List;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
 
-    private List<RecordInfo> recordInfos;
+    private List<RecordInfo> recordInfos = new ArrayList<>();
     private RecordActivity context;
     private RecordAdapter.OnItemClickListener mItemClickListener;
 
@@ -34,7 +32,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     public RecordAdapter(RecordActivity context){
         this.context = context;
-        this.recordInfos = new ArrayList<>();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -83,8 +80,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         holder.shiftid.setText(shift_id);
     }
 
+
     @Override
-    public int getItemCount() {
+    public int getItemCount(){
         return recordInfos.size();
     }
 

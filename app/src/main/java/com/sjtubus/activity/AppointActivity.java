@@ -157,23 +157,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_yesterday:
                 ToastUtils.showShort("前一天");
                 modifyDate(-1);
-                //临时数据
-//                String data1 = departure_place_str;
-//                String data2 = arrive_place_str;
-//                String data3 = "12:15";
-//                String data4 = "13:15";
-//                String data5 = (String) date.getText();
-//                String data6 = "MXHD1215";
-//                String data7 = "寒暑假工作日";
-//                Intent orderIntent = new Intent(AppointActivity.this, OrderActivity.class);
-//                orderIntent.putExtra("departure_place", data1);
-//                orderIntent.putExtra("arrive_place", data2);
-//                orderIntent.putExtra("departure_time", data3);
-//                orderIntent.putExtra("arrive_time", data4);
-//                orderIntent.putExtra("departure_date", data5);
-//                orderIntent.putExtra("shiftid", data6);
-//                orderIntent.putExtra("shift_type", data7);
-//                startActivity(orderIntent);
                 break;
 
             case R.id.appoint_nextday:

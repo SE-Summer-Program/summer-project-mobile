@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +110,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
         public void onClick(View v){
             switch (v.getId()){
                 case R.id.appointitem_reservebtn:
-                    AppointInfo info = appointInfoList.get((int)v.getTag());
+                    AppointInfo info = appointInfoList.get((int)v.getTag()-1);
+                    Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
                     Intent orderIntent = new Intent(context, OrderActivity.class);
                     orderIntent.putExtra("departure_place", info.getDeparture_place());
                     orderIntent.putExtra("arrive_place", info.getArrive_place());
@@ -161,6 +163,16 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
      */
     private AppointInfo getChildDataBean(AppointInfo bean) {
         AppointInfo child = new AppointInfo();
+        child.setLine_type(bean.getLine_type());
+        child.setDate(bean.getDate());
+        child.setAppoint_status(bean.getAppoint_status());
+        child.setShiftid(bean.getShiftid());
+        child.setId(bean.getId());
+        child.setRemain_seat(bean.getRemain_seat());
+        child.setDeparture_time(bean.getDeparture_time());
+        child.setArrive_time(bean.getArrive_time());
+        child.setDeparture_place(bean.getDeparture_place());
+        child.setArrive_place(bean.getArrive_place());
         child.setType(1);
         //child.setChild_msg(bean.getChild_msg());
         return child;

@@ -3,17 +3,13 @@ package com.sjtubus.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.support.v7.widget.Toolbar;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.mob.ums.User;
 import com.sjtubus.R;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.response.RecordInfoResponse;
@@ -93,7 +89,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.refresh_record);
+        swipeRefresh = findViewById(R.id.refresh_record);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -101,6 +97,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
+        refreshRecord();
 //        /* 测试item_record样式专用，用recycleview后删除 */
 //        confirmtime = findViewById(R.id.record_confirmtime);
 //        linename = findViewById(R.id.record_linename);
@@ -130,9 +127,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         String currenttime = StringCalendarUtils.getCurrentTime();
 
         RetrofitClient.getBusApi()
-
             .getRecordInfos(username, currenttime)
-
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<RecordInfoResponse>() {
@@ -144,9 +139,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void onNext(RecordInfoResponse response) {
                     Log.d(TAG, "onNext: ");
-
-                    recordAdapter.setDataList(response.getRecordInfos());
-
+                    if(response.getRecordInfos()!=null) recordAdapter.setDataList(response.getRecordInfos());
                     swipeRefresh.setRefreshing(false);
                 }
 
@@ -163,9 +156,5 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                     //mProgressBar.setVisibility(View.GONE);
                 }
             });
-    }
-
-    private void initData(){
-
     }
 }
