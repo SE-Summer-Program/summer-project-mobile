@@ -6,17 +6,33 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.mob.ums.User;
 import com.sjtubus.R;
 import com.sjtubus.model.RecordInfo;
+import com.sjtubus.model.response.RecordInfoResponse;
+import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.StringCalendarUtils;
+import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.RecordAdapter;
 
 import java.util.List;
 
-public class RecordActivity extends BaseActivity implements RecordAdapter.OnItemClickListener{
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
+
+public class RecordActivity extends BaseActivity implements View.OnClickListener, RecordAdapter.OnItemClickListener{
 
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
@@ -27,13 +43,19 @@ public class RecordActivity extends BaseActivity implements RecordAdapter.OnItem
     private SwipeRefreshLayout swipeRefresh;
     private LinearLayoutManager layoutManager;
 
+//    /* 测试item_record样式专用，用recycleview后删除 */
+//    TextView confirmtime;
+//    TextView linename;
+//    TextView departuremsg;
+//    Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initToolbar();
+        initView();
     }
 
-    private void initToolbar(){
+    private void initView(){
         mToolbar = findViewById(R.id.toolbar_record);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.drawable.back_32);
@@ -50,6 +72,7 @@ public class RecordActivity extends BaseActivity implements RecordAdapter.OnItem
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 //      recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); //分割线
+
         recordAdapter = new RecordAdapter(this);
         recordAdapter.setItemClickListener(this);
         recyclerView.setAdapter(recordAdapter);
@@ -77,6 +100,12 @@ public class RecordActivity extends BaseActivity implements RecordAdapter.OnItem
                 refreshRecord();
             }
         });
+
+//        /* 测试item_record样式专用，用recycleview后删除 */
+//        confirmtime = findViewById(R.id.record_confirmtime);
+//        linename = findViewById(R.id.record_linename);
+//        departuremsg = findViewById(R.id.record_departuremsg);
+//        button = findViewById(R.id.record_btn);
     }
 
     @Override
@@ -85,11 +114,58 @@ public class RecordActivity extends BaseActivity implements RecordAdapter.OnItem
     }
 
     @Override
+    public void onClick(View view) {
+
+    }
+
+    @Override
     public void onItemClick(View view) {
 
     }
 
     private void refreshRecord(){
+        //获取当前用户的username
+        String username = UserManager.getInstance().getUser().getUsername();
+        //获取当前的时间
+        String currenttime = StringCalendarUtils.getCurrentTime();
+
+        RetrofitClient.getBusApi()
+
+            .getRecordInfos(username, currenttime)
+
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<RecordInfoResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
+                }
+
+                @Override
+                public void onNext(RecordInfoResponse response) {
+                    Log.d(TAG, "onNext: ");
+
+                    recordAdapter.setDataList(response.getRecordInfos());
+
+                    swipeRefresh.setRefreshing(false);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    swipeRefresh.setRefreshing(false);
+                    ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, "onComplete: ");
+                    //mProgressBar.setVisibility(View.GONE);
+                }
+            });
+    }
+
+    private void initData(){
 
     }
 }

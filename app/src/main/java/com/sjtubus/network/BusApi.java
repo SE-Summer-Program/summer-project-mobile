@@ -6,6 +6,7 @@ import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.model.response.LoginResponse;
 import com.sjtubus.model.response.MessageResponse;
 import com.sjtubus.model.response.ProfileResponse;
+import com.sjtubus.model.response.RecordInfoResponse;
 import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.model.response.StationResponse;
 
@@ -42,14 +43,18 @@ public interface BusApi {
     Observable<MessageResponse> getMessages();
 
     @GET("/shift/schedule")
-    Observable<ScheduleResponse> getSchedule(@Query("type")String type, @Query("line_name")String line_name);
+    Observable<ScheduleResponse> getSchedule(@Query("type") String type, @Query("line_name") String line_name);
 
     @GET("/line/stations")
-    Observable<StationResponse> getLineStation(@Query("line_name")String line_name);
+    Observable<StationResponse> getLineStation(@Query("line_name") String line_name);
 
     @GET("/line/infos")
-    Observable<LineInfoResponse> getLineInfos(@Query("type")String type);
+    Observable<LineInfoResponse> getLineInfos(@Query("type") String type);
 
     @GET("/appointment/infos")
-    Observable<AppointResponse> getAppointment(@Query("line_name")String line_name, @Query("type")String type, @Query("appoint_date")String appoint_date);
+    Observable<AppointResponse> getAppointment(@Query("line_name") String line_name, @Query("type") String type, @Query("appoint_date") String appoint_date);
+
+    @GET("/..")
+    Observable<RecordInfoResponse> getRecordInfos(@Query("username")String username, @Query("currenttime")String currenttime);
+
 }

@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sjtubus.R;
@@ -25,6 +27,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         this.mItemClickListener = itemClickListener;
     }
 
+    public void setDataList(List<RecordInfo> recordInfos) {
+        this.recordInfos = recordInfos;
+        notifyDataSetChanged();
+    }
+
     public RecordAdapter(RecordActivity context){
         this.context = context;
         this.recordInfos = new ArrayList<>();
@@ -32,15 +39,21 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
-//        TextView linename;
-//        TextView firsttime;
-//        TextView lasttime;
+        TextView confirmtime;
+        TextView linename;
+        TextView departuremsg;
+        TextView shiftid;
+        TextView status;
+        Button detailbtn;
 
         public ViewHolder(View view){
             super(view);
-//            linename = (TextView) view.findViewById(R.id.line_name);
-//            firsttime = (TextView) view.findViewById(R.id.line_first_time);
-//            lasttime = (TextView) view.findViewById(R.id.line_last_time);
+            confirmtime = view.findViewById(R.id.record_confirmtime);
+            linename = view.findViewById(R.id.record_linename);
+            departuremsg = view.findViewById(R.id.record_departuremsg);
+            shiftid = view.findViewById(R.id.record_shiftid);
+            status = view.findViewById(R.id.record_status);
+            detailbtn = view.findViewById(R.id.record_btn);
         }
     }
 
@@ -60,7 +73,12 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
-
+        String confirm_time = recordInfos.get(position).getConfirmDate();
+        String line_name = recordInfos.get(position).getLineName();
+        String departure_msg = recordInfos.get(position).getDepartureMsg();
+        holder.confirmtime.setText(confirm_time);
+        holder.linename.setText(line_name);
+        holder.departuremsg.setText(departure_msg);
     }
 
     @Override

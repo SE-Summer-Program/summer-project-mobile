@@ -35,16 +35,16 @@ public class ShiftUtils {
     }
 
     public static String getLineByDepartureAndArrive(String departure_place_str, String arrive_place_str){
-        if (departure_place_str.contains("闵行") || arrive_place_str.contains("徐汇")) {
+        if (departure_place_str.contains("闵行") && arrive_place_str.contains("徐汇")) {
             return line_list_E[0];
         }
-        else if (departure_place_str.contains("徐汇") || arrive_place_str.contains("闵行")) {
+        else if (departure_place_str.contains("徐汇") && arrive_place_str.contains("闵行")) {
             return line_list_E[1];
         }
-        else if (departure_place_str.contains("闵行") || arrive_place_str.contains("七宝")) {
+        else if (departure_place_str.contains("闵行") && arrive_place_str.contains("七宝")) {
             return line_list_E[2];
         }
-        else if (departure_place_str.contains("七宝") || arrive_place_str.contains("闵行")) {
+        else if (departure_place_str.contains("七宝") && arrive_place_str.contains("闵行")) {
             return line_list_E[3];
         }
         else {
