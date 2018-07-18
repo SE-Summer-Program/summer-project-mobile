@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private TextView login_txt;
     private TextView register_txt;
 
-    private View decorView;
+    //private View decorView;
 
     private List<String> images = new ArrayList<>();
 
@@ -59,14 +59,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
 
         //获取顶层视图
-        decorView = getWindow().getDecorView();
-
-//        decorView = getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //decorView = getWindow().getDecorView();
+        //decorView = getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     @Override
     protected void onStart() {
-        init();
+        //init();
         super.onStart();
     }
 
@@ -235,23 +234,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         return true;
     }
 
-    private void init(){
-        int flag = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide
-                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        //判断当前版本在4.0以上并且存在虚拟按键，否则不做操作
-        if (!checkDeviceHasNavigationBar()) {
-            //一定要判断是否存在按键，否则在没有按键的手机调用会影响别的功能。如之前没有考虑到，导致图传全屏变成小屏显示。
-
-            return;
-        } else {
-            // 获取属性
-            decorView.setSystemUiVisibility(flag);
-        }
-    }
+//    private void init(){
+//        int flag = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide
+//                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//        //判断当前版本在4.0以上并且存在虚拟按键，否则不做操作
+//        if (!checkDeviceHasNavigationBar()) {
+//            //一定要判断是否存在按键，否则在没有按键的手机调用会影响别的功能。如之前没有考虑到，导致图传全屏变成小屏显示。
+//        } else {
+//            // 获取属性
+//            decorView.setSystemUiVisibility(flag);
+//        }
+//    }
 
     /**
      * 判断是否存在虚拟按键

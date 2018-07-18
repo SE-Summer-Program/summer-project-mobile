@@ -17,19 +17,17 @@ public class AppointParentViewHolder extends BaseViewHolder{
 
     private Context context;
     private View view;
-    private LinearLayout container;
-    private View parentDashedView;
 
     private ImageView expand;
 
-    public AppointParentViewHolder(Context context, View view){
+    AppointParentViewHolder(Context context, View view){
         super(view);
         this.context = context;
         this.view = view;
     }
 
     public void bindView(final AppointInfo bean, final int pos, final AppointItemClickListener appointItemClickListener){
-        container = view.findViewById(R.id.container);
+        LinearLayout container = view.findViewById(R.id.container);
 
         TextView shiftid = view.findViewById(R.id.appointitem_shiftid);
         TextView departure_place = view.findViewById(R.id.appointitem_departureplace);
@@ -83,7 +81,7 @@ public class AppointParentViewHolder extends BaseViewHolder{
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void rotationExpandIcon(float from, float to) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);//属性动画
             valueAnimator.setDuration(500);
             valueAnimator.setInterpolator(new DecelerateInterpolator());
@@ -95,6 +93,6 @@ public class AppointParentViewHolder extends BaseViewHolder{
                 }
             });
             valueAnimator.start();
-        }
+        //}
     }
 }

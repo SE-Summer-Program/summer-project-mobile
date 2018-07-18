@@ -1,40 +1,26 @@
 package com.sjtubus.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.ValueCallback;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
-import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
-import com.sjtubus.network.cookie.BusCookieJar;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Cookie;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.RequestBody;
 
 import static android.content.ContentValues.TAG;

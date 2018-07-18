@@ -1,5 +1,6 @@
 package com.sjtubus.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -26,6 +27,7 @@ import java.util.Objects;
 import static android.app.Activity.RESULT_OK;
 
 public class AppointNaviFragment extends BaseFragment {
+    @SuppressLint("StaticFieldLeak")
     private static AppointNaviFragment fragment;
 
     private TextView singleway;

@@ -9,13 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.model.BusMessage;
 import com.sjtubus.model.Schedule;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> {
     private List<String> times;
@@ -50,8 +47,7 @@ public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> 
     @Override
     public ShiftAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_shift, parent, false);
-        ShiftAdapter.ViewHolder holder = new ShiftAdapter.ViewHolder(view);
-        return holder;
+        return new ShiftAdapter.ViewHolder(view);
     }
 
     @Override

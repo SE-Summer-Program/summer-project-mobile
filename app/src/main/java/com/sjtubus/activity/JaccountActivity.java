@@ -3,7 +3,6 @@ package com.sjtubus.activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.CookieManager;
@@ -13,12 +12,10 @@ import android.webkit.WebViewClient;
 
 import com.sjtubus.App;
 import com.sjtubus.R;
-import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.network.cookie.BusCookieJar;
 import com.sjtubus.user.UserManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Cookie;
@@ -81,16 +78,13 @@ public class JaccountActivity extends BaseActivity {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
             Log.i("JaccountActivity", "Start loading: " + url);
-
-            String successUrl = redirect_url;
-
-            if (true || !url.split("\\?")[0].equals(successUrl)){
-                return;
-            }
-            view.stopLoading();
-            saveCookies();
-            UserManager.getInstance().refresh();
-            finish();
+//            if (true || !url.split("\\?")[0].equals(successUrl)){
+//                return;
+//            }
+//            view.stopLoading();
+//            saveCookies();
+//            UserManager.getInstance().refresh();
+//            finish();
         }
 
         @Override

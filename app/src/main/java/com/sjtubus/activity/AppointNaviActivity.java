@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.support.v7.widget.Toolbar;
 
 import com.sjtubus.R;
 import com.sjtubus.fragment.AppointNaviFragment;

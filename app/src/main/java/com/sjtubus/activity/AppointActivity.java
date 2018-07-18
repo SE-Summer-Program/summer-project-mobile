@@ -39,8 +39,6 @@ import static android.content.ContentValues.TAG;
 public class AppointActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
-    private AppointInfo appointInfo;
-    private List<AppointInfo> appointInfoList;
     private AppointAdapter appointAdapter;
     private SwipeRefreshLayout swipeRefresh;
 

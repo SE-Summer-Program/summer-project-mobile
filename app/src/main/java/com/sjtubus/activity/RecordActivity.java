@@ -11,15 +11,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.sjtubus.R;
-import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.response.RecordInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.RecordAdapter;
-
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,8 +27,6 @@ import static android.content.ContentValues.TAG;
 
 public class RecordActivity extends BaseActivity implements View.OnClickListener, RecordAdapter.OnItemClickListener{
 
-    private RecordInfo recordInfo;
-    private List<RecordInfo> recordInfos;
     private RecordAdapter recordAdapter;
 
     private SwipeRefreshLayout swipeRefresh;
@@ -60,7 +55,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycle_record);
+        RecyclerView recyclerView = findViewById(R.id.recycle_record);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

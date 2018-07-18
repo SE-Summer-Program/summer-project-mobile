@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 
 public class AppointPagerAdapter extends FragmentPagerAdapter {
-    private ArrayList<Fragment> mFragments = new ArrayList<>();
+    private ArrayList<Fragment> mFragments;
     private final String[] mTitles;
 
     public AppointPagerAdapter(FragmentManager fm, ArrayList<Fragment> mFragments, String[] mTitles) {

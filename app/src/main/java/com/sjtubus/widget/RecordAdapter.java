@@ -43,7 +43,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView status;
         Button detailbtn;
 
-        public ViewHolder(View view){
+        ViewHolder(View view){
             super(view);
             submittime = view.findViewById(R.id.record_submittime);
             linename = view.findViewById(R.id.record_linename);

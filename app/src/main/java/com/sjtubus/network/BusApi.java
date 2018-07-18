@@ -42,7 +42,7 @@ public interface BusApi {
     @GET("account/messages")
     Observable<MessageResponse> getMessages();
 
-    @GET("/shift/schedule")
+    @GET("/shift/search_schedule")
     Observable<ScheduleResponse> getSchedule(@Query("type") String type, @Query("line_name") String line_name);
 
     @GET("/line/stations")
