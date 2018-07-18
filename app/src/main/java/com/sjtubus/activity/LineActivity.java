@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import android.widget.DatePicker;
 import com.sjtubus.R;
 
 import com.sjtubus.utils.StringCalendarUtils;
+//import com.sjtubus.utils.SwipeRefreshView;
 import com.sjtubus.widget.LineAdapter;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
@@ -44,15 +46,18 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     SwipeRefreshLayout swipeRefresh;
     Calendar calendar;
     MyDialogListener dialogListener = new MyDialogListener();
-    private int select = 0;
 
     private String[] type_list = {"在校期-工作日", "在校期-双休日、节假日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
+    private int select = 0;
+
+    //private SwipeRefreshView mSwipeRefreshView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews();
+        //initSwipeRefreshView();
     }
 
     public int getContentViewId(){
@@ -103,6 +108,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 refreshSchedule();
             }
         });
+
     }
 
     public void setAndShowSchedule(String type){
@@ -135,7 +141,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 }
             });
     }
-
 
     @Override
     public void onItemClick(View view) {
@@ -174,13 +179,16 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
                     adapter.setDataList(response.getLineInfos());
+
                     swipeRefresh.setRefreshing(false);
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
+
                     swipeRefresh.setRefreshing(false);
+
                     ToastUtils.showShort("网络请求失败！请检查你的网络！");
                 }
 
@@ -191,7 +199,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 }
             });
     }
-
 
     private class MyDialogListener implements DialogInterface.OnClickListener{
         private int temp_select = 0;
@@ -208,24 +215,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         }
     }
 
-    public String getTypes(){
-        calendar = Calendar.getInstance();
-        //date = calendar.getTime();
-        boolean isWeekendFlag = StringCalendarUtils.isWeekend(calendar);
-        boolean isHoildayFlag = StringCalendarUtils.isHoilday(calendar);
-        if (!isHoildayFlag && !isWeekendFlag){
-            return "NormalWorkday";
-        }
-        else if (!isHoildayFlag){
-            return "NormalWeekendAndLegalHoilday";
-        }
-        else if (!isWeekendFlag){
-            return "HoildayWorkday";
-        }
-        else{
-            return "HoildayWeekend";
-        }
-    }
 
     public void showDatePickDlg(){
         calendar = Calendar.getInstance();
@@ -239,4 +228,57 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         datePickerDialog.show();
 
     }
+
+
+//    private void initSwipeRefreshView(){
+//        mSwipeRefreshView = (SwipeRefreshView) findViewById(R.id.srl);
+//        // 设置颜色属性的时候一定要注意是引用了资源文件还是直接设置16进制的颜色，因为都是int值容易搞混
+//        // 设置下拉进度的背景颜色，默认就是白色的
+//        mSwipeRefreshView.setProgressBackgroundColorSchemeResource(android.R.color.white);
+//        // 设置下拉进度的主题颜色
+//        mSwipeRefreshView.setColorSchemeResources(R.color.colorAccent,
+//                android.R.color.holo_blue_bright, R.color.colorPrimaryDark,
+//                android.R.color.holo_orange_dark, android.R.color.holo_red_dark, android.R.color.holo_purple);
+//
+//        mSwipeRefreshView.setItemCount(20);
+//
+//        // 手动调用,通知系统去测量
+//        mSwipeRefreshView.measure(0, 0);
+//        mSwipeRefreshView.setRefreshing(true);
+//        initEvent();
+//    }
+//
+//    private void initEvent() {
+//
+//        // 下拉时触发SwipeRefreshLayout的下拉动画，动画完毕之后就会回调这个方法
+//        mSwipeRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshSchedule()
+//            }
+//        });
+//
+//        // 设置下拉加载更多
+//        mSwipeRefreshView.setOnLoadMoreListener(new SwipeRefreshView.OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore() {
+//                loadMoreData();
+//            }
+//        });
+//    }
+//
+//    private void loadMoreData() {
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                mList.clear();
+//                mList.addAll(DataResource.getMoreData());
+//                Toast.makeText(MainActivity.this, "加载了" + 20 + "条数据", Toast.LENGTH_SHORT).show();
+//
+//                // 加载完数据设置为不加载状态，将加载进度收起来
+//                mSwipeRefreshView.setLoading(false);
+//            }
+//        }, 2000);
+//    }
 }
