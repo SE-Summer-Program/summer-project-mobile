@@ -4,6 +4,17 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+
+import android.util.ArrayMap;
+import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
@@ -22,13 +33,22 @@ import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
+import com.baidu.mapapi.overlayutil.OverlayManager;
+import com.baidu.mapapi.overlayutil.TransitRouteOverlay;
+import com.baidu.mapapi.overlayutil.WalkingRouteOverlay;
 import com.baidu.mapapi.search.route.DrivingRouteResult;
 import com.baidu.mapapi.search.route.IndoorRouteResult;
+import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.MassTransitRouteResult;
 import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
 import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.baidu.mapapi.search.route.TransitRouteLine;
+import com.baidu.mapapi.search.route.TransitRoutePlanOption;
 import com.baidu.mapapi.search.route.TransitRouteResult;
+import com.baidu.mapapi.search.route.WalkingRouteLine;
+import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 
 import com.sjtubus.utils.MyMapStatusChangeListener;
@@ -37,8 +57,12 @@ import com.yinglan.scrolllayout.ScrollLayout;
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
 import com.sjtubus.utils.MyLocationListener;
+import com.sjtubus.utils.MyMarkerClickListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -60,8 +84,8 @@ public class MapActivity extends BaseActivity {
     //覆盖物相关
     private List<Marker> markers = new ArrayList<>();
     private List<Station> stations = new ArrayList<>();
-    //private Map<String,BitmapDescriptor> bitmaps = new Map<String, BitmapDescriptor>();
-    private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
+    private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<String, BitmapDescriptor>();
+    private OnMarkerClickListener mMarkClickListener = null;
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
 
     //搜索相关
@@ -119,7 +143,7 @@ public class MapActivity extends BaseActivity {
         /**设置 setting*/
         mScrollLayout.setMinOffset(0);
         mScrollLayout.setMaxOffset((int) (this.getResources().getDisplayMetrics().heightPixels * 0.3));
-        mScrollLayout.setExitOffset(0);
+        mScrollLayout.setExitOffset(-100);
         mScrollLayout.setIsSupportExit(true);
         mScrollLayout.setAllowHorizontalScroll(true);
         mScrollLayout.setOnScrollChangedListener(mOnScrollChangedListener);
@@ -226,20 +250,12 @@ public class MapActivity extends BaseActivity {
     }
 
     private void addMarker(){
-        Float zoom = mBaiduMap.getMapStatus().zoom;
-        BitmapDescriptor bd_temp ;
-        View v_temp = LayoutInflater.from(getApplicationContext()).inflate(R.layout.map_marker, null);//加载自定义的布局
-        ImageView img_temp = (ImageView) v_temp.findViewById(R.id.baidumap_custom_img);//获取自定义布局中的imageview
-        img_temp.setImageResource(R.drawable.icon_gcoding);//设置marker的图标
-        TextView tv_temp = (TextView) v_temp.findViewById(R.id.baidumap_custom_text);//获取自定义布局中的textview
-
+        initBitmap();
         for(Station station : stations){
-            if(zoom > 18.0f) tv_temp.setText(station.getName());//设置站点名
-            else tv_temp.setText("");
-            bd_temp = BitmapDescriptorFactory.fromView(v_temp);
+            BitmapDescriptor bd_temp = bitmaps.get(station.getName() + "_smallZoom");
             MarkerOptions marker_temp = new MarkerOptions()
                     .position(new LatLng(station.getLatitude(),station.getLongitude()))
-                        .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(7);
+                    .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(7);
             //添加marker
             Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
             //使用marker携带info信息，当点击事件的时候可以通过marker获得info信息
@@ -250,14 +266,29 @@ public class MapActivity extends BaseActivity {
 
             markers.add(marker);
         }
-        zoomLevel = zoom;
-
         mMarkClickListener = new MyMarkerClickListener(mScrollLayout);
         mBaiduMap.setOnMarkerClickListener(mMarkClickListener);
-        mMapStatusChangeListener.setStations(stations);
         mMapStatusChangeListener.setMarkers(markers);
+        mMapStatusChangeListener.setBitmaps(bitmaps);
     }
 
+    private void initBitmap(){
+        BitmapDescriptor bd_temp ;
+        View v_temp = LayoutInflater.from(getApplicationContext()).inflate(R.layout.map_marker, null);//加载自定义的布局
+        ImageView img_temp = (ImageView) v_temp.findViewById(R.id.baidumap_custom_img);//获取自定义布局中的imageview
+        img_temp.setImageResource(R.drawable.icon_gcoding);//设置marker的图标
+        TextView tv_temp = (TextView) v_temp.findViewById(R.id.baidumap_custom_text);//获取自定义布局中的textview
+
+        for(Station station : stations){
+            tv_temp.setText(station.getName());//设置站点名
+            bd_temp = BitmapDescriptorFactory.fromView(v_temp);
+            bitmaps.put(station.getName() + "_bigZoom",bd_temp);
+
+            tv_temp.setText("");//小缩略图时站点名不显示
+            bd_temp = BitmapDescriptorFactory.fromView(v_temp);
+            bitmaps.put(station.getName() + "_smallZoom",bd_temp);
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
