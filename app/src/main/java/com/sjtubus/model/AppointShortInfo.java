@@ -11,6 +11,8 @@ public class AppointShortInfo {
     private String arrive_time;
     @SerializedName("remainSeat")
     private int remain_seat;
+    @SerializedName("submitTime")
+    private String submit_time;
 
     public String getShiftid() {
         return shiftid;
@@ -44,4 +46,7 @@ public class AppointShortInfo {
         this.remain_seat = remain_seat;
     }
 
+    public String getSubmit_time() { return submit_time; }
+
+    public void setSubmit_time(String submit_time) { this.submit_time = submit_time; }
 }

@@ -21,6 +21,7 @@ import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ShiftUtils;
+import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -230,6 +231,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 .add("line_name", ShiftUtils.getLineByDepartureAndArrive(departure_place_str,arrive_place_str))
                 .add("shift_id",shiftid_str)
                 .add("appoint_date",date_str)
+                .add("submit_time", StringCalendarUtils.getCurrentTime())
                 .add("username",UserManager.getInstance().getUser().getUsername())
                 .build();
         RetrofitClient.getBusApi()

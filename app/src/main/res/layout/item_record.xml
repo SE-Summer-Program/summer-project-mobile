@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:background="@color/shallow_white"/>
         <TextView
-            android:id="@+id/record_confirmtime"
+            android:id="@+id/record_submittime"
             android:layout_width="0sp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
