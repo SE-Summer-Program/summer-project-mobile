@@ -17,21 +17,21 @@ public class Station  implements Serializable{
     //C = Clockwise
     //L = Loopline
     //N = Nonloopline
-    @SerializedName("AntiClockLoop")
+    @SerializedName("antiClockLoop")
     private List<String> AntiClockLoop = null;
-    @SerializedName("AntiClockNonLoop")
+    @SerializedName("antiClockNonLoop")
     private List<String> AntiClockNonLoop = null;
-    @SerializedName("ClockLoop")
+    @SerializedName("clockLoop")
     private List<String> ClockLoop = null;
-    @SerializedName("ClockNonLoop")
+    @SerializedName("clockNonLoop")
     private List<String> ClockNonLoop = null;
-    @SerializedName("VacAntiClockLoop")
+    @SerializedName("vacAntiClockLoop")
     private List<String> VacAntiClockLoop = null;
-    @SerializedName("VacAntiClockNonLoop")
+    @SerializedName("vacAntiClockNonLoop")
     private List<String> VacAntiClockNonLoop = null;
-    @SerializedName("VacClockLoop")
+    @SerializedName("vacClockLoop")
     private List<String> VacClockLoop = null;
-    @SerializedName("VacClockNonLoop")
+    @SerializedName("vacClockNonLoop")
     private List<String> VacClockNonLoop = null;
 
     public Station(String name, Double latitude, Double longitude) {

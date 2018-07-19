@@ -48,7 +48,7 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
 
         mCoordinatorTabLayout.setTranslucentStatusBar(this)
                 .setTitle("预约班车")
-                .setBackEnable(true)
+                //.setBackEnable(true)
                 .setImageArray(mImageArray, mColorArray)
                 .setupWithViewPager(mViewPager);
     }
@@ -61,7 +61,7 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initViewPager(){
-        mViewPager = (ViewPager)findViewById(R.id.appoint_vp);
+        mViewPager = findViewById(R.id.appoint_vp);
         AppointPagerAdapter adapter = new AppointPagerAdapter(getSupportFragmentManager(),mFragment,mTitles);
         mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(adapter);

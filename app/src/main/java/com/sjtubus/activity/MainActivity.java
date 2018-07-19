@@ -19,9 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.avos.avoscloud.feedback.FeedbackAgent;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.User;
+import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.GlideImageLoader;
@@ -37,6 +41,15 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
@@ -234,9 +247,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             case R.id.navigation_item_reserve:
                 Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
                 startActivity(recordIntent);
+                break;
             case R.id.navigation_item_setting:
                 Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(settingIntent);
+                break;
+            case R.id.navigation_item_scan:
+                new IntentIntegrator(this)
+                    .setOrientationLocked(false)
+                    .setCaptureActivity(SimpleScanActivity.class) // 设置自定义的activity是CustomActivity
+                    .initiateScan(); // 初始化扫描
+                break;
             default:
                 break;
         }
@@ -305,5 +326,59 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Override
+    // 通过 onActivityResult的方法获取 扫描回来的 值
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        if(intentResult != null) {
+            if(intentResult.getContents() == null) {
+                ToastUtils.showShort("内容为空");
+            } else {
+                ToastUtils.showShort("扫描成功");
+                // ScanResult 为 获取到的字符串
+                String scanResult = intentResult.getContents();
+                String[] info = scanResult.split(";");
+                if(info.length<2){
+                    ToastUtils.showShort("二维码格式不正确!");
+                    return;
+                }
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("username", UserManager.getInstance().getUser().getUsername())
+                        .add("shift_id",info[0])
+                        .add("departure_date",info[1])
+                        .build();
+                //登录
+                RetrofitClient.getBusApi()
+                        .verifyUser(requestBody)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<HttpResponse>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                addDisposable(d);
+                            }
+
+                            @Override
+                            public void onNext(HttpResponse response) {
+                                ToastUtils.showShort(response.getMsg());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                Log.d(TAG, "onComplete: ");
+                                //mProgressBar.setVisibility(View.GONE);
+                            }
+                        });
+            }
+        } else {
+            super.onActivityResult(requestCode,resultCode,data);
+        }
     }
 }

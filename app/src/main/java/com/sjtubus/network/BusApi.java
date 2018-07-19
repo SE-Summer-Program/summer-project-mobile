@@ -59,4 +59,7 @@ public interface BusApi {
 
     @POST("/appointment/appoint")
     Observable<HttpResponse> appoint(@Body RequestBody appointinfo);
+
+    @POST("/appointment/verify")
+    Observable<HttpResponse> verifyUser(@Body RequestBody info);
 }

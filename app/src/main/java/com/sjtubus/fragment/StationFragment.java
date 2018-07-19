@@ -71,7 +71,7 @@ public class StationFragment extends BaseFragment {
                 @Override
                 public void onNext(StationResponse response) {
                     Log.d(TAG, "onNext: ");
-                    //mAdapter.setDataList(response.getStations());
+                    mAdapter.setDataList(response.getStations());
                 }
 
                 @Override

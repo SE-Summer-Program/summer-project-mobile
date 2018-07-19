@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.RecordInfo;
+import com.sjtubus.utils.ZxingUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView shiftid;
         TextView status;
         Button detailbtn;
+        ImageView qrcode;
 
         ViewHolder(View view){
             super(view);
@@ -51,6 +54,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             shiftid = view.findViewById(R.id.record_shiftid);
             status = view.findViewById(R.id.record_status);
             detailbtn = view.findViewById(R.id.record_btn);
+            qrcode = view.findViewById(R.id.record_qrcode);
         }
     }
 
@@ -80,6 +84,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         holder.departuremsg.setText(departure_msg);
         holder.shiftid.setText(shift_id);
         holder.submittime.setText(submit_time);
+        String info = shift_id + ";" + recordInfos.get(position).getDepartureDate();
+        holder.qrcode.setImageBitmap(ZxingUtils.createQRImage(info,300,300));
     }
 
     @Override

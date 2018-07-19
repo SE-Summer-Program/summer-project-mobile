@@ -21,6 +21,10 @@
             android:id="@+id/navigation_item_setting"
             android:icon="@mipmap/setting"
             android:title="@string/setting" />
+        <item
+            android:id="@+id/navigation_item_scan"
+            android:icon="@mipmap/icon_qr_128"
+            android:title="@string/scanQrcode" />
     </group>
     <!--<item-->
         <!--android:id="@+id/navigation_subheader"-->

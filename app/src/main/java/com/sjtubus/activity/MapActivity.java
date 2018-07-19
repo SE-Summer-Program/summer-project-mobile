@@ -99,8 +99,9 @@ public class MapActivity extends BaseActivity {
         getPermission();
         initView();
         initLocation();
-        initRoutePlan();
-        addMarker();
+        retrieveData();
+        //initRoutePlan();
+        //addMarker();
     }
 
     public int getContentViewId(){
@@ -233,7 +234,7 @@ public class MapActivity extends BaseActivity {
         mSearch.setOnGetRoutePlanResultListener(routeListener);
         //此处暂时为硬编码，应导入数据库数据
         //拾取坐标系统给的经纬度是反的！！！切记！！！
-        retrieveData();
+        //retrieveData();
 
         PlanNode stNode = PlanNode.withLocation(new LatLng(stations.get(0).getLatitude(),stations.get(0).getLongitude()));//菁菁堂
         List<PlanNode> pbNode = new ArrayList<>();
@@ -494,6 +495,8 @@ public class MapActivity extends BaseActivity {
                     @Override
                     public void onNext(StationResponse response) {
                         setStations(response.getStations());
+                        initRoutePlan();
+                        addMarker();
                         Log.d(TAG, "onNext: ");
                     }
 

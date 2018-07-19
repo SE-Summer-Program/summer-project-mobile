@@ -131,7 +131,9 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void onNext(RecordInfoResponse response) {
                     Log.d(TAG, "onNext: ");
-                    if(response.getRecordInfos()!=null) recordAdapter.setDataList(response.getRecordInfos());
+                    if(response.getRecordInfos()!=null && response.getRecordInfos().size()!=0){
+                        recordAdapter.setDataList(response.getRecordInfos());
+                    }
                     swipeRefresh.setRefreshing(false);
                 }
 

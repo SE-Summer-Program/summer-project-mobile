@@ -9,12 +9,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sjtubus.R;
+import com.sjtubus.model.Station;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHolder> {
-    private List<String> stations;
+    private List<Station> stations;
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -27,7 +28,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
         }
     }
 
-    public void setDataList(List<String> stations) {
+    public void setDataList(List<Station> stations) {
         this.stations = stations;
         notifyDataSetChanged();
     }
@@ -47,7 +48,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull StationAdapter.ViewHolder holder, int position) {
         //Station station = stations.get(position);
-        holder.stationName.setText(stations.get(position));
+        holder.stationName.setText(stations.get(position).getName());
     }
 
     @Override
