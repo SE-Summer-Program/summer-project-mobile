@@ -30,12 +30,19 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+
+import com.sjtubus.utils.MyMapStatusChangeListener;
+import com.yinglan.scrolllayout.ScrollLayout;
+
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
 import com.sjtubus.utils.MyLocationListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.ListIterator;
+import java.util.Map;
 
 public class MapActivity extends BaseActivity {
 
@@ -43,17 +50,19 @@ public class MapActivity extends BaseActivity {
     private MapView mMapView;
     private MapStatusUpdate msu = null;
     private BaiduMap mBaiduMap;
+    private Float zoomLevel = 16.0f;
 
     //定位相关
     public LocationClient mLocationClient = null;
     private MyLocationListener myListener;
     private static final int BAIDU_READ_PHONE_STATE =100;
 
-    //Marker相关
-    private List<LatLng> latLng = new ArrayList<>();
-    private List<Marker> markerList = new ArrayList<>();
-    private List<OverlayOptions> overlayOptions = new ArrayList<>();
+    //覆盖物相关
+    private List<Marker> markers = new ArrayList<>();
     private List<Station> stations = new ArrayList<>();
+    //private Map<String,BitmapDescriptor> bitmaps = new Map<String, BitmapDescriptor>();
+    private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
+    private MyMapStatusChangeListener mMapStatusChangeListener = null;
 
     //搜索相关
     RoutePlanSearch mSearch = null;
@@ -62,20 +71,26 @@ public class MapActivity extends BaseActivity {
     boolean useDefaultIcon = true;
     DrivingRoutePlanOption routePlan = new DrivingRoutePlanOption();
 
+    //站点详细信息相关
+    private ScrollLayout mScrollLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initPermission();
+
+        getPermission();
         initView();
         initLocation();
         initRoutePlan();
+        addMarker();
     }
 
     public int getContentViewId(){
         return R.layout.activity_map;
     }
 
-    private void initPermission(){
+    private void getPermission(){
         //h获得定位权限
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
@@ -94,19 +109,44 @@ public class MapActivity extends BaseActivity {
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setCompassEnable(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为卫星显示
-        //msu = MapStatusUpdateFactory.zoomTo(15.0f);// 设置地图初始化缩放比例
-        //mBaiduMap.setMapStatus(msu);
-        //mBaiduMap.setCompassIcon(BitmapFactory.
-        //        decodeResource(getResources(),R.mipmap.compass));
+        msu = MapStatusUpdateFactory.zoomTo(zoomLevel);// 设置地图初始化缩放比例
+        mBaiduMap.setMapStatus(msu);
+        msu = MapStatusUpdateFactory.newLatLng(new LatLng(31.03201,121.443287));// 设置地图初始中心
+        mBaiduMap.setMapStatus(msu);
 
+        mScrollLayout = (ScrollLayout) findViewById(R.id.scroll_down_layout);
+
+        /**设置 setting*/
+        mScrollLayout.setMinOffset(0);
+        mScrollLayout.setMaxOffset((int) (this.getResources().getDisplayMetrics().heightPixels * 0.3));
+        mScrollLayout.setExitOffset(0);
+        mScrollLayout.setIsSupportExit(true);
+        mScrollLayout.setAllowHorizontalScroll(true);
+        mScrollLayout.setOnScrollChangedListener(mOnScrollChangedListener);
+        mScrollLayout.setToExit();
+        mScrollLayout.getBackground().setAlpha(0);
+
+        mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mScrollLayout.scrollToExit();
+            }
+
+            @Override
+            public boolean onMapPoiClick(MapPoi mapPoi) {
+                mScrollLayout.scrollToExit();
+                return false;
+            }
+        });
+        mMapStatusChangeListener = new MyMapStatusChangeListener(mScrollLayout);
+        mBaiduMap.setOnMapStatusChangeListener(mMapStatusChangeListener);
     }
 
     private void initLocation(){
         myListener = new MyLocationListener(mBaiduMap);
-        //声明LocationClient类
-        mLocationClient = new LocationClient(getApplicationContext());
-        //注册监听函数
-        mLocationClient.registerLocationListener(myListener);
+        myListener.setLocation(false);//设置不以自己为中心
+        mLocationClient = new LocationClient(getApplicationContext());//声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);//注册监听函数
 
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -171,46 +211,51 @@ public class MapActivity extends BaseActivity {
         mSearch.setOnGetRoutePlanResultListener(routeListener);
         //此处暂时为硬编码，应导入数据库数据
         //拾取坐标系统给的经纬度是反的！！！切记！！！
-        PlanNode stNode = PlanNode.withLocation(new LatLng(31.024769,121.436316));//菁菁堂
-        PlanNode enNode = PlanNode.withLocation(new LatLng(31.024769,121.436316));//菁菁堂
-        List<PlanNode> paNode = new ArrayList<PlanNode>();
-        PlanNode p1  = PlanNode.withLocation(new LatLng(31.025864,121.439918));//校医院
-        PlanNode p2  = PlanNode.withLocation(new LatLng(31.027945,121.445348));//东上院
-        PlanNode p3  = PlanNode.withLocation(new LatLng(31.030099,121.444427));//东中院
-        PlanNode p4  = PlanNode.withLocation(new LatLng(31.031666,121.44383)); //新图书馆
-        PlanNode p5  = PlanNode.withLocation(new LatLng(31.032865,121.447585));//行政B楼
-        PlanNode p6  = PlanNode.withLocation(new LatLng(31.031593,121.448681));//电信学院
-        PlanNode p7  = PlanNode.withLocation(new LatLng(31.029484,121.452059));//凯旋门
-        PlanNode p8  = PlanNode.withLocation(new LatLng(31.032525,121.454574));//机动学院
-        PlanNode p9  = PlanNode.withLocation(new LatLng(31.035039,121.453428));//庙门
-        PlanNode p10 = PlanNode.withLocation(new LatLng(31.036837,121.451376));//船建学院
-        PlanNode p11 = PlanNode.withLocation(new LatLng(31.037251,121.448506));//文选医学楼
-        PlanNode p12 = PlanNode.withLocation(new LatLng(31.034389,121.439514));//学生服务中心
-        PlanNode p13 = PlanNode.withLocation(new LatLng(31.03319, 121.435849));//西区学生公寓
-        PlanNode p14 = PlanNode.withLocation(new LatLng(31.031604,121.433221));//第四餐饮大楼
-        PlanNode p15 = PlanNode.withLocation(new LatLng(31.031128,121.436792));//华联生活中心
-        PlanNode p16 = PlanNode.withLocation(new LatLng(31.029047,121.437102));//包玉刚图书馆
-        PlanNode p17 = PlanNode.withLocation(new LatLng(31.028018,121.43456)); //材料学院
-        paNode.add(p1);
-        paNode.add(p2);
-        paNode.add(p3);
-        paNode.add(p4);
-        paNode.add(p5);
-        paNode.add(p6);
-        paNode.add(p7);
-        paNode.add(p8);
-        paNode.add(p9);
-        paNode.add(p10);
-        paNode.add(p11);
-        paNode.add(p12);
-        paNode.add(p13);
-        paNode.add(p14);
-        paNode.add(p15);
-        paNode.add(p16);
-        paNode.add(p17);
+        stations = getData();
+
+        PlanNode stNode = PlanNode.withLocation(new LatLng(stations.get(0).getLatitude(),stations.get(0).getLongitude()));//菁菁堂
+        List<PlanNode> pbNode = new ArrayList<PlanNode>();
+        for(int i = 1; i < stations.size(); i++){
+            PlanNode node_temp  = PlanNode.withLocation(new LatLng(stations.get(i).getLatitude(),stations.get(i).getLongitude()));
+            pbNode.add(node_temp);
+        }
         //开始规划路线
-        routePlan.from(stNode).passBy(paNode).to(enNode);
+        routePlan.from(stNode).passBy(pbNode).to(stNode);
         mSearch.drivingSearch(routePlan);
+
+    }
+
+    private void addMarker(){
+        Float zoom = mBaiduMap.getMapStatus().zoom;
+        BitmapDescriptor bd_temp ;
+        View v_temp = LayoutInflater.from(getApplicationContext()).inflate(R.layout.map_marker, null);//加载自定义的布局
+        ImageView img_temp = (ImageView) v_temp.findViewById(R.id.baidumap_custom_img);//获取自定义布局中的imageview
+        img_temp.setImageResource(R.drawable.icon_gcoding);//设置marker的图标
+        TextView tv_temp = (TextView) v_temp.findViewById(R.id.baidumap_custom_text);//获取自定义布局中的textview
+
+        for(Station station : stations){
+            if(zoom > 18.0f) tv_temp.setText(station.getName());//设置站点名
+            else tv_temp.setText("");
+            bd_temp = BitmapDescriptorFactory.fromView(v_temp);
+            MarkerOptions marker_temp = new MarkerOptions()
+                    .position(new LatLng(station.getLatitude(),station.getLongitude()))
+                        .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(7);
+            //添加marker
+            Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
+            //使用marker携带info信息，当点击事件的时候可以通过marker获得info信息
+            Bundle bundle = new Bundle();
+            //info必须实现序列化接口
+            bundle.putSerializable("info", station);
+            marker.setExtraInfo(bundle);
+
+            markers.add(marker);
+        }
+        zoomLevel = zoom;
+
+        mMarkClickListener = new MyMarkerClickListener(mScrollLayout);
+        mBaiduMap.setOnMarkerClickListener(mMarkClickListener);
+        mMapStatusChangeListener.setStations(stations);
+        mMapStatusChangeListener.setMarkers(markers);
     }
 
     @Override
@@ -227,16 +272,16 @@ public class MapActivity extends BaseActivity {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
+        //refreshMarker.onResume();
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart(){
         super.onStart();
-        if (!mLocationClient.isStarted())
-        {
+        if (!mLocationClient.isStarted()){
             mLocationClient.start();//开启定位
         }
+        //refreshMarker.start();
     }
 
     @Override
@@ -244,14 +289,15 @@ public class MapActivity extends BaseActivity {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
+        //refreshMarker.onPause();
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop(){
         super.onStop();
         mBaiduMap.setMyLocationEnabled(false);
         mLocationClient.stop();//停止定位
+        //refreshMarker.onStop();
     }
 
     //Android6.0申请权限的回调方法
@@ -290,6 +336,14 @@ public class MapActivity extends BaseActivity {
                 return null;
             }
 
+            /*@Override
+            public BitmapDescriptor getPassMarker() {
+                if (useDefaultIcon) {
+                    return BitmapDescriptorFactory.fromResource(R.drawable.icon_geo);
+                }
+                return null;
+            }*/
+
             @Override
             public BitmapDescriptor getTerminalMarker() {
                 if (useDefaultIcon) {
@@ -312,22 +366,13 @@ public class MapActivity extends BaseActivity {
                 Toast.makeText(MapActivity.this, result.error.toString(), Toast.LENGTH_SHORT).show();
             }
 
-            if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
-                // 起终点或途经点地址有岐义，通过以下接口获取建议查询信息
-                // result.getSuggestAddrInfo()
-                return;
-            }
             if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-                //nodeIndex = -1;
-                //mBtnPre.setVisibility(View.VISIBLE);
-                //mBtnNext.setVisibility(View.VISIBLE);
                 route = result.getRouteLines().get(0);
                 DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap);
                 routeOverlay = overlay;
-                mBaiduMap.setOnMarkerClickListener(overlay);
+                //mBaiduMap.setOnMarkerClickListener(overlay);
                 overlay.setData(result.getRouteLines().get(0));  //设置路线数据
                 overlay.addToMap(); //将所有overlay添加到地图中
-                overlay.zoomToSpan();//缩放地图
             }
         }
 
@@ -350,5 +395,167 @@ public class MapActivity extends BaseActivity {
         @Override
         public void onGetBikingRouteResult(BikingRouteResult result) {
         }
+    }
+
+    private class refreshThread extends Thread{
+        private boolean isStop = false;
+        @Override
+        public void run() {
+            super.run();
+            while(!isStop){
+                if(mBaiduMap.getMapStatus().zoom != zoomLevel){
+                    mBaiduMap.clear();//清除所有overlay
+                    routeOverlay.addToMap();//重新添加Route层
+                    addMarker();//添加Marker层
+                }
+                SystemClock.sleep(1000L);//每隔一秒判断地图是否发生缩放
+            }
+            return;
+        }
+
+        public void onStop(){
+            this.isStop = true;
+        }
+        public void onPause(){
+            this.isStop = true;
+        }
+        public void onResume(){
+            this.isStop = false;
+            super.start();
+        }
+    }
+
+    private ScrollLayout.OnScrollChangedListener mOnScrollChangedListener = new ScrollLayout.OnScrollChangedListener() {
+        //实现滑动时的背景变化
+        @Override
+        public void onScrollProgressChanged(float currentProgress) {
+            if (currentProgress >= 0) {
+                float precent = 255 * currentProgress;
+                if (precent > 255) {
+                    precent = 255;
+                } else if (precent < 0) {
+                    precent = 0;
+                }
+                mScrollLayout.getBackground().setAlpha(255 - (int) precent);
+            }
+        }
+
+        @Override
+        public void onScrollFinished(ScrollLayout.Status currentStatus) {
+        }
+
+        @Override
+        public void onChildScroll(int top) {
+        }
+    };
+    //数据应当从数据库读取
+    private List<Station> getData(){
+        List<Station> result = new ArrayList<Station>();
+        Station temp = null;
+
+        temp = new Station("菁菁堂",31.024769,121.436316);
+        String[] AntiClockLoop = {
+                "07:30",
+                "07:45",
+                "08:00",
+                "08:15",
+                "08:25",
+                "08:40",
+                "09:00",
+                "09:20",
+                "09:40",
+                "10:00",
+                "10:20",
+                "10:40",
+                "11:00",
+                "11:20",
+                "11:40",
+                "12:00",
+                "13:00",
+                "13:20",
+                "13:40",
+                "14:00",
+                "14:20",
+                "14:40",
+                "15:00",
+                "15:20",
+                "15:40",
+                "16:00",
+                "16:20",
+                "16:30",
+                "17:00"};
+        temp.setAntiClockLoop(Arrays.asList(AntiClockLoop));
+        String[] AntiClockNonLoop = {
+                "17:15",
+                "17:30",
+                "17:50",
+                "18:00",
+                "19:00",
+                "20:10"
+        };
+        temp.setAntiClockNonLoop(Arrays.asList(AntiClockNonLoop));
+        String[] ClockLoop = {
+                "08:30",
+                "08:50",
+                "09:10",
+                "09:30",
+                "10:00",
+                "10:30",
+                "11:00",
+                "11:30",
+                "12:30",
+                "13:30",
+                "14:00",
+                "14:30",
+                "15:00",
+                "15:30",
+                "16:00"
+        };
+        temp.setClockLoop(Arrays.asList(ClockLoop));
+        String[] ClockNonLoop = {
+                "16:30"
+        };
+        temp.setClockNonLoop(Arrays.asList(ClockNonLoop));
+        //setVacAntiClockLoop();
+        //setVacAntiClockNonLoop();
+        //setVacClockLoop();
+        //setVacClockNonLoop();
+        result.add(temp);
+        temp = new Station("校医院",31.025864,121.439918);
+        result.add(temp);
+        temp = new Station("东上院",31.027945,121.445348);
+        result.add(temp);
+        temp = new Station("东中院",31.030099,121.444427);
+        result.add(temp);
+        temp = new Station("新图书馆",31.031666,121.44383);
+        result.add(temp);
+        temp = new Station("行政B楼",31.032865,121.447585);
+        result.add(temp);
+        temp = new Station("电信学院",31.031593,121.448681);
+        result.add(temp);
+        temp = new Station("凯旋门",31.029484,121.452059);
+        result.add(temp);
+        temp = new Station("机动学院",31.032525,121.454574);
+        result.add(temp);
+        temp = new Station("庙门",31.035039,121.453428);
+        result.add(temp);
+        temp = new Station("船建学院",31.036837,121.451376);
+        result.add(temp);
+        temp = new Station("文选医学楼",31.037251,121.448506);
+        result.add(temp);
+        temp = new Station("学生服务中心",31.034389,121.439514);
+        result.add(temp);
+        temp = new Station("西区学生公寓",31.03319, 121.435849);
+        result.add(temp);
+        temp = new Station("第四餐饮大楼",31.031604,121.433221);
+        result.add(temp);
+        temp = new Station("华联生活中心",31.031128,121.436792);
+        result.add(temp);
+        temp = new Station("包玉刚图书馆",31.029047,121.437102);
+        result.add(temp);
+        temp = new Station("材料学院",31.028018,121.43456);
+        result.add(temp);
+
+        return result;
     }
 }
