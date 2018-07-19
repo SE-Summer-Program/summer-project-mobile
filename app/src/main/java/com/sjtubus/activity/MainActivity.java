@@ -160,6 +160,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(reserveIntent);
                 break;
             case R.id.record_btn:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
                 startActivity(recordIntent);
                 break;
@@ -222,6 +226,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             case R.id.navigation_item_reserve:
                 Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
                 startActivity(recordIntent);
+            case R.id.navigation_item_setting:
+                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(settingIntent);
             default:
                 break;
         }

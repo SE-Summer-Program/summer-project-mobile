@@ -56,7 +56,7 @@
     <string name="other_seat">其他特殊要求 :</string>
     <string name="submit_appoint">预约</string>
     <string name="confirm_and_register">确认并注册</string>
-    <string name="title_setting">设置</string>
+    <string name="setting">设置</string>
     <string name="reserve_btn">预约班车</string>
     <string name="record_btn">预约记录</string>
     <string name="position_btn">司机定位</string>

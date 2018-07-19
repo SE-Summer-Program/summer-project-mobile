@@ -1,6 +1,7 @@
 package com.sjtubus.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.sjtubus.R;
@@ -15,12 +16,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_main;
+        return R.layout.activity_setting;
     }
 
 
     private void initView(){
-
+        Toolbar toolbar = findViewById(R.id.toolbar_setting);
     }
 
     @Override
