@@ -3,18 +3,13 @@ package com.sjtubus.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
-
 import android.util.ArrayMap;
-import android.widget.ImageButton;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
@@ -22,10 +17,12 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.overlayutil.OverlayManager;
@@ -33,39 +30,24 @@ import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.core.SearchResult;
 import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
-import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
-import com.baidu.mapapi.overlayutil.OverlayManager;
-import com.baidu.mapapi.overlayutil.TransitRouteOverlay;
-import com.baidu.mapapi.overlayutil.WalkingRouteOverlay;
 import com.baidu.mapapi.search.route.DrivingRouteResult;
 import com.baidu.mapapi.search.route.IndoorRouteResult;
-import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.MassTransitRouteResult;
 import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
 import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
-import com.baidu.mapapi.search.route.TransitRouteLine;
-import com.baidu.mapapi.search.route.TransitRoutePlanOption;
 import com.baidu.mapapi.search.route.TransitRouteResult;
-import com.baidu.mapapi.search.route.WalkingRouteLine;
-import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
-
-import com.sjtubus.utils.MyMapStatusChangeListener;
-import com.yinglan.scrolllayout.ScrollLayout;
-
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
 import com.sjtubus.utils.MyLocationListener;
+import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.MyMarkerClickListener;
+import com.yinglan.scrolllayout.ScrollLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Map;
 
 public class MapActivity extends BaseActivity {
@@ -85,7 +67,7 @@ public class MapActivity extends BaseActivity {
     private List<Marker> markers = new ArrayList<>();
     private List<Station> stations = new ArrayList<>();
     private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<String, BitmapDescriptor>();
-    private OnMarkerClickListener mMarkClickListener = null;
+    private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
 
     //搜索相关
