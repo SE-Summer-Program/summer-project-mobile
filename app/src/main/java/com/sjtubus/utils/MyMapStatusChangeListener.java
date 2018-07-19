@@ -1,19 +1,11 @@
 package com.sjtubus.utils;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.model.LatLng;
-import com.sjtubus.R;
 import com.sjtubus.model.Station;
 import com.yinglan.scrolllayout.ScrollLayout;
 
@@ -61,8 +53,8 @@ public class MyMapStatusChangeListener implements BaiduMap.OnMapStatusChangeList
             //从marker中获取info信息
             Bundle bundle = marker.getExtraInfo();
             Station station = (Station) bundle.getSerializable("info");
-
-            BitmapDescriptor bd_temp = null;
+            if(station == null) continue;
+            BitmapDescriptor bd_temp;
             if(zoom_new >= 18.0f){
                 bd_temp = bitmaps.get(station.getName() + "_bigZoom");
                 marker.setIcon(bd_temp);
