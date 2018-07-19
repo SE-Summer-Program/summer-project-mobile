@@ -1,7 +1,6 @@
 package com.sjtubus.user;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.sjtubus.App;
 
@@ -31,7 +30,7 @@ public class ReminderManager {
 
     }
 
-    public Set<String> getReminders() {
+    private Set<String> getReminders() {
         Set<String> reminders = preferences.getStringSet(REMINDER, null);
         if (reminders == null) {
             reminders = new HashSet<>();

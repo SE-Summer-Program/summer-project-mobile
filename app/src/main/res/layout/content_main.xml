@@ -26,6 +26,14 @@
         android:layout_width="match_parent"
         android:layout_height="160dp" />
 
+    <com.stx.xmarqueeview.XMarqueeView
+        android:id="@+id/billboard"
+        android:layout_width="match_parent"
+        app:isSingleLine="true"
+        app:isSetAnimDuration="true"
+        android:layout_height="25dp"
+        />
+
     <LinearLayout
         android:baselineAligned="false"
         android:layout_width="match_parent"

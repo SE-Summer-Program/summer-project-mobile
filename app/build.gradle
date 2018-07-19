@@ -95,6 +95,7 @@ dependencies {
     implementation 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
     implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
+    implementation 'com.xhb:xmarqueeview:2.0.0'
 
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
