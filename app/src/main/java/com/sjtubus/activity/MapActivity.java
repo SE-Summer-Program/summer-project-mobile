@@ -64,6 +64,7 @@ import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 
+import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.yinglan.scrolllayout.ScrollLayout;
 
 import com.sjtubus.R;
@@ -78,6 +79,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Map;
 
 public class MapActivity extends BaseActivity {
 
@@ -93,10 +95,13 @@ public class MapActivity extends BaseActivity {
     private static final int BAIDU_READ_PHONE_STATE =100;
 
     //覆盖物相关
+    private List<Marker> markers = new ArrayList<>();
     private List<Station> stations = new ArrayList<>();
-    private refreshThread refreshMarker = new refreshThread();
+    //private Map<String,BitmapDescriptor> bitmaps = new Map<String, BitmapDescriptor>();
+    private OnMarkerClickListener mMarkClickListener = null;
+    private MyMapStatusChangeListener mMapStatusChangeListener = null;
 
-    //搜索相关
+            //搜索相关
     RoutePlanSearch mSearch = null;
     RouteLine route = null;  //路线
     OverlayManager routeOverlay = null;  //该类提供一个能够显示和管理多个Overlay的基类
@@ -156,7 +161,6 @@ public class MapActivity extends BaseActivity {
         mScrollLayout.setAllowHorizontalScroll(true);
         mScrollLayout.setOnScrollChangedListener(mOnScrollChangedListener);
         mScrollLayout.setToExit();
-
         mScrollLayout.getBackground().setAlpha(0);
 
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
@@ -171,6 +175,8 @@ public class MapActivity extends BaseActivity {
                 return false;
             }
         });
+        mMapStatusChangeListener = new MyMapStatusChangeListener(mScrollLayout);
+        mBaiduMap.setOnMapStatusChangeListener(mMapStatusChangeListener);
     }
 
     private void initLocation(){
@@ -278,10 +284,15 @@ public class MapActivity extends BaseActivity {
             //info必须实现序列化接口
             bundle.putSerializable("info", station);
             marker.setExtraInfo(bundle);
+
+            markers.add(marker);
         }
         zoomLevel = zoom;
-        OnMarkerClickListener mMarkClickListener = new MyMarkerClickListener(mScrollLayout);
+
+        mMarkClickListener = new MyMarkerClickListener(mScrollLayout);
         mBaiduMap.setOnMarkerClickListener(mMarkClickListener);
+        mMapStatusChangeListener.setStations(stations);
+        mMapStatusChangeListener.setMarkers(markers);
     }
 
     @Override
