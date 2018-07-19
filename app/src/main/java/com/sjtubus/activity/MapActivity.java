@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
+import android.util.ArrayMap;
 import android.widget.ImageButton;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -97,11 +98,11 @@ public class MapActivity extends BaseActivity {
     //覆盖物相关
     private List<Marker> markers = new ArrayList<>();
     private List<Station> stations = new ArrayList<>();
-    //private Map<String,BitmapDescriptor> bitmaps = new Map<String, BitmapDescriptor>();
+    private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<String, BitmapDescriptor>();
     private OnMarkerClickListener mMarkClickListener = null;
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
 
-            //搜索相关
+    //搜索相关
     RoutePlanSearch mSearch = null;
     RouteLine route = null;  //路线
     OverlayManager routeOverlay = null;  //该类提供一个能够显示和管理多个Overlay的基类
@@ -156,7 +157,7 @@ public class MapActivity extends BaseActivity {
         /**设置 setting*/
         mScrollLayout.setMinOffset(0);
         mScrollLayout.setMaxOffset((int) (this.getResources().getDisplayMetrics().heightPixels * 0.3));
-        mScrollLayout.setExitOffset(0);
+        mScrollLayout.setExitOffset(-100);
         mScrollLayout.setIsSupportExit(true);
         mScrollLayout.setAllowHorizontalScroll(true);
         mScrollLayout.setOnScrollChangedListener(mOnScrollChangedListener);
@@ -263,20 +264,12 @@ public class MapActivity extends BaseActivity {
     }
 
     private void addMarker(){
-        Float zoom = mBaiduMap.getMapStatus().zoom;
-        BitmapDescriptor bd_temp ;
-        View v_temp = LayoutInflater.from(getApplicationContext()).inflate(R.layout.map_marker, null);//加载自定义的布局
-        ImageView img_temp = (ImageView) v_temp.findViewById(R.id.baidumap_custom_img);//获取自定义布局中的imageview
-        img_temp.setImageResource(R.drawable.icon_gcoding);//设置marker的图标
-        TextView tv_temp = (TextView) v_temp.findViewById(R.id.baidumap_custom_text);//获取自定义布局中的textview
-
+        initBitmap();
         for(Station station : stations){
-            if(zoom > 18.0f) tv_temp.setText(station.getName());//设置站点名
-            else tv_temp.setText("");
-            bd_temp = BitmapDescriptorFactory.fromView(v_temp);
+            BitmapDescriptor bd_temp = bitmaps.get(station.getName() + "_smallZoom");
             MarkerOptions marker_temp = new MarkerOptions()
                     .position(new LatLng(station.getLatitude(),station.getLongitude()))
-                        .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(7);
+                    .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(7);
             //添加marker
             Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
             //使用marker携带info信息，当点击事件的时候可以通过marker获得info信息
@@ -287,14 +280,29 @@ public class MapActivity extends BaseActivity {
 
             markers.add(marker);
         }
-        zoomLevel = zoom;
-
         mMarkClickListener = new MyMarkerClickListener(mScrollLayout);
         mBaiduMap.setOnMarkerClickListener(mMarkClickListener);
-        mMapStatusChangeListener.setStations(stations);
         mMapStatusChangeListener.setMarkers(markers);
+        mMapStatusChangeListener.setBitmaps(bitmaps);
     }
 
+    private void initBitmap(){
+        BitmapDescriptor bd_temp ;
+        View v_temp = LayoutInflater.from(getApplicationContext()).inflate(R.layout.map_marker, null);//加载自定义的布局
+        ImageView img_temp = (ImageView) v_temp.findViewById(R.id.baidumap_custom_img);//获取自定义布局中的imageview
+        img_temp.setImageResource(R.drawable.icon_gcoding);//设置marker的图标
+        TextView tv_temp = (TextView) v_temp.findViewById(R.id.baidumap_custom_text);//获取自定义布局中的textview
+
+        for(Station station : stations){
+            tv_temp.setText(station.getName());//设置站点名
+            bd_temp = BitmapDescriptorFactory.fromView(v_temp);
+            bitmaps.put(station.getName() + "_bigZoom",bd_temp);
+
+            tv_temp.setText("");//小缩略图时站点名不显示
+            bd_temp = BitmapDescriptorFactory.fromView(v_temp);
+            bitmaps.put(station.getName() + "_smallZoom",bd_temp);
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
