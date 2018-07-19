@@ -1,31 +1,25 @@
 package com.sjtubus.activity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 
 import com.sjtubus.R;
-
-import com.sjtubus.utils.StringCalendarUtils;
-//import com.sjtubus.utils.SwipeRefreshView;
-import com.sjtubus.widget.LineAdapter;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
+import com.sjtubus.widget.LineAdapter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.reactivex.Observer;
@@ -36,6 +30,8 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.ContentValues.TAG;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
+
+//import com.sjtubus.utils.SwipeRefreshView;
 
 public class LineActivity extends BaseActivity implements LineAdapter.OnItemClickListener{
 

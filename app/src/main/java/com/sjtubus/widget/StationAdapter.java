@@ -9,8 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.model.Schedule;
-import com.sjtubus.model.Station;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
 
         ViewHolder(View view){
             super(view);
-            stationName = (TextView) view.findViewById(R.id.shift_time);
+            stationName = view.findViewById(R.id.shift_time);
         }
     }
 
@@ -43,8 +41,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
     @Override
     public StationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_shift, parent, false);
-        StationAdapter.ViewHolder holder = new StationAdapter.ViewHolder(view);
-        return holder;
+        return new StationAdapter.ViewHolder(view);
     }
 
     @Override

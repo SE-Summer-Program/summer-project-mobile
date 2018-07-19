@@ -26,6 +26,8 @@ import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.GlideImageLoader;
 import com.sjtubus.utils.ToastUtils;
+import com.sjtubus.widget.MarqueeViewAdapter;
+import com.stx.xmarqueeview.XMarqueeView;
 import com.youth.banner.Banner;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,10 +46,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private TextView login_tips;
     private TextView login_txt;
     private TextView register_txt;
+    private XMarqueeView billboard;
+    private MarqueeViewAdapter billboard_adapter;
 
-    private View decorView;
+    //private View decorView;
 
     private List<String> images = new ArrayList<>();
+    private List<String> messages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -59,15 +64,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
 
         //获取顶层视图
-        decorView = getWindow().getDecorView();
-
-//        decorView = getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-    }
-
-    @Override
-    protected void onStart() {
-        init();
-        super.onStart();
+        //decorView = getWindow().getDecorView();
+        //decorView = getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     public int getContentViewId(){
@@ -111,6 +109,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         //设置下划线
         login_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
         register_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
+
+        //设置滚动轮播
+        billboard = findViewById(R.id.billboard);
+        messages.add("2018.8.19即明日,校园巴士停运一天!");
+        messages.add("好消息！校车时速已达到100km/S!");
+        messages.add("恭喜学号为1的同学喜提校车一辆!");
+        billboard_adapter = new MarqueeViewAdapter(messages, this);
+        //刷新公告
+        //billboard_adapter.setData(messages);
+        billboard.setAdapter(billboard_adapter);
     }
     public void loadImages(){
         //目前的图片是用的网上的传图网站
@@ -236,22 +244,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         return true;
     }
 
-    private void init(){
-        int flag = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide
-                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        //判断当前版本在4.0以上并且存在虚拟按键，否则不做操作
-        if (!checkDeviceHasNavigationBar()) {
-            //一定要判断是否存在按键，否则在没有按键的手机调用会影响别的功能。如之前没有考虑到，导致图传全屏变成小屏显示。
+//    private void init(){
+//        int flag = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide
+//                | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//        //判断当前版本在4.0以上并且存在虚拟按键，否则不做操作
+//        if (!checkDeviceHasNavigationBar()) {
+//            //一定要判断是否存在按键，否则在没有按键的手机调用会影响别的功能。如之前没有考虑到，导致图传全屏变成小屏显示。
+//        } else {
+//            // 获取属性
+//            decorView.setSystemUiVisibility(flag);
+//        }
+//    }
 
-            return;
-        } else {
-            // 获取属性
-            decorView.setSystemUiVisibility(flag);
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        billboard.startFlipping();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        billboard.stopFlipping();
     }
 
     /**

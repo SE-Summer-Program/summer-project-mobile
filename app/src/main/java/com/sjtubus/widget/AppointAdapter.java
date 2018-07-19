@@ -36,7 +36,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = null;
+        View view;
         switch (viewType) {
             case AppointInfo.PARENT_ITEM:
                 view = layoutInflater.inflate(R.layout.item_appoint_parent, parent, false);

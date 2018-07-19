@@ -11,11 +11,9 @@ import android.widget.EditText;
 
 import com.sjtubus.R;
 import com.sjtubus.model.response.HttpResponse;
-import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,15 +25,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import okio.BufferedSink;
 
 import static android.content.ContentValues.TAG;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
 
-    private Button register_btn,verify_btn;
+    private Button verify_btn;
     private EditText username_edit,phonenum_edit, password_edit,verify_edit;
     private String username,phoneNum,password;
     private boolean isVerifying = false;
@@ -64,9 +60,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                     //获取验证码成功
                     changeBtnGetCode();
-                } else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
-                    //返回支持发送验证码的国家列表
                 }
+//                else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
+//                    //返回支持发送验证码的国家列表
+//                }
             } else {
                 runOnUiThread(new Runnable() {
                     @Override
@@ -130,7 +127,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         password_edit = findViewById(R.id.pwd_edit);
         phonenum_edit = findViewById(R.id.phone_edit);
         verify_edit = findViewById(R.id.verify_edit);
-        register_btn = findViewById(R.id.register_btn);
+        Button register_btn = findViewById(R.id.register_btn);
         register_btn.setOnClickListener(this);
         verify_btn = findViewById(R.id.verify_btn);
         verify_btn.setOnClickListener(this);

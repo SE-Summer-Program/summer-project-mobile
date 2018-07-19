@@ -59,8 +59,9 @@ public class DrivingRouteOverlay extends OverlayManager {
                                             .zIndex(10)
                                                     .rotate((360 - step.getDirection()))
                                                             .extraInfo(b)
-                                                                    .icon(BitmapDescriptorFactory
-                                                                            .fromAssetWithDpi("Icon_line_node.png")));
+                                                                    .icon(getPassMarker() != null ? getPassMarker() :
+                                                                            BitmapDescriptorFactory
+                                                                                    .fromAssetWithDpi("Icon_line_node.png")));
                 }
                 // 最后路段绘制出口点
                 if (mRouteLine.getAllStep().indexOf(step) == (mRouteLine
@@ -69,14 +70,15 @@ public class DrivingRouteOverlay extends OverlayManager {
                             .position(step.getExit().getLocation())
                                     .anchor(0.5f, 0.5f)
                                             .zIndex(10)
-                                                    .icon(BitmapDescriptorFactory
-                                                            .fromAssetWithDpi("Icon_line_node.png")));
+                                                    .icon(getPassMarker() != null ? getPassMarker() :
+                                                            BitmapDescriptorFactory
+                                                                .fromAssetWithDpi("Icon_line_node.png")));
 
                 }
             }
         }*/
 
-        if (mRouteLine.getStarting() != null) {
+        /*if (mRouteLine.getStarting() != null) {
             overlayOptionses.add((new MarkerOptions())
                     .position(mRouteLine.getStarting().getLocation())
                             .icon(getStartMarker() != null ? getStartMarker() :
@@ -91,7 +93,7 @@ public class DrivingRouteOverlay extends OverlayManager {
                                             BitmapDescriptorFactory
                                                     .fromAssetWithDpi("Icon_en.png"))
                                                             .zIndex(10));
-        }
+        }*/
         // poly line
         if (mRouteLine.getAllStep() != null
                 && mRouteLine.getAllStep().size() > 0) {
@@ -179,6 +181,16 @@ public class DrivingRouteOverlay extends OverlayManager {
         list.add(BitmapDescriptorFactory.fromAsset("Icon_road_nofocus.png"));
         return list;
     }
+
+    /**
+     * 覆写此方法以改变默认途经点图标
+     *
+     * @return 途经点图标
+     */
+    public BitmapDescriptor getPassMarker() {
+        return null;
+    }
+
     /**
      * 覆写此方法以改变默认终点图标
      * 

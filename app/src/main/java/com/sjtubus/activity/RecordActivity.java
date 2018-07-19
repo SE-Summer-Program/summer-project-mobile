@@ -84,7 +84,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycle_record);
+        RecyclerView recyclerView = findViewById(R.id.recycle_record);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);

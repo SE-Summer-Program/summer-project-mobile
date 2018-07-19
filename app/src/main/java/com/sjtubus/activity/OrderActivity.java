@@ -200,11 +200,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 }
                 break;
             case R.id.order_setremindtime:
-                final TextView settime = (TextView) v.findViewById(v.getId());
+                final TextView settime =  v.findViewById(v.getId());
                 setAlertDialog("提醒", remind_list, settime, "");
                 break;
             case R.id.order_phonelocation:
-                final TextView location = (TextView) v.findViewById(v.getId());
+                final TextView location =  v.findViewById(v.getId());
                 setAlertDialog("手机区域", phone_location_list, location, " :");
                 break;
             case R.id.order_confirm:

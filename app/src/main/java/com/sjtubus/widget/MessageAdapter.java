@@ -11,11 +11,8 @@ import android.widget.TextView;
 import com.sjtubus.R;
 import com.sjtubus.model.BusMessage;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -32,10 +29,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         ViewHolder(View view){
             super(view);
-            messageTitle = (TextView) view.findViewById(R.id.message_title);
-            messageContent = (TextView) view.findViewById(R.id.message_content);
-            messageSender = (TextView) view.findViewById(R.id.message_sender);
-            messageTime = (TextView) view.findViewById(R.id.message_time);
+            messageTitle = view.findViewById(R.id.message_title);
+            messageContent = view.findViewById(R.id.message_content);
+            messageSender = view.findViewById(R.id.message_sender);
+            messageTime = view.findViewById(R.id.message_time);
         }
     }
 
@@ -53,8 +50,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public MessageAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
-        MessageAdapter.ViewHolder holder = new MessageAdapter.ViewHolder(view);
-        return holder;
+        return new MessageAdapter.ViewHolder(view);
     }
 
     @Override

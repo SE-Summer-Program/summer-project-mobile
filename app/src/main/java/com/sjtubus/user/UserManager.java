@@ -2,14 +2,10 @@ package com.sjtubus.user;
 
 import android.util.Log;
 
-
 import com.sjtubus.model.User;
-import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.ProfileResponse;
-import com.sjtubus.network.BusApi;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
-
 
 import org.greenrobot.eventbus.EventBus;
 

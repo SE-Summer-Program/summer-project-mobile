@@ -39,8 +39,6 @@ import static android.content.ContentValues.TAG;
 public class AppointActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView recyclerView;
-    private AppointInfo appointInfo;
-    private List<AppointInfo> appointInfoList;
     private AppointAdapter appointAdapter;
     private SwipeRefreshLayout swipeRefresh;
 
@@ -159,9 +157,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
                 isTodayFlag = false;
 
-                final TextView textView_date = v.findViewById(R.id.appoint_date);
+                final TextView textView_date = (TextView)v;
 
-              //  Calendar calendar = Calendar.getInstance();
                 new DatePickerDialog(AppointActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
@@ -183,9 +180,9 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         year = year_choose;
                         month = month_choose+1;
                         day = dayOfMonth_choose;
+                        retrieveData();
                     }
                 }, year,month,day).show();
-                retrieveData();
 
                 //如果当前日期是今天，则前一天不可用
                 if (StringCalendarUtils.isToday((String) date.getText())){
@@ -201,8 +198,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                     ToastUtils.showShort("不能预约更前面的班次了哦~");
                     break;
                 }
-//                modifyDate(-1);
-                ToastUtils.showShort("前一天");
+                //modifyDate(-1);
                 String yesterday = MyDateUtils.getYesterdayStr((String) date.getText());
                 date.setText(yesterday);
                 if (StringCalendarUtils.isToday((String) date.getText())){
@@ -213,8 +209,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 retrieveData();
                 break;
             case R.id.appoint_nextday:
-                ToastUtils.showShort("后一天");
-//                modifyDate(1);
+                //modifyDate(1);
                 String tomorrow = MyDateUtils.getTomorrowStr((String) date.getText());
                 date.setText(tomorrow);
                 yesterday_btn.setEnabled(true);

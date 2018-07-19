@@ -73,8 +73,8 @@ public class StringCalendarUtils {
     }
 
     /* 获取当天的日期，格式 2018-07-18 */
-    public static String getCurrrentDate(){
-        String current_date="";
+    private static String getCurrrentDate(){
+        String current_date;
         Date date = new Date();
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -84,7 +84,7 @@ public class StringCalendarUtils {
 
     /* 获取当天的时间 格式 2018-07-18 19:35:00 */
     public static String getCurrentTime(){
-        String current_time="";
+        String current_time;
         Date date = new Date();
         //最后的aa表示“上午”或“下午” HH表示24小时制  如果换成hh表示12小时制
         @SuppressLint("SimpleDateFormat")

@@ -12,7 +12,7 @@ public class AppointChildViewHolder extends BaseViewHolder{
     private Context context;
     private View view;
 
-    public AppointChildViewHolder(Context context, View view){
+    AppointChildViewHolder(Context context, View view){
         super(view);
         this.context = context;
         this.view = view;

@@ -10,11 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sjtubus.R;
-import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.model.response.StationResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
-import com.sjtubus.widget.ShiftAdapter;
 import com.sjtubus.widget.StationAdapter;
 
 import io.reactivex.Observer;
