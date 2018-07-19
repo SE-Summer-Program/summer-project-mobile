@@ -125,10 +125,9 @@ public class RouteActivity extends BaseActivity {
 
     private void initLocation(){
         myListener = new MyLocationListener(mBaiduMap);
-        //声明LocationClient类
-        mLocationClient = new LocationClient(getApplicationContext());
-        //注册监听函数
-        mLocationClient.registerLocationListener(myListener);
+        myListener.setLocation(false);//设置不以自己为中心
+        mLocationClient = new LocationClient(getApplicationContext());//声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);//注册监听函数
 
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
@@ -302,15 +301,7 @@ public class RouteActivity extends BaseActivity {
                 Toast.makeText(RouteActivity.this, result.error.toString(), Toast.LENGTH_SHORT).show();
             }
 
-            if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
-                // 起终点或途经点地址有岐义，通过以下接口获取建议查询信息
-                // result.getSuggestAddrInfo()
-                return;
-            }
             if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-                //nodeIndex = -1;
-                //mBtnPre.setVisibility(View.VISIBLE);
-                //mBtnNext.setVisibility(View.VISIBLE);
                 route = result.getRouteLines().get(0);
                 DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap);
                 routeOverlay = overlay;

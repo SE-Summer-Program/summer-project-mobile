@@ -11,6 +11,7 @@ import com.baidu.mapapi.model.LatLng;
 public class MyLocationListener extends BDAbstractLocationListener {
     private BaiduMap baiduMap;
     private Boolean isFirstGetLocation = true;
+    private Boolean onSetLocation = true;
 
     public MyLocationListener(BaiduMap baiduMap){
         this.baiduMap = baiduMap;
@@ -30,7 +31,7 @@ public class MyLocationListener extends BDAbstractLocationListener {
         String street = location.getStreet();    //获取街道信息
 
         //判断是否为首次获取到位置数据
-        if (isFirstGetLocation)
+        if (isFirstGetLocation && onSetLocation)
         {
             //如果为首次定位，则直接定位到当前用户坐标
             LatLng latLng=new LatLng(location.getLatitude(), location.getLongitude());
@@ -49,5 +50,9 @@ public class MyLocationListener extends BDAbstractLocationListener {
 
         // 设置定位数据
         baiduMap.setMyLocationData(locData);
+    }
+
+    public void setLocation(Boolean c){
+        this.onSetLocation = c;
     }
 }
