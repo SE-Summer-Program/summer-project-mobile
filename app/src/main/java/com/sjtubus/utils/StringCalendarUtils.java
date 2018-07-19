@@ -72,6 +72,21 @@ public class StringCalendarUtils {
         return dateFormat2.format(date);
     }
 
+    /* 增加字符串的秒部分 */
+    public static String HHmmToHHmmss(String timestr){
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date();
+        try {
+            date = dateFormat.parse(timestr);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return dateFormat2.format(date);
+    }
+
     /* 获取当天的日期，格式 2018-07-18 */
     private static String getCurrrentDate(){
         String current_date;
@@ -149,6 +164,25 @@ public class StringCalendarUtils {
             e.printStackTrace();
         }
         return date.before(current);
+    }
+
+    /**
+     * @ description: 比较某个时间和另一个时间的的先后
+     */
+    public static boolean isBeforeDateOfSecondPara(String first, String second) {
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date first_time = new Date();
+        Date second_time = new Date();
+
+        try {
+            first_time = timeFormat.parse(first);
+            second_time = timeFormat.parse(second);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return first_time.before(second_time);
     }
 
     /**

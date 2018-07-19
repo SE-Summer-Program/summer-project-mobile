@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
 import com.sjtubus.R;
 import com.sjtubus.fragment.ShiftFragment;
@@ -48,8 +49,9 @@ public class ScheduleActivity extends BaseActivity {
 
         mCoordinatorTabLayout.setTranslucentStatusBar(this);
         mCoordinatorTabLayout.setTitle(line_name_cn+"("+line_type_cn+")")
-        .setImageArray(mImageArray, mColorArray)
-        .setupWithViewPager(mViewPager);
+                .setBackEnable(true)
+                .setImageArray(mImageArray, mColorArray)
+                .setupWithViewPager(mViewPager);
     }
 
     public void initFragments(){
@@ -67,5 +69,13 @@ public class ScheduleActivity extends BaseActivity {
     @Override
     public int getContentViewId(){
         return R.layout.activity_schedule;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

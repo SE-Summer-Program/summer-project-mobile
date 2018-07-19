@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LineActivity">
+    tools:context=".activity.LineActivity"
+    android:background="@color/shallow_gray">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_line"
@@ -22,6 +23,16 @@
             android:text="@string/title_schedule"/>
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/line_total"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary_gray"
+        android:background="@color/shallow_gray"
+        android:textSize="@dimen/middleText"
+        android:gravity="center"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_schedule"
         android:layout_width="match_parent"
@@ -31,7 +42,8 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycle_schedule"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/shallow_gray">
         </android.support.v7.widget.RecyclerView>
 
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.response.LineInfoResponse;
@@ -43,6 +44,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     Calendar calendar;
     MyDialogListener dialogListener = new MyDialogListener();
 
+    TextView line_total;
+
     private String[] type_list = {"在校期-工作日", "在校期-双休日、节假日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
     private int select = 0;
@@ -70,6 +73,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 putDialog();
             }
         });
+
+        line_total = findViewById(R.id.line_total);
 
         recyclerView = findViewById(R.id.recycle_schedule);
         layoutManager = new LinearLayoutManager(this);
@@ -123,6 +128,10 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
                     adapter.setDataList(response.getLineInfos());
+
+                    int total_amount = response.getLineInfos().size();
+                    String line_info = "今日共有 " + total_amount +  " 条线路正常运行";
+                    line_total.setText(line_info);
                 }
 
                 @Override

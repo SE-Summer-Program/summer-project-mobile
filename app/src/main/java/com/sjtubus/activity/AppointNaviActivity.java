@@ -3,9 +3,11 @@ package com.sjtubus.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.sjtubus.R;
+import com.sjtubus.fragment.AppointNaviDoubleFragment;
 import com.sjtubus.fragment.AppointNaviFragment;
 import com.sjtubus.widget.AppointPagerAdapter;
 
@@ -55,9 +57,10 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
 
     private void initFragments(){
         mFragment = new ArrayList<>();
-        for (String title : mTitles) {
-            mFragment.add(AppointNaviFragment.getInstance(title));
-        }
+      //  for (String title : mTitles) {
+            mFragment.add(AppointNaviFragment.getInstance());
+            mFragment.add(AppointNaviDoubleFragment.getInstance());
+        //}
     }
 
     private void initViewPager(){
@@ -70,5 +73,13 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

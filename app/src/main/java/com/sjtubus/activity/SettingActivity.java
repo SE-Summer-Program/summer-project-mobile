@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.sjtubus.R;
+import com.sjtubus.utils.ToastUtils;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener{
 
@@ -22,6 +23,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private void initView(){
         Toolbar toolbar = findViewById(R.id.toolbar_setting);
+        ToastUtils.showShort("设置功能还不能使用哦~");
     }
 
     @Override

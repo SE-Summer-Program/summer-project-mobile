@@ -176,6 +176,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(recordIntent);
                 break;
             case R.id.position_btn:
+                ToastUtils.showShort("司机定位功能还不能使用哦~");
                 break;
             case R.id.schedule_btn:
                 Intent scheduleIntent = new Intent(MainActivity.this, LineActivity.class);
@@ -220,6 +221,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(message_intent);
                 break;
             case R.id.navigation_item_idea:
+                ToastUtils.showShort("意见功能还不能使用哦~");
                 FeedbackAgent agent = new FeedbackAgent(App.getInstance());
                 agent.startDefaultThreadActivity();
                 break;

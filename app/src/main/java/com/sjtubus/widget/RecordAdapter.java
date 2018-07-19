@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.RecordActivity;
+import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.RecordInfo;
+import com.sjtubus.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             shiftid = view.findViewById(R.id.record_shiftid);
             status = view.findViewById(R.id.record_status);
             detailbtn = view.findViewById(R.id.record_btn);
+
         }
     }
 
@@ -74,7 +77,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         String line_name = recordInfos.get(position).getLineName();
         String departure_msg = recordInfos.get(position).getDepartureMsg();
         String shift_id = recordInfos.get(position).getShiftid();
-        String submit_time = "预定时间" + recordInfos.get(position).getSubmiTime();
+        String submit_time = "预定时间： " + recordInfos.get(position).getSubmiTime();
         holder.submittime.setText(confirm_time);
         holder.linename.setText(line_name);
         holder.departuremsg.setText(departure_msg);
@@ -90,4 +93,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     public static interface OnItemClickListener {
         void onItemClick(View view);
     }
+
+    private View.OnClickListener ChildListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v){
+            switch (v.getId()){
+                case R.id.record_detailbtn:
+                    ToastUtils.showShort("详细信息功能还不能使用哦~");
+                    break;
+            }
+        }
+    };
 }

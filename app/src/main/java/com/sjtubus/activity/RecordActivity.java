@@ -151,8 +151,11 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         //获取当前的时间
         String currenttime = StringCalendarUtils.getCurrentTime();
 
+        /*
+         * 改动了函数的参数，删去了currenttime
+         */
         RetrofitClient.getBusApi()
-            .getRecordInfos(username, currenttime)
+            .getRecordInfos(username)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<RecordInfoResponse>() {

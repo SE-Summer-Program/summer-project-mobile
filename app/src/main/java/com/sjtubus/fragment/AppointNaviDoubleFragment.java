@@ -26,9 +26,9 @@ import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AppointNaviFragment extends BaseFragment {
+public class AppointNaviDoubleFragment extends BaseFragment{
     @SuppressLint("StaticFieldLeak")
-    private static AppointNaviFragment fragment;
+    private static AppointNaviDoubleFragment fragment;
 
     private TextView singleway;
     private TextView doubleway;
@@ -41,17 +41,19 @@ public class AppointNaviFragment extends BaseFragment {
 
     private int departure_index = 0;//闵行校区
     private int arrive_index = 1;  //徐汇校区
+    private String singledate_str;
+    private String doubledate_str;
 
-    private MyListener listener = new MyListener();
+    private AppointNaviDoubleFragment.MyListener listener = new AppointNaviDoubleFragment.MyListener();
 
     private String[] station_list = {"闵行校区", "徐汇校区", "七宝校区"};
     private int year, month, day;
 
-    public static AppointNaviFragment getInstance() {
+    public static AppointNaviDoubleFragment getInstance() {
         if(fragment == null){
-            fragment = new AppointNaviFragment();
+            fragment = new AppointNaviDoubleFragment();
         }
-        return new AppointNaviFragment();
+        return new AppointNaviDoubleFragment();
         //FIXME： 这里需要利用传过来的参数，由于暂时没啥用就先这样返回了
     }
 
@@ -75,7 +77,7 @@ public class AppointNaviFragment extends BaseFragment {
         departure_place.setOnClickListener(listener);
         arrive_place.setOnClickListener(listener);
         singleway_date.setOnClickListener(listener);
-//        doubleway_date.setOnClickListener(listener);
+        doubleway_date.setOnClickListener(listener);
         search_btn.setOnClickListener(listener);
         revert_btn.setOnClickListener(listener);
 
@@ -84,9 +86,11 @@ public class AppointNaviFragment extends BaseFragment {
         String dayStr = StringCalendarUtils.getDoubleDigitDay(day);
         String dateStr = year+"-"+monthStr+"-"+dayStr;
         singleway_date.setText(dateStr);
-        doubleway_date.setText("");
+        doubleway_date.setText(dateStr);
+        singledate_str = (String) singleway_date.getText();
+        doubledate_str = (String) doubleway_date.getText();
         /*
-         * 标记单程往返区别，单程的doublewaydate值为空
+         * 统一日期格式为 yyyy-MM-dd
          */
 
         return view;
@@ -107,35 +111,34 @@ public class AppointNaviFragment extends BaseFragment {
                 case R.id.appoint_departureplace:
                     final TextView depart_txt = v.findViewById(v.getId());
                     new AlertDialog.Builder(getActivity())
-                        .setTitle("选择出发地")
-                        .setNegativeButton("取消", null)
-                        .setSingleChoiceItems(station_list, departure_index, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            depart_txt.setText(station_list[which]);
-                            departure_index = which;
-                            dialog.dismiss();
-                        }
-                    }).create().show();
+                            .setTitle("选择出发地")
+                            .setNegativeButton("取消", null)
+                            .setSingleChoiceItems(station_list, departure_index, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    depart_txt.setText(station_list[which]);
+                                    departure_index = which;
+                                    dialog.dismiss();
+                                }
+                            }).create().show();
                     break;
                 case R.id.appoint_arriveplace:
                     final TextView arrive_txt = v.findViewById(v.getId());
                     new AlertDialog.Builder(getActivity())
-                        .setTitle("选择目的地")
-                        .setNegativeButton("取消", null)
-                        .setSingleChoiceItems(station_list, arrive_index, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            arrive_txt.setText(station_list[which]);
-                            arrive_index = which;
-                            dialog.dismiss();
-                        }
-                    }).create().show();
+                            .setTitle("选择目的地")
+                            .setNegativeButton("取消", null)
+                            .setSingleChoiceItems(station_list, arrive_index, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    arrive_txt.setText(station_list[which]);
+                                    arrive_index = which;
+                                    dialog.dismiss();
+                                }
+                            }).create().show();
                     break;
 
                 case R.id.appoint_singlewaydate:
-               // case R.id.appoint_doublewaydate:
-                    final TextView textView_date = v.findViewById(v.getId());
+                    final TextView singledate = v.findViewById(v.getId());
 
                     new DatePickerDialog(Objects.requireNonNull(getActivity()), new DatePickerDialog.OnDateSetListener() {
                         @Override
@@ -145,7 +148,34 @@ public class AppointNaviFragment extends BaseFragment {
                             String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
                             String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
                             String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
-                            textView_date.setText(dateStr);
+                            singledate.setText(dateStr);
+                            singledate_str = (String) singleway_date.getText();
+
+                            year = year_choose;
+                            month = month_choose;
+                            day = dayOfMonth_choose;
+                        }
+                    }, year,month,day).show();
+                    break;
+
+                case R.id.appoint_doublewaydate:
+                    final TextView doubledate = v.findViewById(v.getId());
+
+                    new DatePickerDialog(Objects.requireNonNull(getActivity()), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
+
+                            /* 这里改过 */
+                            String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
+                            String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
+                            String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
+
+                            if (StringCalendarUtils.isBeforeDateOfSecondPara(dateStr, singledate_str)){
+                                ToastUtils.showShort("回程的时间不能早于去程哦~");
+                                return;
+                            }
+                            doubledate.setText(dateStr);
+                            doubledate_str = (String) doubleway_date.getText();
 
                             year = year_choose;
                             month = month_choose;
@@ -155,16 +185,19 @@ public class AppointNaviFragment extends BaseFragment {
                     break;
 
                 case R.id.appoint_searchbtn:
-                    if (departure_index == arrive_index){
-                        ToastUtils.showShort("起点和终点不能相同！");
-                        break;
-                    }
-                    Intent appointIntent = new Intent(getActivity(), AppointActivity.class);
-                    appointIntent.putExtra("departure_place", (String) departure_place.getText());
-                    appointIntent.putExtra("arrive_place", (String) arrive_place.getText());
-                    appointIntent.putExtra("singleway_date", (String) singleway_date.getText());
-                    appointIntent.putExtra("doubleway_date", (String) doubleway_date.getText());
-                    startActivityForResult(appointIntent, 1);
+
+                    ToastUtils.showShort("往返功能还不能使用哦~");
+//                    if (departure_index == arrive_index){
+//                        ToastUtils.showShort("起点和终点不能相同！");
+//                        break;
+//                    }
+//                    Intent appointIntent = new Intent(getActivity(), AppointActivity.class);
+//                    appointIntent.putExtra("departure_place", (String) departure_place.getText());
+//                    appointIntent.putExtra("arrive_place", (String) arrive_place.getText());
+//                    appointIntent.putExtra("singleway_date", (String) singleway_date.getText());
+//                    appointIntent.putExtra("doubleway_date", (String) doubleway_date.getText());
+//                    startActivityForResult(appointIntent, 1);
+
                     break;
             }
         }
@@ -175,7 +208,7 @@ public class AppointNaviFragment extends BaseFragment {
         switch (requestCode){
             case 1:
                 if (resultCode == RESULT_OK){
-                   //Log.d("appointfragment", data.getStringExtra("singleway_date"));
+                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));
                     ToastUtils.showShort(data.getStringExtra("singleway_date"));
                     departure_place.setText(data.getStringExtra("departure_place"));
                     arrive_place.setText(data.getStringExtra("arrive_place"));
@@ -193,5 +226,4 @@ public class AppointNaviFragment extends BaseFragment {
         month = calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = calendar.get(Calendar.DAY_OF_MONTH);
     }
-
 }

@@ -46,7 +46,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/primary_white"
-                android:text="筛选"
+                android:text="@string/fliter"
                 android:clickable="true"
                 android:focusable="true"/>
         </LinearLayout>
@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/primary_white"
-                android:text="排序"
+                android:text="@string/sort"
                 android:clickable="true"
                 android:focusable="true"/>
         </LinearLayout>
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textColor="@color/primary_white"
-                android:text="有效预约"
+                android:text="@string/vaild_record"
                 android:layout_marginLeft="@dimen/basicPaddingSize"/>
         </LinearLayout>
     </LinearLayout>
@@ -101,8 +101,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/primary_gray"
         android:textSize="@dimen/middleText"
-        android:gravity="center"
-        android:text="共计1条预约记录"/>
+        android:gravity="center"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_record"
