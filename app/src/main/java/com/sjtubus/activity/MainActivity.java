@@ -226,6 +226,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             case R.id.navigation_item_reserve:
                 Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
                 startActivity(recordIntent);
+                break;
             case R.id.navigation_item_setting:
                 Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(settingIntent);

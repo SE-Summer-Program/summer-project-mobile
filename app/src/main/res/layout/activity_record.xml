@@ -25,9 +25,84 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/primary_red"
+        android:paddingBottom="@dimen/smallPadding"
+        android:paddingHorizontal="@dimen/screenPadding">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/icon_filter"
+                android:layout_marginHorizontal="@dimen/basicPaddingSize"/>
+            <TextView
+                android:id="@+id/record_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/primary_white"
+                android:text="筛选"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/icon_sort"
+                android:layout_marginHorizontal="@dimen/basicPaddingSize"/>
+            <TextView
+                android:id="@+id/record_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/primary_white"
+                android:text="排序"
+                android:clickable="true"
+                android:focusable="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <CheckBox
+                android:id="@+id/record_valid"
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:theme="@style/MyCheckBox" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/primary_white"
+                android:text="有效预约"
+                android:layout_marginLeft="@dimen/basicPaddingSize"/>
+        </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/record_total"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/primary_gray"
+        android:textSize="@dimen/middleText"
+        android:gravity="center"
+        android:text="共计1条预约记录"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_record"
