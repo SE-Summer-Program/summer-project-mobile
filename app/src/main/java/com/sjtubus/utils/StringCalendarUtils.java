@@ -26,16 +26,16 @@ public class StringCalendarUtils {
 
     /* calendar转化成 2018-07-18 的格式 */
     public static String CalendarToString(Calendar calendar){
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");// 设置你想要的格式
-        String dateStr = dateFormat.format(calendar.getTime());
-        return dateStr;
+        return dateFormat.format(calendar.getTime());
     }
 
     /* calendar转化成 2018-07-18 19:35:00 的格式 */
     public static String CalendarToStringTime(Calendar calendar){
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");// 设置你想要的格式
-        String dateStr = dateFormat.format(calendar.getTime());
-        return dateStr;
+        return dateFormat.format(calendar.getTime());
     }
 
     /* 将date类型转化为 格式 2018-07-18 的string */
@@ -43,6 +43,7 @@ public class StringCalendarUtils {
 //        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //        sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         String date_str;
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         date_str = sdf.format(date);
         return date_str;
@@ -58,7 +59,9 @@ public class StringCalendarUtils {
 
     /* 删取字符串的秒部分 */
     public static String HHmmssToHHmm(String timestr){
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat2 = new SimpleDateFormat("HH:mm");
         Date date = new Date();
         try {
@@ -73,6 +76,7 @@ public class StringCalendarUtils {
     public static String getCurrrentDate(){
         String current_date="";
         Date date = new Date();
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         current_date=simpleDateFormat.format(date);
         return current_date;
@@ -83,6 +87,7 @@ public class StringCalendarUtils {
         String current_time="";
         Date date = new Date();
         //最后的aa表示“上午”或“下午” HH表示24小时制  如果换成hh表示12小时制
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         current_time=simpleDateFormat.format(date);
         return current_time;
@@ -128,10 +133,11 @@ public class StringCalendarUtils {
     }
 
     /**
-     * @description: 比较某个时间和现在时间的先后
+     * @ description: 比较某个时间和现在时间的先后
      */
     public static boolean isBeforeCurrentTime(String datetime) {
 
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
         Date current = new Date();
@@ -142,16 +148,14 @@ public class StringCalendarUtils {
         } catch (Exception e){
             e.printStackTrace();
         }
-        if (date.before(current))
-            return true;
-        else
-            return false;
+        return date.before(current);
     }
 
     /**
-     * @description: 比较某个日期和现在日期的先后
+     * @ description: 比较某个日期和现在日期的先后
      */
     public static boolean isBeforeCurrentDate(String datestr){
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         Date current = new Date();
@@ -161,17 +165,11 @@ public class StringCalendarUtils {
         } catch (Exception e){
             e.printStackTrace();
         }
-        if (date.before(current))
-            return true;
-        else
-            return false;
+        return date.before(current);
     }
 
     /* 判断所给的时间字符串是否是今天 */
     public static boolean isToday(String datestr){
-        if (datestr.equals(getCurrrentDate()))
-            return true;
-        else
-            return false;
+        return datestr.equals(getCurrrentDate());
     }
 }

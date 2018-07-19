@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import java.util.List;
 
+/*
+ * 这个类找时间重写一下
+ */
 public class Schedule {
 
     private String lineName;
@@ -53,14 +56,14 @@ public class Schedule {
 
     public List<String> getScheduleComment(){ return scheduleComment; }
 
-    public String getDetail() {
-        java.lang.String detail = "123";
-        for (int i = 0; i < scheduleTime.size(); i++){
-            detail.concat(scheduleTime.get(i));
-            detail.concat(scheduleComment.get(i));
-            detail.concat("\n");
-        }
-        return detail;
-    } //实际应该使用getSchedule的，但是adapter那里传不进去list
+//    public String getDetail() {
+//        java.lang.String detail = "123";
+//        for (int i = 0; i < scheduleTime.size(); i++){
+//            detail.concat(scheduleTime.get(i));
+//            detail.concat(scheduleComment.get(i));
+//            detail.concat("\n");
+//        }
+//        return detail;
+//    } //实际应该使用getSchedule的，但是adapter那里传不进去list
 
 }

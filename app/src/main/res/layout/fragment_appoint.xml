@@ -84,7 +84,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:padding="@dimen/textPadding"
-            android:clickable="true" />
+            android:clickable="true"
+            android:focusable="true"/>
 
     </LinearLayout>
 

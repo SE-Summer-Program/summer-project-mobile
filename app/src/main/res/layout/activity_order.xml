@@ -95,7 +95,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:textColor="@color/primary_white"
-                android:text="备注信息"
+                android:text="@string/remark_title"
                 android:gravity="center"/>
         </LinearLayout>
 
@@ -172,7 +172,7 @@
             android:layout_width="0dp"
             android:layout_weight="2.5"
             android:layout_height="match_parent"
-            android:text="提醒时间 :"
+            android:text="@string/remindtime_title"
             android:layout_marginStart="8dp"
             android:textSize="14sp"
             android:layout_gravity="end"
@@ -182,7 +182,7 @@
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="match_parent"
-            android:text="提前30分钟"
+            android:text="@string/remindtime_default"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
@@ -208,7 +208,7 @@
             android:layout_weight="2.5"
             android:layout_height="match_parent"
             android:textSize="14sp"
-            android:text="大陆手机 :"
+            android:text="@string/phone_title"
             android:layout_gravity="right"
             android:gravity="center|end"
             android:drawableLeft="@drawable/more_8">
@@ -226,7 +226,7 @@
             android:layout_gravity="bottom"
             android:gravity="bottom"
             android:maxLength="11"
-            android:hint="请输入手机号"
+            android:hint="@string/hint_phone"
             android:focusable="true"/>
     </LinearLayout>
 
@@ -242,7 +242,7 @@
             android:layout_width="0dp"
             android:layout_weight="2.5"
             android:layout_height="match_parent"
-            android:text="邮箱地址 :"
+            android:text="@string/mail_title"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center|right">
@@ -262,7 +262,7 @@
             android:layout_gravity="bottom"
             android:gravity="bottom"
             android:maxLength="20"
-            android:hint="请输入邮箱"
+            android:hint="@string/hint_mail"
             android:focusable="true"/>
     </LinearLayout>
 
@@ -307,7 +307,7 @@
             android:layout_width="0dp"
             android:layout_weight="3.5"
             android:layout_height="match_parent"
-            android:text="前排座位"
+            android:text="@string/front_seat"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
@@ -316,7 +316,7 @@
             android:layout_width="0dp"
             android:layout_weight="1.5"
             android:layout_height="match_parent"
-            android:text="备注 :"
+            android:text="@string/order_remark"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"/>
@@ -342,7 +342,7 @@
             android:layout_width="0dp"
             android:layout_weight="3.5"
             android:layout_height="match_parent"
-            android:text="后排座位"
+            android:text="@string/back_seat"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
@@ -351,7 +351,7 @@
             android:layout_width="0dp"
             android:layout_weight="1.5"
             android:layout_height="match_parent"
-            android:text="备注 :"
+            android:text="@string/order_remark"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"/>
@@ -377,7 +377,7 @@
             android:layout_width="0dp"
             android:layout_weight="3.5"
             android:layout_height="match_parent"
-            android:text="靠窗座位"
+            android:text="@string/window_seat"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
@@ -386,7 +386,7 @@
             android:layout_width="0dp"
             android:layout_weight="1.5"
             android:layout_height="match_parent"
-            android:text="备注 :"
+            android:text="@string/order_remark"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"/>
@@ -412,7 +412,7 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
-            android:text="其他特殊要求 ："
+            android:text="@string/other_seat"
             android:textSize="14sp"
             android:layout_gravity="center"
             android:gravity="center"
@@ -439,7 +439,7 @@
         android:layout_margin="20dp"
         android:layout_marginTop="30dp"
         android:background="@color/primary_red"
-        android:text="预约" />
+        android:text="@string/submit_appoint" />
 
 </LinearLayout>
 </ScrollView>

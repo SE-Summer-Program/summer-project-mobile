@@ -36,31 +36,18 @@ import static android.content.ContentValues.TAG;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
-    private TextView departure_place, departure_time, departure_date;
-    private TextView arrive_place, arrive_time, arrive_date;
-
-    private TextView shiftid;
-    private TextView shift_type;
-    private TextView comment;
-
     private String departure_place_str, arrive_place_str;
     private String departure_time_str, arrive_time_str;
     private String date_str;
     private String shiftid_str;
     private String shift_type_str;
 
-    private TextView remind_bar, need_bar;
     private ImageView remind_icon, need_icon;
     private LinearLayout remind_time, remind_phone, remind_mail;
     private LinearLayout need_front, need_back, need_window, need_other;
 
-    private TextView time_set, phone_location;
-    private EditText phone_edit, mail_edit;
-    private CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
     private EditText comment1, comment2, comment3, comment4;
     private ImageView comment1_clear, comment2_clear, comment3_clear, comment4_clear;
-
-    private Button submit_btn;
 
     private boolean isRemindExtend, isNeedExtend;
     private String[] remind_list = {"提前10分钟","提前30分钟","提前1小时","提前2小时","不提醒"};
@@ -104,15 +91,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             }
         });
 
-        departure_place = findViewById(R.id.order_departureplace);
-        departure_time = findViewById(R.id.order_departuretime);
-        departure_date = findViewById(R.id.order_departuredate);
-        arrive_place = findViewById(R.id.order_arriveplace);
-        arrive_time = findViewById(R.id.order_arrivetime);
-        arrive_date = findViewById(R.id.order_arrivedate);
-        shiftid = findViewById(R.id.order_shiftid);
-        shift_type = findViewById(R.id.order_shifttype);
-        comment = findViewById(R.id.order_comment);
+        TextView departure_place = findViewById(R.id.order_departureplace);
+        TextView departure_time = findViewById(R.id.order_departuretime);
+        TextView departure_date = findViewById(R.id.order_departuredate);
+        TextView arrive_place = findViewById(R.id.order_arriveplace);
+        TextView arrive_time = findViewById(R.id.order_arrivetime);
+        TextView arrive_date = findViewById(R.id.order_arrivedate);
+        TextView shiftid = findViewById(R.id.order_shiftid);
+        TextView shift_type = findViewById(R.id.order_shifttype);
+        TextView comment = findViewById(R.id.order_comment);
 
         departure_place.setText(departure_place_str);
         arrive_place.setText(arrive_place_str);
@@ -125,17 +112,17 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
         comment.setOnClickListener(this);
 
-        submit_btn = findViewById(R.id.order_confirm);
+        Button submit_btn = findViewById(R.id.order_confirm);
         submit_btn.setOnClickListener(this);
     }
 
     private void initRemindView() {
-        remind_bar = findViewById(R.id.order_setremind);
+        TextView remind_bar = findViewById(R.id.order_setremind);
         remind_icon = findViewById(R.id.order_setremind_icon);
-        time_set = findViewById(R.id.order_setremindtime);
-        phone_location = findViewById(R.id.order_phonelocation);
-        phone_edit = findViewById(R.id.order_phoneedit);
-        mail_edit = findViewById(R.id.order_mailedit);
+        TextView time_set = findViewById(R.id.order_setremindtime);
+        TextView phone_location = findViewById(R.id.order_phonelocation);
+        EditText phone_edit = findViewById(R.id.order_phoneedit);
+        EditText mail_edit = findViewById(R.id.order_mailedit);
 
         remind_time = findViewById(R.id.order_remind_time);
         remind_phone = findViewById(R.id.order_remind_phone);
@@ -150,12 +137,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void initNeedView(){
-        need_bar = findViewById(R.id.order_setneed);
+        TextView need_bar = findViewById(R.id.order_setneed);
         need_icon = findViewById(R.id.order_setneed_icon);
-        checkBox1 = findViewById(R.id.order_need_checkbox1);
-        checkBox2 = findViewById(R.id.order_need_checkbox2);
-        checkBox3 = findViewById(R.id.order_need_checkbox3);
-        checkBox4 = findViewById(R.id.order_need_checkbox4);
+        CheckBox checkBox1 = findViewById(R.id.order_need_checkbox1);
+        CheckBox checkBox2 = findViewById(R.id.order_need_checkbox2);
+        CheckBox checkBox3 = findViewById(R.id.order_need_checkbox3);
+        CheckBox checkBox4 = findViewById(R.id.order_need_checkbox4);
         need_front = findViewById(R.id.order_need1);
         need_back = findViewById(R.id.order_need2);
         need_window = findViewById(R.id.order_need3);
@@ -188,7 +175,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         switch (v.getId()){
             case R.id.order_setremind:
             case R.id.order_setremind_icon:
-                if (isRemindExtend == true){
+                if (isRemindExtend){
                     setViewsGone(remind_time, remind_phone, remind_mail);
                     isRemindExtend = false;
                     remind_icon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.more_48));
@@ -201,7 +188,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.order_setneed:
             case R.id.order_setneed_icon:
-                if (isNeedExtend == true){
+                if (isNeedExtend){
                     setViewsGone(need_front, need_back, need_window, need_other);
                     isNeedExtend = false;
                     need_icon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.more_48));
@@ -300,7 +287,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                textView.setText(list[which] + more);
+                String text = list[which] + more;
+                textView.setText(text);
             }
         });
         builder.setNegativeButton("取消", null);

@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
@@ -279,7 +280,7 @@ public class MapActivity extends BaseActivity {
 
     //Android6.0申请权限的回调方法
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             // requestCode即所声明的权限获取码，在checkSelfPermission时传入
@@ -301,7 +302,7 @@ public class MapActivity extends BaseActivity {
 
     private class MyDrivingRouteOverlay extends DrivingRouteOverlay {
 
-        public MyDrivingRouteOverlay(BaiduMap baiduMap) {
+        MyDrivingRouteOverlay(BaiduMap baiduMap) {
             super(baiduMap);
         }
 

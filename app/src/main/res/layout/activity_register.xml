@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:hint="请输入用户名"
+                android:hint="@string/hint_username"
                 android:inputType="text"
                 />
         </LinearLayout>
@@ -65,7 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:hint="请输入手机号码"
+                android:hint="@string/hint_phone"
                 android:inputType="phone"
                 />
         </LinearLayout>
@@ -85,7 +85,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:hint="请输入6-16位密码"
+                android:hint="@string/hint_password_detail"
                 android:inputType="textPassword"
                 />
         </LinearLayout>
@@ -110,7 +110,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:hint="请输入验证码"
+                android:hint="@string/hint_identify"
                 android:inputType="textPassword"
                 />
             <Button
@@ -132,8 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@color/primary_red"
-        android:text="确认并注册"
-        />
+        android:text="@string/confirm_and_register" />
 
     <LinearLayout
         android:layout_width="match_parent"

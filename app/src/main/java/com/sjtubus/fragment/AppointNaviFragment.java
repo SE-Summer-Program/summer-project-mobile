@@ -82,7 +82,8 @@ public class AppointNaviFragment extends BaseFragment {
         getCurrentDay();
         String monthStr = StringCalendarUtils.getDoubleDigitMonth(month);
         String dayStr = StringCalendarUtils.getDoubleDigitDay(day);
-        singleway_date.setText(year+"-"+monthStr+"-"+dayStr);
+        String dateStr = year+"-"+monthStr+"-"+dayStr;
+        singleway_date.setText(dateStr);
         /*
          * 统一日期格式为 yyyy-MM-dd
          */
@@ -142,7 +143,8 @@ public class AppointNaviFragment extends BaseFragment {
                             /* 这里改过 */
                             String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
                             String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
-                            textView_date.setText(year_choose+"-"+monthStr+"-"+dayStr);
+                            String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
+                            textView_date.setText(dateStr);
 
                             year = year_choose;
                             month = month_choose;

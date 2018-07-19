@@ -35,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
-            android:text="前一天"
+            android:text="@string/appoint_yesterday"
             android:textColor="@color/primary_white"
             android:paddingLeft="@dimen/largePadding"/>
         <ImageView
@@ -63,7 +63,7 @@
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
-            android:text="后一天"
+            android:text="@string/appoint_tomorrow"
             android:layout_gravity="end"
             android:gravity="end"
             android:textColor="@color/primary_white"
