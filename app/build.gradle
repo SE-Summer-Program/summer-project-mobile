@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
     signingConfigs {
         config {
-            keyAlias 'yaozihang'
-            keyPassword '123456yzh'
-            storeFile file('C:/Users/SHIYONG/Desktop/map.jks')
-            storePassword '123456yzh'
+            keyAlias 'Ricardo'
+            keyPassword '123456'
+            storeFile file('C:/Users/Ricardo/.android/keystore.jks')
+            storePassword '123456'
         }
     }
     compileSdkVersion 27
@@ -24,10 +24,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.config
         }
+        debug {
+            signingConfig signingConfigs.config
+        }
     }
 }
 
 dependencies {
+    implementation 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
