@@ -253,6 +253,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(settingIntent);
                 break;
             case R.id.navigation_item_scan:
+                if(UserManager.getInstance().getUser()==null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 new IntentIntegrator(this)
                     .setOrientationLocked(false)
                     .setCaptureActivity(SimpleScanActivity.class) // 设置自定义的activity是CustomActivity
@@ -340,12 +344,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 // ScanResult 为 获取到的字符串
                 String scanResult = intentResult.getContents();
                 String[] info = scanResult.split(";");
-                if(info.length<2){
+                if(info.length < 3){
                     ToastUtils.showShort("二维码格式不正确!");
                     return;
                 }
                 RequestBody requestBody = new FormBody.Builder()
-                        .add("username", UserManager.getInstance().getUser().getUsername())
+                        .add("username", info[2])
                         .add("shift_id",info[0])
                         .add("departure_date",info[1])
                         .build();

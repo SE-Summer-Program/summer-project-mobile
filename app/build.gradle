@@ -110,6 +110,10 @@ dependencies {
     implementation 'cn.leancloud.android:avoscloud-feedback:v4.6.4@aar'
     // 推送与实时聊天需要的包
     implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
+    implementation 'cn.leancloud.android:Java-WebSocket:1.2.0-leancloud'
+
+    //avoscloud-statistics 为 LeanCloud 统计包
+    implementation 'cn.leancloud.android:avoscloud-statistics:v3.+@aar'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

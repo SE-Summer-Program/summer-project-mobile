@@ -16,7 +16,7 @@ public class MyMapStatusChangeListener implements BaiduMap.OnMapStatusChangeList
     private ScrollLayout mScrollLayout;
     private List<Marker> markers = null;
     private Map<String,BitmapDescriptor> bitmaps = null;
-    private Float zoom;
+    private Float zoom = 16.0f;
 
     public MyMapStatusChangeListener(ScrollLayout mScrollLayout){
         this.mScrollLayout = mScrollLayout;
@@ -46,7 +46,7 @@ public class MyMapStatusChangeListener implements BaiduMap.OnMapStatusChangeList
     @Override
     public void onMapStatusChangeFinish(MapStatus status){
         Float zoom_new = status.zoom;
-        if((zoom_new < 18.0f && this.zoom < 18.0f) ||
+        if(this.zoom == null || (zoom_new < 18.0f && this.zoom < 18.0f) ||
                 (zoom_new >= 18.0f && this.zoom >= 18.0f))
                     return;
         for(Marker marker : markers){

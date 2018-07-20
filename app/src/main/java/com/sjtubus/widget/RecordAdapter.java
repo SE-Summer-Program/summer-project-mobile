@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.sjtubus.R;
 import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.RecordInfo;
+import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ZxingUtils;
 
 import java.util.ArrayList;
@@ -84,7 +85,8 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         holder.departuremsg.setText(departure_msg);
         holder.shiftid.setText(shift_id);
         holder.submittime.setText(submit_time);
-        String info = shift_id + ";" + recordInfos.get(position).getDepartureDate();
+        String info = shift_id + ";" + recordInfos.get(position).getDepartureDate() + ";"
+                + UserManager.getInstance().getUser().getUsername();
         holder.qrcode.setImageBitmap(ZxingUtils.createQRImage(info,300,300));
     }
 
