@@ -77,7 +77,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/primary_gray"
         android:textSize="@dimen/middleText"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:background="@color/shallow_gray"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_appoint"
@@ -90,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            android:paddingTop="@dimen/textPadding">
+            android:paddingTop="@dimen/textPadding"
+            android:background="@color/shallow_gray">
         </android.support.v7.widget.RecyclerView>
 
     </android.support.v4.widget.SwipeRefreshLayout>

@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:padding="5dp"
-    android:background="@color/primary_white">
+    android:background="@color/shallow_white"
+    android:layout_marginHorizontal="@dimen/screenPadding">
 
         <Button
             android:id="@+id/appointitem_reservebtn"

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.Schedule;
+import com.sjtubus.utils.StringCalendarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ShiftAdapter.ViewHolder holder, int position) {
-        String departure_time = times.get(position);
+        String departure_time = StringCalendarUtils.HHmmssToHHmm(times.get(position));
 //        String comment = comments.get(position);
         holder.shiftTime.setText(departure_time);
 //        holder.shiftComment.setText(comment);

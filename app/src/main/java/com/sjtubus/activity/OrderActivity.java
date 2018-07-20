@@ -108,7 +108,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         departure_date.setText(date_str);
         arrive_date.setText(date_str);
         shiftid.setText(shiftid_str);
-        shift_type.setText(shift_type_str);
+        shift_type.setText(ShiftUtils.getChiType(shift_type_str));
 
         comment.setOnClickListener(this);
 
@@ -208,7 +208,16 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 setAlertDialog("手机区域", phone_location_list, location, " :");
                 break;
             case R.id.order_confirm:
-                submitAppoint();
+                new AlertDialog.Builder(this)
+                        .setMessage("确认提交预约申请吗？")
+                        .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                submitAppoint();
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
                 break;
         }
     }

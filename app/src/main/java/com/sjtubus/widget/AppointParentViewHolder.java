@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.AppointInfo;
+import com.sjtubus.utils.StringCalendarUtils;
 
 public class AppointParentViewHolder extends BaseViewHolder{
 
@@ -29,7 +30,7 @@ public class AppointParentViewHolder extends BaseViewHolder{
     public void bindView(final AppointInfo bean, final int pos, final AppointItemClickListener appointItemClickListener){
         LinearLayout container = view.findViewById(R.id.container);
 
-        TextView shiftid = view.findViewById(R.id.appointitem_shiftid);
+       // TextView shiftid = view.findViewById(R.id.appointitem_shiftid);
         TextView departure_place = view.findViewById(R.id.appointitem_departureplace);
         TextView arrive_place = view.findViewById(R.id.appointitem_arriveplace);
         TextView departure_time = view.findViewById(R.id.appointitem_departuretime);
@@ -42,11 +43,12 @@ public class AppointParentViewHolder extends BaseViewHolder{
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)expand.getLayoutParams();
         expand.setLayoutParams(params);
 
-        shiftid.setText(bean.getShiftid());
+       // shiftid.setText(bean.getShiftid());
         departure_place.setText(bean.getDeparture_place());
         arrive_place.setText(bean.getArrive_place());
-        departure_time.setText(bean.getDeparture_time());
-        arrive_time.setText(bean.getArrive_time());
+        departure_time.setText(StringCalendarUtils.HHmmssToHHmm(bean.getDeparture_time()));
+        String arrive_time_text = "约" + StringCalendarUtils.HHmmssToHHmm(bean.getArrive_time());
+        arrive_time.setText(arrive_time_text);
         String remain_text = "剩余"+bean.getRemain_seat()+"座";
         remain_seat.setText(remain_text);
 

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.sjtubus.R;
 import com.sjtubus.activity.OrderActivity;
 import com.sjtubus.model.AppointInfo;
+import com.sjtubus.utils.StringCalendarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,8 +116,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
                     Intent orderIntent = new Intent(context, OrderActivity.class);
                     orderIntent.putExtra("departure_place", info.getDeparture_place());
                     orderIntent.putExtra("arrive_place", info.getArrive_place());
-                    orderIntent.putExtra("departure_time", info.getDeparture_time());
-                    orderIntent.putExtra("arrive_time", info.getArrive_time());
+                    orderIntent.putExtra("departure_time", StringCalendarUtils.HHmmssToHHmm(info.getDeparture_time()));
+                    orderIntent.putExtra("arrive_time", StringCalendarUtils.HHmmssToHHmm(info.getArrive_time()));
                     orderIntent.putExtra("departure_date", info.getDate());
                     orderIntent.putExtra("shiftid", info.getShiftid());
                     orderIntent.putExtra("shift_type", info.getLine_type());

@@ -64,6 +64,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         initPassData();
         initToolbar();
         initView();
+        ToastUtils.showLong("点击车次即可进行预约哦~");
     }
 
     @Override
@@ -272,7 +273,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         i++;
                         infos.add(info);
                     }
-                    String left_appoint_info = "当日剩余可预约班次:"+infos.size();
+                    String left_appoint_info = "当日剩余可预约班次: "+infos.size();
                     left_appoint.setText(left_appoint_info);
                     appointAdapter.setDataList(infos);
                     swipeRefresh.setRefreshing(false);
