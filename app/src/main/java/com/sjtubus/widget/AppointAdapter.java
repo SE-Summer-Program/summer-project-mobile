@@ -10,19 +10,36 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sjtubus.R;
+import com.sjtubus.activity.BaseActivity;
 import com.sjtubus.activity.OrderActivity;
+import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.AppointInfo;
+import com.sjtubus.model.RecordInfo;
+import com.sjtubus.model.response.RecordInfoResponse;
+import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.StringCalendarUtils;
+import com.sjtubus.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
+
+public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private Context context;
     private List<AppointInfo> appointInfoList = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private OnScrollListener onScrollListener;
+
+    private boolean hasConflictSchedule = false;
 
     public AppointAdapter(Context context){
         this.context = context;
@@ -113,12 +130,21 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
                 case R.id.appointitem_reservebtn:
                     AppointInfo info = appointInfoList.get((int)v.getTag()-1);
                     Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
+                    String departure_time = info.getDeparture_time();
+                    String arrive_time = info.getArrive_time();
+                    String departure_date = info.getDate();
+//                    hasConflictSchedule = false;
+//                    refreshRecord(departure_date, arrive_time, departure_date);
+//                    if (hasConflictSchedule){
+//                        ToastUtils.showShort("不能预约行程冲突的班次哦~");
+//                        break;
+//                    }
                     Intent orderIntent = new Intent(context, OrderActivity.class);
                     orderIntent.putExtra("departure_place", info.getDeparture_place());
                     orderIntent.putExtra("arrive_place", info.getArrive_place());
-                    orderIntent.putExtra("departure_time", StringCalendarUtils.HHmmssToHHmm(info.getDeparture_time()));
-                    orderIntent.putExtra("arrive_time", StringCalendarUtils.HHmmssToHHmm(info.getArrive_time()));
-                    orderIntent.putExtra("departure_date", info.getDate());
+                    orderIntent.putExtra("departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
+                    orderIntent.putExtra("arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
+                    orderIntent.putExtra("departure_date", departure_date);
                     orderIntent.putExtra("shiftid", info.getShiftid());
                     orderIntent.putExtra("shift_type", info.getLine_type());
                     context.startActivity(orderIntent);
@@ -186,6 +212,69 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder>{
 
     public void setOnScrollListener(OnScrollListener onScrollListener){
         this.onScrollListener = onScrollListener;
+    }
+
+
+    private void refreshRecord(final String departure_time, final String arrive_time, final String departure_date){
+        //获取当前用户的username
+        String username = UserManager.getInstance().getUser().getUsername();
+
+        RetrofitClient.getBusApi()
+            .getRecordInfos(username)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<RecordInfoResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    /*
+                     * 因为飘红删去了
+                     */
+                  //  ToastUtils.showShort("hello");
+            //        addDisposable(d);
+
+                }
+
+                @Override
+                public void onNext(RecordInfoResponse response) {
+                    Log.d(TAG, "onNext: ");
+//                    if(response.getRecordInfos()!=null && response.getRecordInfos().size()!=0){
+////                        RecordAdapter recordAdapter = new RecordAdapter( );
+////                        recordAdapter.setDataList(response.getRecordInfos());
+//                        hasConflictSchedule = false;
+//                    }
+
+                    String appoint_starttime = departure_date + " " + departure_time;
+                    String appoint_endtime = departure_date + " " + arrive_time;
+                    List<RecordInfo> recordInfos = response.getRecordInfos();
+                   // ToastUtils.showShort(recordInfos.size());
+                    //输出为空
+                    for (RecordInfo recordInfo : recordInfos) {
+                        String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
+                        String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
+                        //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
+                        if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
+                            hasConflictSchedule = false;
+                        else if (StringCalendarUtils.isBeforeTimeOfSecondPara(record_endtime, appoint_starttime))
+                            hasConflictSchedule = false;
+                        else {
+                            hasConflictSchedule = true;
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, "onComplete: ");
+                    //mProgressBar.setVisibility(View.GONE);
+                }
+            });
     }
 
 }

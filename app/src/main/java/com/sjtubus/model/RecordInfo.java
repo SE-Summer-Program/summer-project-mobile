@@ -19,6 +19,8 @@ public class RecordInfo {
     private String departureDate;
     @SerializedName("departureTime")
     private String departureTime; //预约的日期和时间
+    @SerializedName("arriveTime")
+    private String arriveTime;
     @SerializedName("shiftid")
     private String shiftid;
 
@@ -61,6 +63,10 @@ public class RecordInfo {
     public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
+
+    public String getArriveTime() { return arriveTime; }
+
+    public void setArriveTime(String arriveTime) { this.arriveTime = arriveTime; }
 
     public String getShiftid() {
         return shiftid;

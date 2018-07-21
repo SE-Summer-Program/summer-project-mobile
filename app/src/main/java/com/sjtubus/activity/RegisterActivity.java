@@ -1,5 +1,7 @@
 package com.sjtubus.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -7,7 +9,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.response.HttpResponse;
@@ -32,9 +37,13 @@ import static android.content.ContentValues.TAG;
 public class RegisterActivity extends BaseActivity implements View.OnClickListener{
 
     private Button verify_btn;
-    private EditText username_edit,phonenum_edit, password_edit,verify_edit;
-    private String username,phoneNum,password;
+    private EditText username_edit,phonenum_edit, password_edit, password_confirm, verify_edit;
+    private String username;
+    private String phoneNum;
+    private String password;
+    private CheckBox checkbtn_protocol;
     private boolean isVerifying = false;
+    private boolean hasReadProtocol = false;
 
     private EventHandler eventHandler = new EventHandler() {
         @Override
@@ -53,7 +62,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ToastUtils.showShort("验证码不正确!");
+                                ToastUtils.showShort("验证码输入不正确哦~");
                             }
                         });
                     }
@@ -125,12 +134,26 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         Toolbar toolbar = findViewById(R.id.toolbar_register);
         username_edit = findViewById(R.id.username_edit);
         password_edit = findViewById(R.id.pwd_edit);
+        password_confirm = findViewById(R.id.pwd_confirm);
         phonenum_edit = findViewById(R.id.phone_edit);
         verify_edit = findViewById(R.id.verify_edit);
+        TextView txt_protocol = findViewById(R.id.txt_protocol);
         Button register_btn = findViewById(R.id.register_btn);
         register_btn.setOnClickListener(this);
         verify_btn = findViewById(R.id.verify_btn);
         verify_btn.setOnClickListener(this);
+        txt_protocol.setOnClickListener(this);
+
+        checkbtn_protocol = findViewById(R.id.checkbtn_protocol);
+        checkbtn_protocol.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+               if (hasReadProtocol)
+                   hasReadProtocol = false;
+               else
+                   hasReadProtocol = true;
+            }
+        });
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +168,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             case  R.id.verify_btn:
                 getVerifyCode();
                 break;
+            case R.id.txt_protocol:
+                showProtocol();
+                break;
             case R.id.register_btn:
                 testVerifyCode();
                 break;
@@ -158,9 +184,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         Matcher matcher=pattern.matcher(phoneNum);
         //发送短信，传入国家号和电话---使用SMSSDK核心类之前一定要在MyApplication中初始化，否侧不能使用
         if (TextUtils.isEmpty(phoneNum)) {
-            ToastUtils.showShort("号码不能为空！");
+            ToastUtils.showShort("手机号码不能为空哦~");
         }else if(!matcher.matches()){
-            ToastUtils.showShort("号码格式不正确！");
+            ToastUtils.showShort("手机号码格式不正确哦~");
         }
         else {
             SMSSDK.getVerificationCode("86", phoneNum);
@@ -168,18 +194,43 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    public void showProtocol(){
+        new AlertDialog.Builder(this)
+                .setTitle("SJTUBUS用户协议")
+                .setMessage("不用在意这些细节用就完事了2333")
+                .setPositiveButton("我同意", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        hasReadProtocol = true;
+                        checkbtn_protocol.setChecked(true);
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
+    }
+
     public void testVerifyCode() {
         String verify_code = verify_edit.getText().toString().trim();
         username = username_edit.getText().toString().trim();
         password = password_edit.getText().toString().trim();
-        if(TextUtils.isEmpty(username)){
-            ToastUtils.showShort("用户名不能为空!");
+        String confirm = password_confirm.getText().toString().trim();
+        if (TextUtils.isEmpty(username)){
+            ToastUtils.showShort("用户名不能为空哦~");
         }
-        else if(TextUtils.isEmpty(password)){
-            ToastUtils.showShort("密码不能为空!");
+        else if (TextUtils.isEmpty(password)){
+            ToastUtils.showShort("密码不能为空哦~");
+        }
+        else if (password.length() < 6 || password.length() > 16){
+            ToastUtils.showShort("请设置6-16位的密码哦~");
+        }
+        else if (! password.equals(confirm)){
+            ToastUtils.showShort("两次密码输入不一致哦~");
         }
         else if (TextUtils.isEmpty(verify_code)) {
-            ToastUtils.showShort("验证码不能为空!");
+            ToastUtils.showShort("验证码不能为空哦~");
+        }
+        else if (! hasReadProtocol){
+            ToastUtils.showShort("请确保您已阅读并同意《SJTUBUS用户协议》哦~");
         }else {
             //提交短信验证码
             SMSSDK.submitVerificationCode("86", phoneNum, verify_code);//国家号，手机号码，验证码

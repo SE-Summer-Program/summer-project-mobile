@@ -74,6 +74,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 Intent jaccountIntent = new Intent(LoginActivity.this,JaccountActivity.class);
                 startActivity(jaccountIntent);
                 break;
+            case R.id.txt_forget_password:
+                ToastUtils.showShort("忘记密码功能还没有做好哦~");
+                break;
         }
     }
 

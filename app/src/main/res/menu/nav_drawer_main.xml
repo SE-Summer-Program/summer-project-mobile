@@ -10,6 +10,10 @@
             android:icon="@mipmap/bell"
             android:title="@string/reserve_record" />
         <item
+            android:id="@+id/navigation_item_collect"
+            android:icon="@mipmap/like"
+            android:title="@string/collect" />
+        <item
             android:id="@+id/navigation_item_message"
             android:icon="@mipmap/message"
             android:title="@string/message" />

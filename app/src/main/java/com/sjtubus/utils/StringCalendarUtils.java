@@ -167,6 +167,23 @@ public class StringCalendarUtils {
     }
 
     /**
+     * @ description: 比较某个日期和现在日期的先后
+     */
+    public static boolean isBeforeCurrentDate(String datestr){
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        Date current = new Date();
+        try {
+            date = timeFormat.parse(datestr);
+            current = timeFormat.parse(timeFormat.format(new Date()));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return date.before(current);
+    }
+
+    /**
      * @ description: 比较某个时间和另一个时间的的先后
      */
     public static boolean isBeforeDateOfSecondPara(String first, String second) {
@@ -186,20 +203,22 @@ public class StringCalendarUtils {
     }
 
     /**
-     * @ description: 比较某个日期和现在日期的先后
+     * @ description: 比较某个时间和另一个时间的的先后
      */
-    public static boolean isBeforeCurrentDate(String datestr){
+    public static boolean isBeforeTimeOfSecondPara(String first, String second) {
+
         @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        Date current = new Date();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date first_time = new Date();
+        Date second_time = new Date();
+
         try {
-            date = timeFormat.parse(datestr);
-            current = timeFormat.parse(timeFormat.format(new Date()));
+            first_time = timeFormat.parse(first);
+            second_time = timeFormat.parse(second);
         } catch (Exception e){
             e.printStackTrace();
         }
-        return date.before(current);
+        return first_time.before(second_time);
     }
 
     /* 判断所给的时间字符串是否是今天 */

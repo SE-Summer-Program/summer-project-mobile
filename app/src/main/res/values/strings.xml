@@ -15,7 +15,7 @@
     <string name="verify_code">验证码</string>
     <string name="verify">获取验证码</string>
     <string name="not_login">未登录，点击下方登录或注册</string>
-    <string name="protocol">点击确认并注册按钮，表示你同意《SJTUBUS用户协议》</string>
+    <string name="protocol">我已阅读并同意《SJTUBUS用户协议》</string>
     <string name="title_home">SJTU校园巴士</string>
     <string name="title_schedule">班次信息</string>
     <string name="title_message">我的消息</string>
@@ -69,4 +69,6 @@
     <string name="fliter">筛选</string>
     <string name="sort">排序</string>
     <string name="vaild_record">有效预约</string>
+    <string name="collect">班次收藏</string>
+    <string name="password_confirm">请再次输入密码</string>
 </resources>

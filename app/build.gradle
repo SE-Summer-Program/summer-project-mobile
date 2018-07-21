@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.mob.sdk'
 
 android {
-//    signingConfigs {
-//        config {
-//            keyAlias 'yaozihang'
-//            keyPassword '123456yzh'
-//            storeFile file('C:/Users/SHIYONG/Desktop/map.jks')
-//            storePassword '123456yzh'
-//        }
-//    }
+    signingConfigs {
+        config {
+            keyAlias 'yaozihang'
+            keyPassword '123456yzh'
+           // storeFile file('C:/Users/wxw/Desktop/map.jks')
+            storePassword '123456yzh'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.sjtubus"
@@ -23,7 +23,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-           // signingConfig signingConfigs.config
+            //signingConfig signingConfigs.config
         }
         debug {
             //signingConfig signingConfigs.config

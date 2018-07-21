@@ -229,15 +229,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.navigation_item_message:
-                Intent message_intent = new Intent(MainActivity.this,MessageActivity.class);
-                startActivity(message_intent);
-                break;
-            case R.id.navigation_item_idea:
-                ToastUtils.showShort("意见功能还不能使用哦~");
-                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
-                agent.startDefaultThreadActivity();
-                break;
             case R.id.navigation_item_person:
                 if(UserManager.getInstance().getUser() == null){
                     ToastUtils.showShort("请先登录~");
@@ -247,8 +238,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(person_intent);
                 break;
             case R.id.navigation_item_reserve:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
                 startActivity(recordIntent);
+                break;
+            case R.id.navigation_item_collect:
+                Intent collectIntent = new Intent(MainActivity.this, CollectActivity.class);
+                startActivity(collectIntent);
+                break;
+            case R.id.navigation_item_message:
+                Intent messageIntent = new Intent(MainActivity.this, MessageActivity.class);
+                startActivity(messageIntent);
+                break;
+            case R.id.navigation_item_idea:
+                ToastUtils.showShort("意见功能还不能使用哦~");
+                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
+                agent.startDefaultThreadActivity();
                 break;
             case R.id.navigation_item_setting:
                 Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);

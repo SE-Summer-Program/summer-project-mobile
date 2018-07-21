@@ -110,7 +110,6 @@ public class AppointInfo implements Cloneable{
         this.date = date;
     }
 
-
     public String getLine_type() {
         return line_type;
     }

@@ -57,21 +57,21 @@
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/record_btn"
+                android:id="@+id/schedule_btn"
                 android:background="#ffffff"
+                android:drawableTop="@drawable/schedule"
+                android:text="@string/schedule_btn"
                 android:paddingTop="@dimen/icon_padding"
-                android:drawableTop="@drawable/record"
-                android:text="@string/record_btn"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/position_btn"
+                android:id="@+id/record_btn"
                 android:background="#ffffff"
                 android:paddingTop="@dimen/icon_padding"
-                android:drawableTop="@drawable/position"
-                android:text="@string/position_btn"
+                android:drawableTop="@drawable/record"
+                android:text="@string/record_btn"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
@@ -84,16 +84,7 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <Button
-                android:id="@+id/schedule_btn"
-                android:background="#ffffff"
-                android:drawableTop="@drawable/schedule"
-                android:text="@string/schedule_btn"
-                android:paddingTop="@dimen/icon_padding"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"/>
+
             <Button
                 android:id="@+id/map_btn"
                 android:background="#ffffff"
@@ -110,6 +101,16 @@
                 android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@drawable/navigate"
                 android:text="@string/navigate_btn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/position_btn"
+                android:background="#ffffff"
+                android:paddingTop="@dimen/icon_padding"
+                android:drawableTop="@drawable/position"
+                android:text="@string/position_btn"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
