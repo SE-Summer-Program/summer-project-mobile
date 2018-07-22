@@ -218,7 +218,39 @@ public class StringCalendarUtils {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return first_time.before(second_time) || first_time.equals(second_time);
+        return first_time.before(second_time);
+    }
+
+    public static boolean isBeforeTimeOfSecondParaHHmm(String first, String second) {
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date first_time = new Date();
+        Date second_time = new Date();
+
+        try {
+            first_time = timeFormat.parse(first);
+            second_time = timeFormat.parse(second);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return first_time.before(second_time);
+    }
+
+    public static boolean isEqualsTimeOfSecondPara(String first, String second) {
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date first_time = new Date();
+        Date second_time = new Date();
+
+        try {
+            first_time = timeFormat.parse(first);
+            second_time = timeFormat.parse(second);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return first_time.equals(second_time);
     }
 
     /* 判断所给的时间字符串是否是今天 */

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointActivity;
+import com.sjtubus.activity.AppointDoubleActivity;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
@@ -26,7 +27,7 @@ import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AppointNaviDoubleFragment extends BaseFragment{
+public class AppointNaviDoubleFragment extends BaseFragment {
     @SuppressLint("StaticFieldLeak")
     private static AppointNaviDoubleFragment fragment;
 
@@ -148,6 +149,11 @@ public class AppointNaviDoubleFragment extends BaseFragment{
                             String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
                             String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
                             String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
+
+                            if (StringCalendarUtils.isBeforeDateOfSecondPara(doubledate_str, dateStr)){
+                                ToastUtils.showShort("回程的时间不能早于去程哦~");
+                                return;
+                            }
                             singledate.setText(dateStr);
                             singledate_str = (String) singleway_date.getText();
 
@@ -186,39 +192,39 @@ public class AppointNaviDoubleFragment extends BaseFragment{
 
                 case R.id.appoint_searchbtn:
 
-                    ToastUtils.showShort("往返功能还不能使用哦~");
-//                    if (departure_index == arrive_index){
-//                        ToastUtils.showShort("起点和终点不能相同！");
-//                        break;
-//                    }
-//                    Intent appointIntent = new Intent(getActivity(), AppointActivity.class);
-//                    appointIntent.putExtra("departure_place", (String) departure_place.getText());
-//                    appointIntent.putExtra("arrive_place", (String) arrive_place.getText());
-//                    appointIntent.putExtra("singleway_date", (String) singleway_date.getText());
-//                    appointIntent.putExtra("doubleway_date", (String) doubleway_date.getText());
-//                    startActivityForResult(appointIntent, 1);
-
+                    if (departure_index == arrive_index){
+                        ToastUtils.showShort("起点和终点不能相同！");
+                        break;
+                    }
+                    Intent appointDoubleIntent = new Intent(getActivity(), AppointDoubleActivity.class);
+                    appointDoubleIntent.putExtra("departure_place", (String) departure_place.getText());
+                    appointDoubleIntent.putExtra("arrive_place", (String) arrive_place.getText());
+                    appointDoubleIntent.putExtra("singleway_date", (String) singleway_date.getText());
+                    appointDoubleIntent.putExtra("doubleway_date", (String) doubleway_date.getText());
+                    appointDoubleIntent.putExtra("target_page", 0);
+                  //  startActivityForResult(appointDoubleIntent, 1);
+                    startActivity(appointDoubleIntent);
                     break;
             }
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){
-            case 1:
-                if (resultCode == RESULT_OK){
-                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));
-                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
-                    departure_place.setText(data.getStringExtra("departure_place"));
-                    arrive_place.setText(data.getStringExtra("arrive_place"));
-                    singleway_date.setText(data.getStringExtra("singleway_date"));
-                    //doubleway_date.setText(data.getStringExtra("doubleway_date"));
-                }
-            default:
-                break;
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        switch (requestCode){
+//            case 1:
+//                if (resultCode == RESULT_OK){
+//                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));
+//                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
+//                    departure_place.setText(data.getStringExtra("departure_place"));
+//                    arrive_place.setText(data.getStringExtra("arrive_place"));
+//                    singleway_date.setText(data.getStringExtra("singleway_date"));
+//                    //doubleway_date.setText(data.getStringExtra("doubleway_date"));
+//                }
+//            default:
+//                break;
+//        }
+//    }
 
     private void getCurrentDay() {
         Calendar calendar = Calendar.getInstance();

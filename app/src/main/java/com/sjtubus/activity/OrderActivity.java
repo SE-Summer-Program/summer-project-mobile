@@ -42,6 +42,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     private String shiftid_str;
     private String shift_type_str;
 
+    private String double_departure_place_str, double_arrive_place_str;
+    private String double_departure_time_str, double_arrive_time_str;
+    private String double_date_str;
+    private String double_shiftid_str;
+    private String double_shift_type_str;
+
     private ImageView remind_icon, need_icon;
     private LinearLayout remind_time, remind_phone, remind_mail;
     private LinearLayout need_front, need_back, need_window, need_other;
@@ -54,6 +60,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     private String[] phone_location_list ={"大陆地区", "港澳台地区", "国外地区"};
     private boolean[] checked_array = {false, false, false, false};
     private String[] check_msg = {"前排座位", "后排座位", "靠窗座位", "其他特殊要求"};
+
+    private int SINGLE_WAY = 0, DOUBLE_WAY = 1;
+    private boolean isSingleWayFlag = true;
+    private boolean isOrderFinished = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,18 +89,54 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         date_str = intent.getStringExtra("departure_date");
         shiftid_str = intent.getStringExtra("shiftid");
         shift_type_str = intent.getStringExtra("shift_type");
+
+        int appoint_type = intent.getIntExtra("appoint_type",0);
+
+        if (appoint_type == DOUBLE_WAY){
+            double_departure_place_str = intent.getStringExtra("double_departure_place");
+            double_arrive_place_str = intent.getStringExtra("double_arrive_place");
+            double_departure_time_str = intent.getStringExtra("double_departure_time");
+            double_arrive_time_str = intent.getStringExtra("double_arrive_time");
+            double_date_str = intent.getStringExtra("double_departure_date");
+            double_shiftid_str = intent.getStringExtra("double_shiftid");
+            double_shift_type_str = intent.getStringExtra("double_shift_type");
+
+            isSingleWayFlag = false;
+        }
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         Toolbar mToolbar = findViewById(R.id.toolbar_order);
         mToolbar.setNavigationIcon(R.drawable.back_32);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (isSingleWayFlag)
+                    finish();
+                else{
+                    Intent appointDoubleIntent = new Intent(OrderActivity.this, AppointDoubleActivity.class);
+
+                    appointDoubleIntent.putExtra("single_departure_place", departure_place_str);
+                    appointDoubleIntent.putExtra("single_arrive_place", arrive_place_str);
+                    appointDoubleIntent.putExtra("single_departure_time", departure_time_str);
+                    //ToastUtils.showShort(StringCalendarUtils.HHmmssToHHmm(departure_time));
+                    appointDoubleIntent.putExtra("single_arrive_time", arrive_time_str);
+                    appointDoubleIntent.putExtra("single_departure_date", date_str);
+                    appointDoubleIntent.putExtra("single_shiftid", shiftid_str);
+                    appointDoubleIntent.putExtra("single_shift_type", shift_type_str);
+
+                    appointDoubleIntent.putExtra("double_departure_date", double_date_str);
+                    appointDoubleIntent.putExtra("target_page", 1);
+
+                    startActivity(appointDoubleIntent);
+                }
             }
         });
 
+        initShiftInfo();
+    }
+
+    private void initShiftInfo() {
         TextView departure_place = findViewById(R.id.order_departureplace);
         TextView departure_time = findViewById(R.id.order_departuretime);
         TextView departure_date = findViewById(R.id.order_departuredate);
@@ -112,9 +158,42 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
         comment.setOnClickListener(this);
 
+        TextView double_departure_place = findViewById(R.id.order_departureplace_double);
+        TextView double_departure_time = findViewById(R.id.order_departuretime_double);
+        TextView double_departure_date = findViewById(R.id.order_departuredate_double);
+        TextView double_arrive_place = findViewById(R.id.order_arriveplace_double);
+        TextView double_arrive_time = findViewById(R.id.order_arrivetime_double);
+        TextView double_arrive_date = findViewById(R.id.order_arrivedate_double);
+        TextView double_shiftid = findViewById(R.id.order_shiftid_double);
+        TextView double_shift_type = findViewById(R.id.order_shifttype_double);
+        TextView double_comment = findViewById(R.id.order_comment_double);
+
+        double_departure_place.setText(double_departure_place_str);
+        double_arrive_place.setText(double_arrive_place_str);
+        double_departure_time.setText(double_departure_time_str);
+        double_arrive_time.setText(double_arrive_time_str);
+        double_departure_date.setText(double_date_str);
+        double_arrive_date.setText(double_date_str);
+        double_shiftid.setText(double_shiftid_str);
+        double_shift_type.setText(ShiftUtils.getChiType(double_shift_type_str));
+
+        double_comment.setOnClickListener(this);
+
         Button submit_btn = findViewById(R.id.order_confirm);
         submit_btn.setOnClickListener(this);
+
+        if (isSingleWayFlag){
+            double_departure_place.setVisibility(View.GONE);
+            double_arrive_place.setVisibility(View.GONE);
+            double_departure_time.setVisibility(View.GONE);
+            double_arrive_time.setVisibility(View.GONE);
+            double_departure_date.setVisibility(View.GONE);
+            double_arrive_date.setVisibility(View.GONE);
+            double_shiftid.setVisibility(View.GONE);
+            double_shift_type.setVisibility(View.GONE);
+        }
     }
+
 
     private void initRemindView() {
         TextView remind_bar = findViewById(R.id.order_setremind);
@@ -213,7 +292,20 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                submitAppoint();
+                                RequestBody requestBody = new FormBody.Builder()
+                                    .add("line_name", ShiftUtils.getLineByDepartureAndArrive(departure_place_str,arrive_place_str))
+                                    .add("shift_id",shiftid_str)
+                                    .add("appoint_date",date_str)
+                                    .add("submit_time", StringCalendarUtils.getCurrentTime())
+                                    .add("username",UserManager.getInstance().getUser().getUsername())
+                                    .build();
+                                submitAppoint(requestBody);
+
+//                                try {
+//                                    Thread.sleep(1000);
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
                             }
                         })
                         .setNegativeButton("取消", null)
@@ -222,61 +314,98 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
-    public void submitAppoint(){
-        RequestBody requestBody = new FormBody.Builder()
-                .add("line_name", ShiftUtils.getLineByDepartureAndArrive(departure_place_str,arrive_place_str))
-                .add("shift_id",shiftid_str)
-                .add("appoint_date",date_str)
-                .add("submit_time", StringCalendarUtils.getCurrentTime())
-                .add("username",UserManager.getInstance().getUser().getUsername())
-                .build();
-        RetrofitClient.getBusApi()
-                .appoint(requestBody)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<HttpResponse>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        addDisposable(d);
-                    }
+    @Override
+    public void onBackPressed() {
+        if (isSingleWayFlag)
+            finish();
+        else{
+            Intent appointDoubleIntent = new Intent(OrderActivity.this, AppointDoubleActivity.class);
 
-                    @Override
-                    public void onNext(HttpResponse response) {
-                        if(response.getError()==0){
-                            //显示预约成功
-                            String message = "您已成功预约" + date_str +" "+ departure_time_str + "从" + departure_place_str
-                                    + "开往" + arrive_place_str + "的" + shiftid_str +"号校区巴士，请记得按时前去乘坐哦~";
-                            new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("预约成功~")
-                                    .setContentText(message)
-                                    .setConfirmText("确定")
-                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                        @Override
-                                        public void onClick(SweetAlertDialog sDialog) {
-                                            OrderActivity.this.startActivity(new Intent(OrderActivity.this,MainActivity.class));
-                                        }
-                                    })
-                                    .show();
-                        }else{
-                            new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("预约失败!")
-                                    .setContentText("没有剩余座位或网络出错!")
-                                    .show();
-                        }
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
+            appointDoubleIntent.putExtra("single_departure_place", departure_place_str);
+            appointDoubleIntent.putExtra("single_arrive_place", arrive_place_str);
+            appointDoubleIntent.putExtra("single_departure_time", departure_time_str);
+            //ToastUtils.showShort(StringCalendarUtils.HHmmssToHHmm(departure_time));
+            appointDoubleIntent.putExtra("single_arrive_time", arrive_time_str);
+            appointDoubleIntent.putExtra("single_departure_date", date_str);
+            appointDoubleIntent.putExtra("single_shiftid", shiftid_str);
+            appointDoubleIntent.putExtra("single_shift_type", shift_type_str);
 
-                    @Override
-                    public void onComplete() {
-                        Log.d(TAG, "onComplete: ");
-                        //mProgressBar.setVisibility(View.GONE);
-                    }
-                });
+            appointDoubleIntent.putExtra("double_departure_date", double_date_str);
+            appointDoubleIntent.putExtra("target_page", 1);
+
+            startActivity(appointDoubleIntent);
+        }
     }
 
+    public void submitAppoint(RequestBody requestBody){
+        RetrofitClient.getBusApi()
+            .appoint(requestBody)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<HttpResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
+                }
+
+                @Override
+                public void onNext(HttpResponse response) {
+                    if(response.getError()==0){
+                        //显示预约成功
+                        String message = "";
+                        if (isSingleWayFlag || (! isSingleWayFlag && !isOrderFinished)) {
+                            message = "您已成功预约【" + date_str + " " + departure_time_str + "从" + departure_place_str
+                                    + "开往" + arrive_place_str + "的" + shiftid_str + "号校区巴士】，请记得按时前去乘坐哦~";
+                        } else if (isOrderFinished){
+                            message = "您已成功预约【" + double_date_str + " " + double_departure_time_str + "从" + double_departure_place_str
+                                    + "开往" + double_arrive_place_str + "的" + double_shiftid_str + "号校区巴士】，请记得按时前去乘坐哦~";
+                        }
+                        new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("预约成功~")
+                                .setContentText(message)
+                                .setConfirmText("确定")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        if (isSingleWayFlag) {
+                                            OrderActivity.this.startActivity(new Intent(OrderActivity.this, MainActivity.class));
+                                        } else if (! isOrderFinished){
+                                            isOrderFinished = true;
+
+                                            RequestBody anotherRequestBody = new FormBody.Builder()
+                                                .add("line_name", ShiftUtils.getLineByDepartureAndArrive(double_departure_place_str,double_arrive_place_str))
+                                                .add("shift_id",double_shiftid_str)
+                                                .add("appoint_date",double_date_str)
+                                                .add("submit_time", StringCalendarUtils.getCurrentTime())
+                                                .add("username",UserManager.getInstance().getUser().getUsername())
+                                                .build();
+                                            submitAppoint(anotherRequestBody);
+
+                                        } else {
+                                            OrderActivity.this.startActivity(new Intent(OrderActivity.this, MainActivity.class));
+                                        }
+                                    }
+                                })
+                                .show();
+                    }else{
+                        new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("预约失败!")
+                                .setContentText("没有剩余座位或网络出错!")
+                                .show();
+                    }
+                }
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, "onComplete: ");
+                    //mProgressBar.setVisibility(View.GONE);
+                }
+            });
+    }
 
     private void setViewsVisible(LinearLayout... linearLayouts){
         for (LinearLayout layout : linearLayouts){

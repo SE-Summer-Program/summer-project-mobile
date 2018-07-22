@@ -50,7 +50,7 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
 
         mCoordinatorTabLayout.setTranslucentStatusBar(this)
                 .setTitle("预约班车")
-                //.setBackEnable(true)
+                .setBackEnable(true)
                 .setImageArray(mImageArray, mColorArray)
                 .setupWithViewPager(mViewPager);
     }

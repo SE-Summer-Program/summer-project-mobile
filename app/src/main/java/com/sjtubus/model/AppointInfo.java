@@ -125,4 +125,17 @@ public class AppointInfo implements Cloneable{
     public void setAppoint_status(int appoint_status) {
         this.appoint_status = appoint_status;
     }
+
+    public void copy(AppointInfo appointInfo){
+        this.departure_place = appointInfo.departure_place;
+        this.arrive_place = appointInfo.arrive_place;
+        this.departure_time = appointInfo.departure_time;
+        this.arrive_time = appointInfo.arrive_time;
+        this.date = appointInfo.date;
+        this.shiftid = appointInfo.shiftid;
+        this.line_type = appointInfo.line_type;
+
+//        this.remain_seat = appointInfo.remain_seat;
+//        this.appoint_status = appointInfo.appoint_status;
+    }
 }

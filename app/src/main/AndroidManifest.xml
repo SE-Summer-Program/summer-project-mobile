@@ -49,6 +49,7 @@
         <activity android:name=".activity.RecordActivity"/>
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".activity.CollectActivity"/>
+        <activity android:name=".activity.AppointDoubleActivity" />
 
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >

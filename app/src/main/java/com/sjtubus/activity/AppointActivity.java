@@ -84,7 +84,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
     private void initToolbar(){
         Toolbar mToolbar = findViewById(R.id.toolbar_appointment);
-        mToolbar.setTitle(departure_place_str + "->" + arrive_place_str);
+        mToolbar.setTitle(" " + departure_place_str + "->" + arrive_place_str);
         mToolbar.setNavigationIcon(R.mipmap.icon_back_128);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -302,15 +302,4 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = cal.get(Calendar.DAY_OF_MONTH);
     }
-
-//    private void modifyDate(int offset){
-//        switch(offset){
-//            case 1:
-//                //...后一天
-//                break;
-//            case -1:
-//                //...前一天
-//                break;
-//        }
-//    }
 }
