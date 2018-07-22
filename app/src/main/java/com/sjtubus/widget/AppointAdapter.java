@@ -1,5 +1,6 @@
 package com.sjtubus.widget;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -15,7 +16,9 @@ import com.sjtubus.activity.OrderActivity;
 import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.RecordInfo;
+import com.sjtubus.model.ShiftInfo;
 import com.sjtubus.model.response.RecordInfoResponse;
+import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.StringCalendarUtils;
@@ -50,6 +53,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.appointInfoList = appointInfoList;
         notifyDataSetChanged();
     }
+
+    private CompositeDisposable compositeDisposable;
 
     @NonNull
     @Override
@@ -128,28 +133,38 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         public void onClick(View v){
             switch (v.getId()){
                 case R.id.appointitem_reservebtn:
-                    AppointInfo info = appointInfoList.get((int)v.getTag()-1);
+                    AppointInfo info_reserve = appointInfoList.get((int)v.getTag()-1);
                     Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
-                    String departure_time = info.getDeparture_time();
-                    String arrive_time = info.getArrive_time();
-                    String departure_date = info.getDate();
-//                    hasConflictSchedule = false;
-//                    refreshRecord(departure_date, arrive_time, departure_date);
-//                    if (hasConflictSchedule){
-//                        ToastUtils.showShort("不能预约行程冲突的班次哦~");
-//                        break;
-//                    }
+                    String departure_time = info_reserve.getDeparture_time();
+                    String arrive_time = info_reserve.getArrive_time();
+                    String departure_date = info_reserve.getDate();
+
+                    hasConflictSchedule = false;
+                    retrofitRecord(departure_time, arrive_time, departure_date);
+                    if (hasConflictSchedule){
+                        ToastUtils.showShort("不能预约行程冲突的班次哦~");
+                        break;
+                    }
+
                     Intent orderIntent = new Intent(context, OrderActivity.class);
-                    orderIntent.putExtra("departure_place", info.getDeparture_place());
-                    orderIntent.putExtra("arrive_place", info.getArrive_place());
+                    orderIntent.putExtra("departure_place", info_reserve.getDeparture_place());
+                    orderIntent.putExtra("arrive_place", info_reserve.getArrive_place());
                     orderIntent.putExtra("departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
                     orderIntent.putExtra("arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
                     orderIntent.putExtra("departure_date", departure_date);
-                    orderIntent.putExtra("shiftid", info.getShiftid());
-                    orderIntent.putExtra("shift_type", info.getLine_type());
+                    orderIntent.putExtra("shiftid", info_reserve.getShiftid());
+                    orderIntent.putExtra("shift_type", info_reserve.getLine_type());
                     context.startActivity(orderIntent);
                     break;
+
+                case R.id.appointitem_collectbtn:
+
+                    break;
+
                 case R.id.appointitem_infobtn:
+                    AppointInfo info_schedule = appointInfoList.get((int)v.getTag()-1);
+                    String shiftid = info_schedule.getShiftid();
+                    retrofitShiftInfo(shiftid);
                     break;
             }
         }
@@ -209,13 +224,12 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         void scrollTo(int pos);
     }
 
-
     public void setOnScrollListener(OnScrollListener onScrollListener){
         this.onScrollListener = onScrollListener;
     }
 
 
-    private void refreshRecord(final String departure_time, final String arrive_time, final String departure_date){
+    private void retrofitRecord(final String departure_time, final String arrive_time, final String departure_date){
         //获取当前用户的username
         String username = UserManager.getInstance().getUser().getUsername();
 
@@ -229,9 +243,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     /*
                      * 因为飘红删去了
                      */
-                  //  ToastUtils.showShort("hello");
-            //        addDisposable(d);
-
+                    addDisposable(d);
                 }
 
                 @Override
@@ -246,11 +258,11 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     String appoint_starttime = departure_date + " " + departure_time;
                     String appoint_endtime = departure_date + " " + arrive_time;
                     List<RecordInfo> recordInfos = response.getRecordInfos();
-                   // ToastUtils.showShort(recordInfos.size());
                     //输出为空
                     for (RecordInfo recordInfo : recordInfos) {
                         String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
                         String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
+                        //ToastUtils.showShort(record_starttime + " " + record_endtime);
                         //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
                         if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
                             hasConflictSchedule = false;
@@ -275,6 +287,60 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     //mProgressBar.setVisibility(View.GONE);
                 }
             });
+    }
+
+    private void retrofitShiftInfo(final String shiftid){
+        //获取当前用户的username
+//        String username = UserManager.getInstance().getUser().getUsername();
+
+        RetrofitClient.getBusApi()
+                .getShiftInfos(shiftid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ShiftInfoResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(ShiftInfoResponse response) {
+                        ShiftInfo shiftInfo = response.getShiftInfo();
+                        String message = "班次序列号：" + shiftInfo.getShiftid()
+                                + "\n线路名称：" + shiftInfo.getLineNameCn()
+                                + "\n发车时间：" + shiftInfo.getDepartureTime()
+                                + "\n车牌号：" + shiftInfo.getBusPlateNum()
+                                + "\n核载人数：" + shiftInfo.getBusSeatNum()
+                                + "\n司机姓名：" + shiftInfo.getDriverName()
+                                + "\n司机联系方式：" + shiftInfo.getDriverPhone()
+                                + "\n备注：" + shiftInfo.getComment();
+                        new AlertDialog.Builder(context)
+                                .setTitle("班次详细信息")
+                                .setMessage(message)
+                                .setPositiveButton("确定", null)
+                                .show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                        //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    public void addDisposable(Disposable s) {
+        if (this.compositeDisposable == null) {
+            this.compositeDisposable = new CompositeDisposable();
+        }
+
+        this.compositeDisposable.add(s);
     }
 
 }

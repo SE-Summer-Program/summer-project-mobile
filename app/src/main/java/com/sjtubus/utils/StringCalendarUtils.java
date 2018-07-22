@@ -218,7 +218,7 @@ public class StringCalendarUtils {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return first_time.before(second_time);
+        return first_time.before(second_time) || first_time.equals(second_time);
     }
 
     /* 判断所给的时间字符串是否是今天 */

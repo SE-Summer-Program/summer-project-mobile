@@ -20,9 +20,12 @@ public class AppointChildViewHolder extends BaseViewHolder{
 
     public void bindView(final AppointInfo bean, final int pos, final View.OnClickListener listener){
         Button reserve_btn = view.findViewById(R.id.appointitem_reservebtn);
+        Button collect_btn = view.findViewById(R.id.appointitem_collectbtn);
         Button info_btn = view.findViewById(R.id.appointitem_infobtn);
         reserve_btn.setTag(pos);
         reserve_btn.setOnClickListener(listener);
+        collect_btn.setTag(pos);
+        collect_btn.setOnClickListener(listener);
         info_btn.setTag(pos);
         info_btn.setOnClickListener(listener);
     }

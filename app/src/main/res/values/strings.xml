@@ -71,4 +71,6 @@
     <string name="vaild_record">有效预约</string>
     <string name="collect">班次收藏</string>
     <string name="password_confirm">请再次输入密码</string>
+    <string name="child_collect">收藏</string>
+    <string name="child_shift">详细信息</string>
 </resources>
