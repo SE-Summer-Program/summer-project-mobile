@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.widget.PopupWindow;
+import android.view.View;
+import android.view.LayoutInflater;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -19,7 +23,6 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapPoi;
-import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
@@ -29,8 +32,10 @@ import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.overlayutil.OverlayManager;
 import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.route.DrivingRouteLine;
 import com.baidu.mapapi.search.route.BikingRouteResult;
 import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.search.route.DrivingRouteResult;
 import com.baidu.mapapi.search.route.IndoorRouteResult;
 import com.baidu.mapapi.search.route.MassTransitRouteResult;
@@ -39,6 +44,10 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
+
+import com.sjtubus.utils.BusLocationSimulator;
+import com.yinglan.scrolllayout.ScrollLayout;
+
 import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
@@ -47,10 +56,14 @@ import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.MyLocationListener;
 import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.MyMarkerClickListener;
+import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.ToastUtils;
 import com.yinglan.scrolllayout.ScrollLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -65,9 +78,9 @@ public class MapActivity extends BaseActivity {
 
     //百度地图相关
     private MapView mMapView;
-    private MapStatusUpdate msu = null;
     private BaiduMap mBaiduMap;
     private Float zoomLevel = 16.0f;
+    private LatLng initPosition = new LatLng(31.03201,121.443287);
 
     //定位相关
     public LocationClient mLocationClient = null;
@@ -80,15 +93,16 @@ public class MapActivity extends BaseActivity {
     private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<>();
     private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
+//    private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<String, BitmapDescriptor>();
+//    private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
 
     //搜索相关
-    RoutePlanSearch mSearch = null;
-    RouteLine route = null;  //路线
-    OverlayManager routeOverlay = null;  //该类提供一个能够显示和管理多个Overlay的基类
-    boolean useDefaultIcon = true;
-    DrivingRoutePlanOption routePlan = new DrivingRoutePlanOption();
+    private RoutePlanSearch mSearch = null;
+    private boolean useDefaultIcon = false;
+    private DrivingRoutePlanOption routePlan = new DrivingRoutePlanOption();
 
-    //站点详细信息相关
+    //时刻表相关
+    private MyMapStatusChangeListener mMapStatusChangeListener = null;
     private ScrollLayout mScrollLayout;
 
 
@@ -126,11 +140,9 @@ public class MapActivity extends BaseActivity {
         mMapView = findViewById(R.id.mapview);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setCompassEnable(true);
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为普通显示
-        msu = MapStatusUpdateFactory.zoomTo(zoomLevel);// 设置地图初始化缩放比例
-        mBaiduMap.setMapStatus(msu);
-        msu = MapStatusUpdateFactory.newLatLng(new LatLng(31.03201,121.443287));// 设置地图初始中心
-        mBaiduMap.setMapStatus(msu);
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为卫星显示
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(zoomLevel));// 设置地图初始化缩放比例
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(initPosition));// 设置地图初始中心
 
         mScrollLayout = findViewById(R.id.scroll_down_layout);
 
@@ -271,6 +283,32 @@ public class MapActivity extends BaseActivity {
         mMapStatusChangeListener.setBitmaps(bitmaps);
     }
 
+    private void addBus(){
+        BusLocationSimulator simulator = new BusLocationSimulator();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
+        String time = simpleDateFormat.format(new Date());
+        System.out.println(time);
+        LatLng busLocation = simulator.getBusLocation(time);
+        System.out.println(busLocation.toString());
+
+        MarkerOptions marker_temp = new MarkerOptions()
+                .position(busLocation)
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
+        //添加marker
+        Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
+
+        List<LatLng> points = simulator.points;
+        //显示所有途经点
+        /*for(LatLng step:points){
+            MarkerOptions p = new MarkerOptions()
+                    .position(step)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_geo)).anchor(0.5f, 0.5f).zIndex(7);
+            //添加marker
+            mBaiduMap.addOverlay(p);
+            //Toast.makeText(MapActivity.this, step.getEntrance().getLocation().toString(), Toast.LENGTH_SHORT).show();
+        }*/
+    }
+
     private void initBitmap(){
         BitmapDescriptor bd_temp;
         View v_temp = LayoutInflater.from(App.getInstance()).inflate(R.layout.map_marker, null);//加载自定义的布局
@@ -302,7 +340,6 @@ public class MapActivity extends BaseActivity {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
-        //refreshMarker.onResume();
     }
 
     @Override
@@ -311,7 +348,6 @@ public class MapActivity extends BaseActivity {
         if (!mLocationClient.isStarted()){
             mLocationClient.start();//开启定位
         }
-        //refreshMarker.start();
     }
 
     @Override
@@ -319,7 +355,6 @@ public class MapActivity extends BaseActivity {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
-        //refreshMarker.onPause();
     }
 
     @Override
@@ -327,7 +362,6 @@ public class MapActivity extends BaseActivity {
         super.onStop();
         mBaiduMap.setMyLocationEnabled(false);
         mLocationClient.stop();//停止定位
-        //refreshMarker.onStop();
     }
 
     //Android6.0申请权限的回调方法
@@ -351,11 +385,10 @@ public class MapActivity extends BaseActivity {
         }
     }
 
-
     private class MyDrivingRouteOverlay extends DrivingRouteOverlay {
 
-        MyDrivingRouteOverlay(BaiduMap baiduMap) {
-            super(baiduMap);
+        private MyDrivingRouteOverlay(BaiduMap baiduMap,boolean setMarker) {
+            super(baiduMap, setMarker);
         }
 
             @Override
@@ -392,16 +425,14 @@ public class MapActivity extends BaseActivity {
                     result.error == SearchResult.ERRORNO.REQUEST_ERROR) {
                 mSearch.drivingSearch(routePlan);
             }
-            else if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR ) {
+            else if (result.error != SearchResult.ERRORNO.NO_ERROR ) {
                 Toast.makeText(MapActivity.this, result.error.toString(), Toast.LENGTH_SHORT).show();
             }
 
             if (result.error == SearchResult.ERRORNO.NO_ERROR) {
-                route = result.getRouteLines().get(0);
-                DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap);
-                routeOverlay = overlay;
-                //mBaiduMap.setOnMarkerClickListener(overlay);
-                overlay.setData(result.getRouteLines().get(0));//设置路线数据
+                DrivingRouteLine route = result.getRouteLines().get(0);
+                DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap, false);
+                overlay.setData(route);  //设置路线数据
                 overlay.addToMap(); //将所有overlay添加到地图中
             }
         }
@@ -424,34 +455,6 @@ public class MapActivity extends BaseActivity {
 
         @Override
         public void onGetBikingRouteResult(BikingRouteResult result) {
-        }
-    }
-
-    private class refreshThread extends Thread{
-        private boolean isStop = false;
-        @Override
-        public void run() {
-            super.run();
-            while(!isStop){
-                if(mBaiduMap.getMapStatus().zoom != zoomLevel){
-                    mBaiduMap.clear();//清除所有overlay
-                    routeOverlay.addToMap();//重新添加Route层
-                    addMarker();//添加Marker层
-                }
-                SystemClock.sleep(1000L);//每隔一秒判断地图是否发生缩放
-            }
-            return;
-        }
-
-        public void onStop(){
-            this.isStop = true;
-        }
-        public void onPause(){
-            this.isStop = true;
-        }
-        public void onResume(){
-            this.isStop = false;
-            super.start();
         }
     }
 

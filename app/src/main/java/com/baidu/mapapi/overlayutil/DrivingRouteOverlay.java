@@ -27,6 +27,7 @@ public class DrivingRouteOverlay extends OverlayManager {
 
     private DrivingRouteLine mRouteLine = null;
     boolean focus = false;
+    boolean setMarker;
 
     /**
      * 构造函数
@@ -34,8 +35,9 @@ public class DrivingRouteOverlay extends OverlayManager {
      * @param baiduMap
      *            该DrivingRouteOvelray引用的 BaiduMap
      */
-    public DrivingRouteOverlay(BaiduMap baiduMap) {
+    public DrivingRouteOverlay(BaiduMap baiduMap,boolean setMarker) {
         super(baiduMap);
+        this.setMarker = setMarker;
     }
 
     @Override
@@ -78,22 +80,16 @@ public class DrivingRouteOverlay extends OverlayManager {
             }
         }*/
 
-        /*if (mRouteLine.getStarting() != null) {
+        if (mRouteLine.getStarting() != null && setMarker) {
             overlayOptionses.add((new MarkerOptions())
                     .position(mRouteLine.getStarting().getLocation())
-                            .icon(getStartMarker() != null ? getStartMarker() :
-                                    BitmapDescriptorFactory
-                                            .fromAssetWithDpi("Icon_st.png")).zIndex(10));
+                            .icon(getStartMarker()).zIndex(10));
         }
-        if (mRouteLine.getTerminal() != null) {
-            overlayOptionses
-                    .add((new MarkerOptions())
-                            .position(mRouteLine.getTerminal().getLocation())
-                                    .icon(getTerminalMarker() != null ? getTerminalMarker() :
-                                            BitmapDescriptorFactory
-                                                    .fromAssetWithDpi("Icon_en.png"))
-                                                            .zIndex(10));
-        }*/
+        if (mRouteLine.getTerminal() != null && setMarker) {
+            overlayOptionses.add((new MarkerOptions())
+                    .position(mRouteLine.getTerminal().getLocation())
+                        .icon(getTerminalMarker()).zIndex(10));
+        }
         // poly line
         if (mRouteLine.getAllStep() != null
                 && mRouteLine.getAllStep().size() > 0) {
