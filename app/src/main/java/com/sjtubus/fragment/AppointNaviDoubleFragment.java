@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.activity.AppointActivity;
 import com.sjtubus.activity.AppointDoubleActivity;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
@@ -197,34 +196,35 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                         break;
                     }
                     Intent appointDoubleIntent = new Intent(getActivity(), AppointDoubleActivity.class);
+
                     appointDoubleIntent.putExtra("departure_place", (String) departure_place.getText());
                     appointDoubleIntent.putExtra("arrive_place", (String) arrive_place.getText());
                     appointDoubleIntent.putExtra("singleway_date", (String) singleway_date.getText());
                     appointDoubleIntent.putExtra("doubleway_date", (String) doubleway_date.getText());
                     appointDoubleIntent.putExtra("target_page", 0);
-                  //  startActivityForResult(appointDoubleIntent, 1);
-                    startActivity(appointDoubleIntent);
+                    startActivityForResult(appointDoubleIntent, 1);
+                  //  startActivity(appointDoubleIntent);
                     break;
             }
         }
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode){
-//            case 1:
-//                if (resultCode == RESULT_OK){
-//                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));
-//                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
-//                    departure_place.setText(data.getStringExtra("departure_place"));
-//                    arrive_place.setText(data.getStringExtra("arrive_place"));
-//                    singleway_date.setText(data.getStringExtra("singleway_date"));
-//                    //doubleway_date.setText(data.getStringExtra("doubleway_date"));
-//                }
-//            default:
-//                break;
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if (resultCode == RESULT_OK){
+                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));
+                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
+                    departure_place.setText(data.getStringExtra("departure_place"));
+                    arrive_place.setText(data.getStringExtra("arrive_place"));
+                    singleway_date.setText(data.getStringExtra("singleway_date"));
+                    //doubleway_date.setText(data.getStringExtra("doubleway_date"));
+                }
+            default:
+                break;
+        }
+    }
 
     private void getCurrentDay() {
         Calendar calendar = Calendar.getInstance();

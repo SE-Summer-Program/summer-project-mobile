@@ -130,6 +130,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
                     startActivity(appointDoubleIntent);
                 }
+               // finish();
             }
         });
 
@@ -191,9 +192,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             double_arrive_date.setVisibility(View.GONE);
             double_shiftid.setVisibility(View.GONE);
             double_shift_type.setVisibility(View.GONE);
+            double_comment.setVisibility(View.GONE);
         }
     }
-
 
     private void initRemindView() {
         TextView remind_bar = findViewById(R.id.order_setremind);
@@ -335,6 +336,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
             startActivity(appointDoubleIntent);
         }
+
+       // finish();
     }
 
     public void submitAppoint(RequestBody requestBody){

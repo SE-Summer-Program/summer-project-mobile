@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
-import com.sjtubus.activity.BaseActivity;
 import com.sjtubus.activity.OrderActivity;
-import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.ShiftInfo;
@@ -189,6 +187,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     /* 往返去程 */
                     else if (! isSecondPageFlag){
                         Intent appointDoubleIntent = new Intent(context, AppointDoubleActivity.class);
+
                         appointDoubleIntent.putExtra("single_departure_place", info_reserve.getDeparture_place());
                         appointDoubleIntent.putExtra("single_arrive_place", info_reserve.getArrive_place());
                         appointDoubleIntent.putExtra("single_departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
@@ -200,7 +199,9 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
                         appointDoubleIntent.putExtra("double_departure_date", double_date_str);
                         appointDoubleIntent.putExtra("target_page", 1);
+
                         context.startActivity(appointDoubleIntent);
+
                     }
 
                     /* 往返返程 */

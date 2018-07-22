@@ -135,7 +135,9 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
                     intent.putExtra("departure_place", departure_place_str);
                     intent.putExtra("arrive_place", arrive_place_str);
                     intent.putExtra("singleway_date", dateText);
-                    startActivity(intent);
+                   // startActivity(intent);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
                 else{
                     Intent appointIntent = new Intent(AppointDoubleActivity.this, AppointDoubleActivity.class);
@@ -307,14 +309,16 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         if (! isSecondPageFlag){
-//            String data1 = departure_place_str;
-//            String data2 = arrive_place_str;
-//            String data3 = (String) date.getText();
-//            Intent intent = new Intent(AppointDoubleActivity.this, AppointNaviActivity.class);
-//            intent.putExtra("departure_place", data1);
-//            intent.putExtra("arrive_place", data2);
-//            intent.putExtra("singleway_date", data3);
-//            startActivity(intent);
+            String data1 = departure_place_str;
+            String data2 = arrive_place_str;
+            String data3 = (String) date.getText();
+            Intent intent = new Intent(AppointDoubleActivity.this, AppointNaviActivity.class);
+            intent.putExtra("departure_place", data1);
+            intent.putExtra("arrive_place", data2);
+            intent.putExtra("singleway_date", data3);
+          //  startActivity(intent);
+            setResult(RESULT_OK, intent);
+            finish();
         }
         else{
             Intent appointIntent = new Intent(AppointDoubleActivity.this, AppointDoubleActivity.class);

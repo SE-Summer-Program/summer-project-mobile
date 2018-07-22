@@ -163,29 +163,29 @@ public class AppointNaviFragment extends BaseFragment {
                     appointIntent.putExtra("departure_place", (String) departure_place.getText());
                     appointIntent.putExtra("arrive_place", (String) arrive_place.getText());
                     appointIntent.putExtra("singleway_date", (String) singleway_date.getText());
-                   // startActivityForResult(appointIntent, 1);
-                    startActivity(appointIntent);
+                    startActivityForResult(appointIntent, 1);
+                   // startActivity(appointIntent);
                     break;
             }
         }
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (requestCode){
-//            case 1:
-//                if (resultCode == RESULT_OK){
-//                   //Log.d("appointfragment", data.getStringExtra("singleway_date"));
-//                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
-//                    departure_place.setText(data.getStringExtra("departure_place"));
-//                    arrive_place.setText(data.getStringExtra("arrive_place"));
-//                    singleway_date.setText(data.getStringExtra("singleway_date"));
-//                    //doubleway_date.setText(data.getStringExtra("doubleway_date"));
-//                }
-//            default:
-//                break;
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            case 1:
+                if (resultCode == RESULT_OK){
+                   //Log.d("appointfragment", data.getStringExtra("singleway_date"));
+                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
+                    departure_place.setText(data.getStringExtra("departure_place"));
+                    arrive_place.setText(data.getStringExtra("arrive_place"));
+                    singleway_date.setText(data.getStringExtra("singleway_date"));
+                    //doubleway_date.setText(data.getStringExtra("doubleway_date"));
+                }
+            default:
+                break;
+        }
+    }
 
     private void getCurrentDay() {
         Calendar calendar = Calendar.getInstance();
