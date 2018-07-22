@@ -10,7 +10,7 @@ import com.sjtubus.R;
 import com.sjtubus.fragment.ShiftFragment;
 import com.sjtubus.fragment.StationFragment;
 import com.sjtubus.utils.ShiftUtils;
-import com.sjtubus.widget.SchedulePagerAdapter;
+import com.sjtubus.widget.MyPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -63,7 +63,7 @@ public class ScheduleActivity extends BaseActivity {
     private void initViewPager() {
         mViewPager = findViewById(R.id.schedule_vp);
         mViewPager.setOffscreenPageLimit(4);
-        mViewPager.setAdapter(new SchedulePagerAdapter(getSupportFragmentManager(), mFragments, mTitles));
+        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), mFragments, mTitles));
     }
 
     @Override

@@ -36,7 +36,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.LoginActivity"/>
         <activity android:name=".activity.LineActivity"/>
         <activity android:name=".activity.MessageActivity"/>
         <activity android:name=".activity.ScheduleActivity"/>
@@ -50,6 +49,7 @@
         <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".activity.CollectActivity"/>
         <activity android:name=".activity.AppointDoubleActivity" />
+        <activity android:name=".activity.LoginActivity" />
 
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
