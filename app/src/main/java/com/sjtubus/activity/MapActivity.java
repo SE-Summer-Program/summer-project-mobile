@@ -1,6 +1,7 @@
 package com.sjtubus.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -36,15 +37,13 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
-
-import com.sjtubus.utils.BusLocationSimulator;
-import com.yinglan.scrolllayout.ScrollLayout;
-
+import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
 import com.sjtubus.model.response.LocationResponse;
 import com.sjtubus.model.response.StationResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.BusLocationSimulator;
 import com.sjtubus.utils.MyLocationListener;
 import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.MyMarkerClickListener;
@@ -54,7 +53,6 @@ import com.yinglan.scrolllayout.ScrollLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
@@ -103,6 +101,7 @@ public class MapActivity extends BaseActivity {
     //巴士运行相关
     private List<Marker> buses = new ArrayList<>();
     private BusLocationSimulator simulator = new BusLocationSimulator();
+    @SuppressLint("SimpleDateFormat")
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
 
     @Override
@@ -307,13 +306,11 @@ public class MapActivity extends BaseActivity {
 
                         @Override
                         public void onError(Throwable e) {
-                            e.printStackTrace();
-                            ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                            addBus(null);
                         }
                         @Override
                         public void onComplete() {
                             Log.d(TAG, "onComplete: ");
-                            //mProgressBar.setVisibility(View.GONE);
                         }
                     });
             }
@@ -323,86 +320,44 @@ public class MapActivity extends BaseActivity {
     }
 
     private void addBus(Map<String,String>locations){
-//        BusLocationSimulator simulator = new BusLocationSimulator();
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
-//        String time = simpleDateFormat.format(new Date());
-//        System.out.println(time);
-//        LatLng busLocation = simulator.getBusLocation(time);
-//        System.out.println(busLocation.toString());
         String time = simpleDateFormat.format(new Date());//目前为当前时间，也可以为任意时间
         List<BusLocationSimulator.BusLocation> busLocations = simulator.getBusLocation(time);//获得巴士坐标信息
-        for(BusLocationSimulator.BusLocation busLocation : busLocations){
-            MarkerOptions marker_temp = new MarkerOptions()
-                    .position(busLocation.location)//位置
-                    .rotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180)//角度
-                    .icon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
-                            BitmapDescriptorFactory.fromResource(R.drawable.bus_left))//图标源
-                    .scaleX(0.15f).scaleY(0.15f)//图标缩放比例
-                    .anchor(0.5f, 1.0f).zIndex(7);//锚点和纵轴坐标
-            //添加marker
-            Marker bus = (Marker) mBaiduMap.addOverlay(marker_temp);
-            buses.add(bus);
-        }
-
-        for(String key:locations.keySet()){
-            if(buses.get(key) == null){
+        if(buses.size()==0) {
+            for (BusLocationSimulator.BusLocation busLocation : busLocations) {
                 MarkerOptions marker_temp = new MarkerOptions()
-                        .position(new LatLng(Double.valueOf(locations.get(key).split(" ")[0]),
-                                             Double.valueOf(locations.get(key).split(" ")[0])))
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
+                        .position(busLocation.location)//位置
+                        .rotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180)//角度
+                        .icon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
+                                BitmapDescriptorFactory.fromResource(R.drawable.bus_left))//图标源
+                        .scaleX(0.15f).scaleY(0.15f)//图标缩放比例
+                        .anchor(0.5f, 1.0f).zIndex(7);//锚点和纵轴坐标
                 //添加marker
-                buses.put(key,(Marker) mBaiduMap.addOverlay(marker_temp));
+                Marker bus = (Marker) mBaiduMap.addOverlay(marker_temp);
+                buses.add(bus);
             }
-            buses.get(key).setPosition(new LatLng(Double.valueOf(locations.get(key).split(" ")[0]),
-                    Double.valueOf(locations.get(key).split(" ")[0])));
+        }else{
+            for(int i = 0; i < busLocations.size(); i++){
+                Marker bus = buses.get(i);
+                BusLocationSimulator.BusLocation busLocation = busLocations.get(i);
+                bus.setPosition(busLocations.get(i).location);
+                bus.setRotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180);
+                bus.setIcon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
+                        BitmapDescriptorFactory.fromResource(R.drawable.bus_left));
+            }
         }
 
-        BusLocationSimulator simulator = new BusLocationSimulator();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
-        String time = simpleDateFormat.format(new Date());
-        System.out.println(time);
-        BusLocationSimulator.BusLocation busLocation = simulator.getBusLocation(time);
-
-        MarkerOptions marker_temp = new MarkerOptions()
-                .position(busLocation.location)
-                .rotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180)
-                .icon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
-                        BitmapDescriptorFactory.fromResource(R.drawable.bus_left))
-                .scaleX(0.5f).scaleY(0.5f)
-                .anchor(0.5f, 1.0f).zIndex(7);
-        //添加marker
-        Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
-        //List<LatLng> points = simulator.points;
-        //显示所有途经点
-        /*for(LatLng step:points){
-            MarkerOptions p = new MarkerOptions()
-                    .position(step)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_geo)).anchor(0.5f, 0.5f).zIndex(7);
-            //添加marker
-            mBaiduMap.addOverlay(p);
-            //Toast.makeText(MapActivity.this, step.getEntrance().getLocation().toString(), Toast.LENGTH_SHORT).show();
-        }*/
-    }
-
-    private void upDateBus(){
-        final TimerTask task = new TimerTask(){
-            @Override
-            public void run(){
-                //获得当前巴士位置
-                String time = simpleDateFormat.format(new Date());//目前为当前时间，也可以为任意时间
-                List<BusLocationSimulator.BusLocation> busLocations = simulator.getBusLocation(time);//获得巴士坐标信息
-                for(int i = 0; i < busLocations.size(); i++){
-                    Marker bus = buses.get(i);
-                    BusLocationSimulator.BusLocation busLocation = busLocations.get(i);
-                    bus.setPosition(busLocations.get(i).location);
-                    bus.setRotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180);
-                    bus.setIcon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
-                            BitmapDescriptorFactory.fromResource(R.drawable.bus_left));
-                }
-            }
-        };
-        ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
-        pool.scheduleAtFixedRate(task, 0 , 3000, TimeUnit.MILLISECONDS);
+//        for(String key:locations.keySet()){
+//            if(buses.get(key) == null){
+//                MarkerOptions marker_temp = new MarkerOptions()
+//                        .position(new LatLng(Double.valueOf(locations.get(key).split(" ")[0]),
+//                                             Double.valueOf(locations.get(key).split(" ")[0])))
+//                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
+//                //添加marker
+//                buses.put(key,(Marker) mBaiduMap.addOverlay(marker_temp));
+//            }
+//            buses.get(key).setPosition(new LatLng(Double.valueOf(locations.get(key).split(" ")[0]),
+//                    Double.valueOf(locations.get(key).split(" ")[0])));
+//        }
     }
 
     private void initBitmap(){
