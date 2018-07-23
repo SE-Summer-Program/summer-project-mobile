@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<!--<ScrollView-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:background="@color/shallow_gray">-->
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +19,8 @@
         android:background="@color/primary_red"
         app:titleTextColor="@color/primary_white"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height">
+        android:layout_height="@dimen/toolbar_height"
+        android:layout_alignParentTop="true">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -23,19 +30,44 @@
             android:text="@string/gps_position"/>
     </android.support.v7.widget.Toolbar>
 
-    <Button
-        android:id="@+id/position_startbtn"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text = "开始"/>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_position"
+        android:orientation="vertical">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:cursorVisible="false"
-        android:inputType="none"
-        android:id="@+id/position_edittext"
-        android:background="@color/primary_gray"
-        android:textColor="@color/primary_white"/>
+        <TextView
+            android:id="@+id/position_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary_red"
+            android:textColor="@color/primary_white"
+            android:textStyle="bold"
+            android:textSize="@dimen/middleText"
+            android:padding="5dp"
+            android:gravity="center" />
 
-</LinearLayout>
+        <com.sjtubus.utils.RippleImageView
+            android:id="@+id/position_rippleImageView"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:background="@color/primary_red"
+            app:show_spacing_time="800"
+            app:imageViewWidth="20dp"
+            app:imageViewHeigth="20dp"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:focusable="true">
+        </com.sjtubus.utils.RippleImageView>
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/position_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
+<!--</ScrollView>-->

@@ -66,4 +66,7 @@ public interface BusApi {
 
     @POST("/appointment/verify")
     Observable<HttpResponse> verifyUser(@Body RequestBody info);
+
+    @POST("/locate")
+    Observable<HttpResponse> postLocation(@Body RequestBody location);
 }

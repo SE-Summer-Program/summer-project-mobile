@@ -54,7 +54,7 @@
         <activity android:name=".activity.CollectActivity"/>
         <activity android:name=".activity.AppointDoubleActivity" />
         <activity android:name=".activity.PositionActivity" />
-        <activity android:name=".activity.GPSPositionActivity" />
+        <!--<activity android:name=".activity.GPSPositionActivity" />-->
 
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
