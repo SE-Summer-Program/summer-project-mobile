@@ -3,7 +3,6 @@ package com.sjtubus.activity;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -12,10 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.RelativeLayout;
-import android.widget.PopupWindow;
-import android.view.View;
-import android.view.LayoutInflater;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -29,13 +24,10 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
-import com.baidu.mapapi.overlayutil.OverlayManager;
-import com.baidu.mapapi.search.core.RouteLine;
 import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.route.DrivingRouteLine;
 import com.baidu.mapapi.search.route.BikingRouteResult;
+import com.baidu.mapapi.search.route.DrivingRouteLine;
 import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
-import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.search.route.DrivingRouteResult;
 import com.baidu.mapapi.search.route.IndoorRouteResult;
 import com.baidu.mapapi.search.route.MassTransitRouteResult;
@@ -44,28 +36,27 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
-
-import com.sjtubus.utils.BusLocationSimulator;
-import com.yinglan.scrolllayout.ScrollLayout;
-
 import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
 import com.sjtubus.model.response.StationResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.BusLocationSimulator;
 import com.sjtubus.utils.MyLocationListener;
 import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.MyMarkerClickListener;
-import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.ToastUtils;
 import com.yinglan.scrolllayout.ScrollLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -92,9 +83,8 @@ public class MapActivity extends BaseActivity {
     private List<Station> stations = new ArrayList<>();
     private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<>();
     private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
-    private MyMapStatusChangeListener mMapStatusChangeListener = null;
-//    private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<String, BitmapDescriptor>();
-//    private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
+    //private Map<String,BitmapDescriptor> bitmaps = new ArrayMap<String, BitmapDescriptor>();
+    //private BaiduMap.OnMarkerClickListener mMarkClickListener = null;
 
     //搜索相关
     private RoutePlanSearch mSearch = null;
@@ -105,6 +95,8 @@ public class MapActivity extends BaseActivity {
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
     private ScrollLayout mScrollLayout;
 
+    private Marker bus;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +106,7 @@ public class MapActivity extends BaseActivity {
         initView();
         initLocation();
         retrieveData();
-        //initRoutePlan();
-        //addMarker();
+        startBus();
     }
 
     public int getContentViewId(){
@@ -283,6 +274,20 @@ public class MapActivity extends BaseActivity {
         mMapStatusChangeListener.setBitmaps(bitmaps);
     }
 
+    private void startBus(){
+        final TimerTask task = new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                //execute task
+                addBus();
+            }
+        };
+        ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
+        pool.scheduleAtFixedRate(task, 0 , 3000, TimeUnit.MILLISECONDS);
+    }
+
     private void addBus(){
         BusLocationSimulator simulator = new BusLocationSimulator();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
@@ -290,12 +295,14 @@ public class MapActivity extends BaseActivity {
         System.out.println(time);
         LatLng busLocation = simulator.getBusLocation(time);
         System.out.println(busLocation.toString());
-
-        MarkerOptions marker_temp = new MarkerOptions()
-                .position(busLocation)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
-        //添加marker
-        Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
+        if(bus == null){
+            MarkerOptions marker_temp = new MarkerOptions()
+                    .position(busLocation)
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
+            //添加marker
+            bus = (Marker) mBaiduMap.addOverlay(marker_temp);
+        }
+        bus.setPosition(busLocation);
 
         List<LatLng> points = simulator.points;
         //显示所有途经点
@@ -515,110 +522,6 @@ public class MapActivity extends BaseActivity {
                         //mProgressBar.setVisibility(View.GONE);
                     }
                 });
-
-//        temp = new Station("菁菁堂",31.024769,121.436316);
-//        String[] AntiClockLoop = {
-//                "07:30",
-//                "07:45",
-//                "08:00",
-//                "08:15",
-//                "08:25",
-//                "08:40",
-//                "09:00",
-//                "09:20",
-//                "09:40",
-//                "10:00",
-//                "10:20",
-//                "10:40",
-//                "11:00",
-//                "11:20",
-//                "11:40",
-//                "12:00",
-//                "13:00",
-//                "13:20",
-//                "13:40",
-//                "14:00",
-//                "14:20",
-//                "14:40",
-//                "15:00",
-//                "15:20",
-//                "15:40",
-//                "16:00",
-//                "16:20",
-//                "16:30",
-//                "17:00"};
-//        temp.setAntiClockLoop(Arrays.asList(AntiClockLoop));
-//        String[] AntiClockNonLoop = {
-//                "17:15",
-//                "17:30",
-//                "17:50",
-//                "18:00",
-//                "19:00",
-//                "20:10"
-//        };
-//        temp.setAntiClockNonLoop(Arrays.asList(AntiClockNonLoop));
-//        String[] ClockLoop = {
-//                "08:30",
-//                "08:50",
-//                "09:10",
-//                "09:30",
-//                "10:00",
-//                "10:30",
-//                "11:00",
-//                "11:30",
-//                "12:30",
-//                "13:30",
-//                "14:00",
-//                "14:30",
-//                "15:00",
-//                "15:30",
-//                "16:00"
-//        };
-//        temp.setClockLoop(Arrays.asList(ClockLoop));
-//        String[] ClockNonLoop = {
-//                "16:30"
-//        };
-//        temp.setClockNonLoop(Arrays.asList(ClockNonLoop));
-//        //setVacAntiClockLoop();
-//        //setVacAntiClockNonLoop();
-//        //setVacClockLoop();
-//        //setVacClockNonLoop();
-//        result.add(temp);
-//        temp = new Station("校医院",31.025864,121.439918);
-//        result.add(temp);
-//        temp = new Station("东上院",31.027945,121.445348);
-//        result.add(temp);
-//        temp = new Station("东中院",31.030099,121.444427);
-//        result.add(temp);
-//        temp = new Station("新图书馆",31.031666,121.44383);
-//        result.add(temp);
-//        temp = new Station("行政B楼",31.032865,121.447585);
-//        result.add(temp);
-//        temp = new Station("电信学院",31.031593,121.448681);
-//        result.add(temp);
-//        temp = new Station("凯旋门",31.029484,121.452059);
-//        result.add(temp);
-//        temp = new Station("机动学院",31.032525,121.454574);
-//        result.add(temp);
-//        temp = new Station("庙门",31.035039,121.453428);
-//        result.add(temp);
-//        temp = new Station("船建学院",31.036837,121.451376);
-//        result.add(temp);
-//        temp = new Station("文选医学楼",31.037251,121.448506);
-//        result.add(temp);
-//        temp = new Station("学生服务中心",31.034389,121.439514);
-//        result.add(temp);
-//        temp = new Station("西区学生公寓",31.03319, 121.435849);
-//        result.add(temp);
-//        temp = new Station("第四餐饮大楼",31.031604,121.433221);
-//        result.add(temp);
-//        temp = new Station("华联生活中心",31.031128,121.436792);
-//        result.add(temp);
-//        temp = new Station("包玉刚图书馆",31.029047,121.437102);
-//        result.add(temp);
-//        temp = new Station("材料学院",31.028018,121.43456);
-//        result.add(temp);
-
         return result;
     }
 }
