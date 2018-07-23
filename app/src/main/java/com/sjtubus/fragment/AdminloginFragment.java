@@ -82,7 +82,7 @@ public class AdminloginFragment extends BaseFragment implements View.OnClickList
                 .add("username",username).build();
         //登录
         RetrofitClient.getBusApi()
-                .driverlogin(requestBody)
+                .adminlogin(requestBody)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<HttpResponse>() {

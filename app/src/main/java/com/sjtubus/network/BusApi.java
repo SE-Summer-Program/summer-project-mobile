@@ -31,8 +31,11 @@ public interface BusApi {
     @POST("account/login")
     Observable<LoginResponse> login(@Body RequestBody info);
 
-    @POST("account/driverlogin")
+    @POST("driver/login")
     Observable<LoginResponse> driverlogin(@Body RequestBody info);
+
+    @POST("account/admin")
+    Observable<LoginResponse> adminlogin(@Body RequestBody info);
 
     @POST("account/logout")
     Observable<HttpResponse> logout();
