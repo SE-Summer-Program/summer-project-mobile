@@ -24,7 +24,7 @@ public class MyMapStatusChangeListener implements BaiduMap.OnMapStatusChangeList
     private ScrollLayout mScrollLayout;
     private List<Marker> markers = null;
     private Map<String,BitmapDescriptor> bitmaps = null;
-    private Float zoom;
+    private Float zoom = 16.0f;
 
     public MyMapStatusChangeListener(ScrollLayout mScrollLayout){
         this.mScrollLayout = mScrollLayout;
