@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.MenuItem;
 
 import com.sjtubus.R;
 import com.sjtubus.fragment.ShiftFragment;
 import com.sjtubus.fragment.StationFragment;
+import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.widget.SchedulePagerAdapter;
 
 import java.util.ArrayList;
@@ -34,17 +36,22 @@ public class ScheduleActivity extends BaseActivity {
     public void initView(){
         initFragments();
         initViewPager();
-        CoordinatorTabLayout mCoordinatorTabLayout = findViewById(R.id.coordinatortablayout);
+        CoordinatorTabLayout mCoordinatorTabLayout = findViewById(R.id.schedule_coordinatortablayout);
         int[] mImageArray = new int[]{
                 R.drawable.bus_background,
                 R.drawable.bus_background};
         int[] mColorArray = new int[]{
                 R.color.primary_red,
                 R.color.primary_red};
+
+        String line_name_cn = ShiftUtils.getChiLineName(line_name);
+        String line_type_cn = ShiftUtils.getChiType(line_type);
+
         mCoordinatorTabLayout.setTranslucentStatusBar(this);
-        mCoordinatorTabLayout.setTitle(line_name+"("+line_type+")")
-        .setImageArray(mImageArray, mColorArray)
-        .setupWithViewPager(mViewPager);
+        mCoordinatorTabLayout.setTitle(line_name_cn+"("+line_type_cn+")")
+                .setBackEnable(true)
+                .setImageArray(mImageArray, mColorArray)
+                .setupWithViewPager(mViewPager);
     }
 
     public void initFragments(){
@@ -62,5 +69,13 @@ public class ScheduleActivity extends BaseActivity {
     @Override
     public int getContentViewId(){
         return R.layout.activity_schedule;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

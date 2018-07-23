@@ -7,17 +7,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.v4.view.ViewCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-//import com.avos.avoscloud.AVException;
-//import com.avos.avoscloud.AVInstallation;
-//import com.avos.avoscloud.AVOSCloud;
-//import com.avos.avoscloud.PushService;
-//import com.avos.avoscloud.SaveCallback;
-//import com.mcxiaoke.packer.helper.PackerNg;
+import com.avos.avoscloud.AVAnalytics;
 import com.avos.avoscloud.AVException;
 import com.avos.avoscloud.AVInstallation;
 import com.avos.avoscloud.AVOSCloud;
@@ -28,17 +24,22 @@ import com.sjtubus.activity.MainActivity;
 import com.sjtubus.user.ReminderManager;
 import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+//import com.avos.avoscloud.AVException;
+//import com.avos.avoscloud.AVInstallation;
+//import com.avos.avoscloud.AVOSCloud;
+//import com.avos.avoscloud.PushService;
+//import com.avos.avoscloud.SaveCallback;
+//import com.mcxiaoke.packer.helper.PackerNg;
 //import com.squareup.leakcanary.LeakCanary;
 //import com.squareup.leakcanary.RefWatcher;
 //import com.tencent.bugly.Bugly;
 //import com.tencent.bugly.crashreport.CrashReport;
 //import com.tencent.stat.StatConfig;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 /**
  * Created by Allen on 2018/7/3.
@@ -109,12 +110,18 @@ public class App extends Application {
         final String appKey = "tnpkj8g2EyCFWydpDrbcXj3X";
         AVOSCloud.initialize(this, appID, appKey);
 
+        // 启用崩溃错误统计
+        AVAnalytics.enableCrashReport(this.getApplicationContext(), true);
+        AVOSCloud.setLastModifyEnabled(true);
+        AVOSCloud.setDebugLogEnabled(true);
+
         AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
             public void done(AVException e) {
                 if (e == null) {
                     // 保存成功
                     installationId = AVInstallation.getCurrentInstallation().getInstallationId();
                     // 关联  installationId 到用户表等操作……
+                    Log.i("LEANCLOUD",installationId);
                 } else {
                     // 保存失败，输出错误信息
                 }

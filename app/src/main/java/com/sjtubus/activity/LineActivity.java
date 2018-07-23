@@ -1,28 +1,26 @@
 package com.sjtubus.activity;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.app.DatePickerDialog;
 import android.widget.DatePicker;
+import android.widget.TextView;
 
 import com.sjtubus.R;
-
-import com.sjtubus.widget.LineAdapter;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
+import com.sjtubus.widget.LineAdapter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import io.reactivex.Observer;
@@ -34,6 +32,8 @@ import static android.content.ContentValues.TAG;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
+//import com.sjtubus.utils.SwipeRefreshView;
+
 public class LineActivity extends BaseActivity implements LineAdapter.OnItemClickListener{
 
     Toolbar mToolbar;
@@ -43,15 +43,20 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     SwipeRefreshLayout swipeRefresh;
     Calendar calendar;
     MyDialogListener dialogListener = new MyDialogListener();
-    private int select = 0;
+
+    TextView line_total;
 
     private String[] type_list = {"在校期-工作日", "在校期-双休日、节假日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
+    private int select = 0;
+
+    //private SwipeRefreshView mSwipeRefreshView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews();
+        //initSwipeRefreshView();
     }
 
     public int getContentViewId(){
@@ -69,11 +74,13 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
             }
         });
 
+        line_total = findViewById(R.id.line_total);
+
         recyclerView = findViewById(R.id.recycle_schedule);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL); //设置为垂直布局，默认
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); //分割线
+       // recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); //分割线
         adapter = new LineAdapter(this);
         adapter.setItemClickListener(this);
         recyclerView.setAdapter(adapter);
@@ -87,7 +94,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
             public void onTouchEvent(RecyclerView rv, MotionEvent e) {
 
             }
-
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
@@ -96,13 +102,14 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         String type = "NormalWorkday";
         setAndShowSchedule(type);
 
-        swipeRefresh = (SwipeRefreshLayout)findViewById(R.id.refresh_schedule);
+        swipeRefresh = findViewById(R.id.refresh_schedule);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshSchedule();
             }
         });
+
     }
 
     public void setAndShowSchedule(String type){
@@ -121,6 +128,10 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
                     adapter.setDataList(response.getLineInfos());
+
+                    int total_amount = response.getLineInfos().size();
+                    String line_info = "今日共有 " + total_amount +  " 条线路正常运行";
+                    line_total.setText(line_info);
                 }
 
                 @Override
@@ -135,7 +146,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 }
             });
     }
-
 
     @Override
     public void onItemClick(View view) {
@@ -174,13 +184,16 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
                     adapter.setDataList(response.getLineInfos());
+
                     swipeRefresh.setRefreshing(false);
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
+
                     swipeRefresh.setRefreshing(false);
+
                     ToastUtils.showShort("网络请求失败！请检查你的网络！");
                 }
 
@@ -208,34 +221,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     }
 
 
-    public String getTypes(){
-        calendar = Calendar.getInstance();
-        //date = calendar.getTime();
-        boolean isWeekendFlag = isWeekend(calendar);
-        boolean isHoildayFlag = isHoilday(calendar);
-        if (!isHoildayFlag && !isWeekendFlag){
-            return "NormalWorkday";
-        }
-        else if (!isHoildayFlag){
-            return "NormalWeekendAndLegalHoilday";
-        }
-        else if (!isWeekendFlag){
-            return "HoildayWorkday";
-        }
-        else{
-            return "HoildayWeekend";
-        }
-    }
-    public boolean isWeekend(Calendar calendar){
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-        return (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
-    }
-    public boolean isHoilday(Calendar calendar){
-        int month = calendar.get(Calendar.MONTH);
-        return (month == Calendar.FEBRUARY || month == Calendar.JUNE
-                || month == Calendar.JULY);
-    }
-
     public void showDatePickDlg(){
         calendar = Calendar.getInstance();
         DatePickerDialog datePickerDialog = new DatePickerDialog(LineActivity.this, new DatePickerDialog.OnDateSetListener() {
@@ -248,4 +233,57 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         datePickerDialog.show();
 
     }
+
+
+//    private void initSwipeRefreshView(){
+//        mSwipeRefreshView = (SwipeRefreshView) findViewById(R.id.srl);
+//        // 设置颜色属性的时候一定要注意是引用了资源文件还是直接设置16进制的颜色，因为都是int值容易搞混
+//        // 设置下拉进度的背景颜色，默认就是白色的
+//        mSwipeRefreshView.setProgressBackgroundColorSchemeResource(android.R.color.white);
+//        // 设置下拉进度的主题颜色
+//        mSwipeRefreshView.setColorSchemeResources(R.color.colorAccent,
+//                android.R.color.holo_blue_bright, R.color.colorPrimaryDark,
+//                android.R.color.holo_orange_dark, android.R.color.holo_red_dark, android.R.color.holo_purple);
+//
+//        mSwipeRefreshView.setItemCount(20);
+//
+//        // 手动调用,通知系统去测量
+//        mSwipeRefreshView.measure(0, 0);
+//        mSwipeRefreshView.setRefreshing(true);
+//        initEvent();
+//    }
+//
+//    private void initEvent() {
+//
+//        // 下拉时触发SwipeRefreshLayout的下拉动画，动画完毕之后就会回调这个方法
+//        mSwipeRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshSchedule()
+//            }
+//        });
+//
+//        // 设置下拉加载更多
+//        mSwipeRefreshView.setOnLoadMoreListener(new SwipeRefreshView.OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore() {
+//                loadMoreData();
+//            }
+//        });
+//    }
+//
+//    private void loadMoreData() {
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                mList.clear();
+//                mList.addAll(DataResource.getMoreData());
+//                Toast.makeText(MainActivity.this, "加载了" + 20 + "条数据", Toast.LENGTH_SHORT).show();
+//
+//                // 加载完数据设置为不加载状态，将加载进度收起来
+//                mSwipeRefreshView.setLoading(false);
+//            }
+//        }, 2000);
+//    }
 }

@@ -14,6 +14,8 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <!--Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色-->
         <item name="android:statusBarColor">@android:color/transparent</item>
+
+        <!--<item name="android:windowTranslucentNavigation">false</item>-->
     </style>
 
     <!-->线条<-->
@@ -32,17 +34,24 @@
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
+    <style name="line_personinfo" parent="line_vertical">
+        <item name="android:layout_width">340dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@color/shallow_red</item>
+    </style>
+
     <style name="editText_base">
         <item name="android:textSize">16sp</item>
         <item name="android:padding">8dp</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:drawablePadding">16dp</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">16dp</item>
         <item name="android:textCursorDrawable">@null</item>
         <item name="android:minHeight">@dimen/normalButtonHeight</item>
         <item name="android:textColor">@color/primary_red</item>
         <item name="android:textColorHint">@color/primary_gray</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="colorControlNormal">@color/primary_gray</item>
+        <item name="colorControlNormal">@color/primary_red</item>
         <item name="colorControlActivated">@color/primary_red</item>
     </style>
 
@@ -69,5 +78,10 @@
 
     <style name="Theme.ToolBar.Menu" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+    </style>
+
+    <style name="MyCheckBox" parent="@android:style/Widget.Material.CompoundButton.CheckBox">
+        <item name="android:colorControlActivated">@color/primary_white</item>
+        <item name="android:colorControlNormal">@color/primary_white</item>
     </style>
 </resources>

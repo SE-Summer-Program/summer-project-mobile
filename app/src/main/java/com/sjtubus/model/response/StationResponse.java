@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 public class StationResponse extends HttpResponse {
     @SerializedName("stations")
-    private ArrayList<String> stations;
+    private ArrayList<Station> stations;
 
-    public ArrayList<String> getStations() {
+    public ArrayList<Station> getStations() {
         return stations;
     }
 
-    public void setStations(ArrayList<String> stations) {
+    public void setStations(ArrayList<Station> stations) {
         this.stations = stations;
     }
 }

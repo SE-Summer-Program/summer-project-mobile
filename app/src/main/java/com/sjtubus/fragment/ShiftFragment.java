@@ -1,6 +1,7 @@
 package com.sjtubus.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -29,8 +30,10 @@ import static android.content.ContentValues.TAG;
 public class ShiftFragment extends BaseFragment {
     private static ShiftFragment mFragment = null;
 
-    private String type = "NormalWorkday";
-    private String line_name = "MinToXu";
+//    private String type = "NormalWorkday";
+//    private String line_name = "MinToXu";
+    private String type;
+    private String line_name;
 
     private ShiftAdapter mAdapter;
 
@@ -48,7 +51,7 @@ public class ShiftFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shift, container, false);
 
         RecyclerView mRecyclerView = view.findViewById(R.id.shift_view);

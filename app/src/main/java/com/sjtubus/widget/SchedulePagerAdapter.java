@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 
 public class SchedulePagerAdapter extends FragmentPagerAdapter {
-    private ArrayList<Fragment> mFragments = new ArrayList<>();
+    private ArrayList<Fragment> mFragments;
     private final String[] mTitles;
 
     public SchedulePagerAdapter(FragmentManager fm, ArrayList<Fragment> mFragments, String[] mTitles) {

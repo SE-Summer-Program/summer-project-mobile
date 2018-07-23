@@ -1,5 +1,6 @@
 package com.sjtubus.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -41,9 +42,11 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
         init(context);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void init(final Context context) {
 
         final Drawable drawable = ContextCompat.getDrawable(context, R.mipmap.icon_delete_64);
+        assert drawable != null;
         final Drawable wrappedDrawable = DrawableCompat.wrap(drawable); //Wrap the drawable so
         // that it can be tinted pre Lollipop
         DrawableCompat.setTint(wrappedDrawable, getCurrentHintTextColor());

@@ -1,6 +1,7 @@
 package com.sjtubus.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,11 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sjtubus.R;
-import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.model.response.StationResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
-import com.sjtubus.widget.ShiftAdapter;
 import com.sjtubus.widget.StationAdapter;
 
 import io.reactivex.Observer;
@@ -44,7 +43,7 @@ public class StationFragment extends BaseFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_shift, container, false);
         RecyclerView mRecyclerView = view.findViewById(R.id.shift_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
@@ -61,8 +60,8 @@ public class StationFragment extends BaseFragment {
     private void retrieveData() {
         RetrofitClient.getBusApi()
             .getLineStation(line_name)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io()) //在子线程里运行请求
+            .observeOn(AndroidSchedulers.mainThread()) //请求结束 主线程回调
             .subscribe(new Observer<StationResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
@@ -88,4 +87,6 @@ public class StationFragment extends BaseFragment {
                 }
             });
     }
+
+
 }

@@ -17,6 +17,9 @@ package com.sjtubus.network.cookie;
  * limitations under the License.
  */
 
+import android.support.annotation.NonNull;
+import android.util.Log;
+
 import com.sjtubus.App;
 
 import java.util.ArrayList;
@@ -53,13 +56,13 @@ public class BusCookieJar implements CookieJar {
     }
 
     @Override
-    synchronized public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+    synchronized public void saveFromResponse(@NonNull HttpUrl url, @NonNull List<Cookie> cookies) {
         cache.addAll(cookies);
         persistor.saveAll(cookies);
     }
 
     @Override
-    synchronized public List<Cookie> loadForRequest(HttpUrl url) {
+    synchronized public List<Cookie> loadForRequest(@NonNull HttpUrl url) {
         List<Cookie> removedCookies = new ArrayList<>();
         List<Cookie> validCookies = new ArrayList<>();
 
@@ -71,6 +74,7 @@ public class BusCookieJar implements CookieJar {
                 it.remove();
 
             } else if (currentCookie.matches(url)) {
+                Log.i(url.toString(),currentCookie.toString());
                 validCookies.add(currentCookie);
             }
         }

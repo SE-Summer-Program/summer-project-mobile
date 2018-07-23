@@ -26,6 +26,14 @@
         android:layout_width="match_parent"
         android:layout_height="160dp" />
 
+    <com.stx.xmarqueeview.XMarqueeView
+        android:id="@+id/billboard"
+        android:layout_width="match_parent"
+        app:isSingleLine="true"
+        app:isSetAnimDuration="true"
+        android:layout_height="25dp"
+        />
+
     <LinearLayout
         android:baselineAligned="false"
         android:layout_width="match_parent"
@@ -42,8 +50,18 @@
                 android:id="@+id/reserve_btn"
                 android:background="#ffffff"
                 android:drawableTop="@drawable/reserve"
-                android:text="预约班车"
-                android:paddingTop="@dimen/iconPadding"
+                android:text="@string/reserve_btn"
+                android:paddingTop="@dimen/icon_padding"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/schedule_btn"
+                android:background="#ffffff"
+                android:drawableTop="@drawable/schedule"
+                android:text="@string/schedule_btn"
+                android:paddingTop="@dimen/icon_padding"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
@@ -51,19 +69,9 @@
             <Button
                 android:id="@+id/record_btn"
                 android:background="#ffffff"
-                android:paddingTop="@dimen/iconPadding"
+                android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@drawable/record"
-                android:text="预约记录"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"/>
-            <Button
-                android:id="@+id/position_btn"
-                android:background="#ffffff"
-                android:paddingTop="@dimen/iconPadding"
-                android:drawableTop="@drawable/position"
-                android:text="司机定位"
+                android:text="@string/record_btn"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
@@ -76,22 +84,13 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <Button
-                android:id="@+id/schedule_btn"
-                android:background="#ffffff"
-                android:drawableTop="@drawable/schedule"
-                android:text="班次信息"
-                android:paddingTop="@dimen/iconPadding"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"/>
+
             <Button
                 android:id="@+id/map_btn"
                 android:background="#ffffff"
-                android:paddingTop="@dimen/iconPadding"
+                android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@drawable/map"
-                android:text="路线查询"
+                android:text="@string/map_btn"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
@@ -99,9 +98,19 @@
             <Button
                 android:id="@+id/navigate_btn"
                 android:background="#ffffff"
-                android:paddingTop="@dimen/iconPadding"
+                android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@drawable/navigate"
-                android:text="实时位置"
+                android:text="@string/navigate_btn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/position_btn"
+                android:background="#ffffff"
+                android:paddingTop="@dimen/icon_padding"
+                android:drawableTop="@drawable/position"
+                android:text="@string/position_btn"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"

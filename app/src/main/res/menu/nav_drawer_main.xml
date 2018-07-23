@@ -11,6 +11,10 @@
             android:color="@color/avoscloud_timestamp_gray"
             android:title="@string/reserve_record" />
         <item
+            android:id="@+id/navigation_item_collect"
+            android:icon="@mipmap/like"
+            android:title="@string/collect" />
+        <item
             android:id="@+id/navigation_item_message"
             android:icon="@mipmap/message"
             android:color="@color/avoscloud_timestamp_gray"
@@ -20,6 +24,14 @@
             android:icon="@mipmap/idea"
             android:color="@color/avoscloud_timestamp_gray"
             android:title="@string/idea" />
+        <item
+            android:id="@+id/navigation_item_setting"
+            android:icon="@mipmap/setting"
+            android:title="@string/setting" />
+        <item
+            android:id="@+id/navigation_item_scan"
+            android:icon="@mipmap/icon_qr_128"
+            android:title="@string/scanQrcode" />
     </group>
     <!--<item-->
         <!--android:id="@+id/navigation_subheader"-->

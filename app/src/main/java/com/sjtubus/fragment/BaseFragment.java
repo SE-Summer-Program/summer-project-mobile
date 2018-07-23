@@ -17,7 +17,7 @@ public class BaseFragment extends Fragment {
         return this.compositeDisposable;
     }
 
-
+    //保持生命周期一致
     public void addDisposable(Disposable s) {
         if (this.compositeDisposable == null) {
             this.compositeDisposable = new CompositeDisposable();

@@ -2,6 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.mob.sdk'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'yaozihang'
+            keyPassword '123456yzh'
+           // storeFile file('C:/Users/wxw/Desktop/map.jks')
+            storePassword '123456yzh'
+        }
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.sjtubus"
@@ -9,12 +17,16 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner "
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.config
+        }
+        debug {
+            //signingConfig signingConfigs.config
         }
     }
     buildToolsVersion '27.0.3'
@@ -33,46 +45,47 @@ MobSDK {
     appKey "26b5786c3909c"
     appSecret "7a1856615364cf66ead4d76019bee5ad"
     SMSSDK {}
-    ShareSDK {
-        devInfo {
-            SinaWeibo {
-                appKey "568898243"
-                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
-                callbackUri "http://www.sharesdk.cn"
-                shareByAppClient true
-            }
-            ShortMessage {}
-            Wechat {
-                appId "wx4868b35061f87885"
-                appSecret "64020361b8ec4c99936c0e3999a9f249"
-                userName "gh_afb25ac019c9"
-                path "pages/index/index.html?id=1"
-                withShareTicket true
-                miniprogramType 2
-                bypassApproval false
-            }
-            QQ {
-                appId "100371282"
-                appKey "aed9b0303e3ed1e27bae87c33761161d"
-                shareByAppClient true
-                bypassApproval false
-            }
-        }
-    }
-    UMSSDK {}
+//    ShareSDK {
+//        devInfo {
+//            SinaWeibo {
+//                appKey "568898243"
+//                appSecret "38a4f8204cc784f81f9f0daaf31e02e3"
+//                callbackUri "http://www.sharesdk.cn"
+//                shareByAppClient true
+//            }
+//            ShortMessage {}
+//            Wechat {
+//                appId "wx4868b35061f87885"
+//                appSecret "64020361b8ec4c99936c0e3999a9f249"
+//                userName "gh_afb25ac019c9"
+//                path "pages/index/index.html?id=1"
+//                withShareTicket true
+//                miniprogramType 2
+//                bypassApproval false
+//            }
+//            QQ {
+//                appId "100371282"
+//                appKey "aed9b0303e3ed1e27bae87c33761161d"
+//                shareByAppClient true
+//                bypassApproval false
+//            }
+//        }
+//    }
+//    UMSSDK {}
 }
 
 dependencies {
-
+    implementation 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-
+    implementation 'com.android.support:percent:27.1.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation "com.squareup.okhttp3:okhttp:3.10.0"
-    implementation "com.squareup.okhttp3:logging-interceptor:3.10.0"
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
@@ -80,18 +93,31 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'org.greenrobot:eventbus:3.1.1'
 
+    //扫码相关
+    implementation 'com.google.zxing:core:3.3.0'
+    implementation "com.journeyapps:zxing-android-embedded:3.3.0"
+
     //自定义的view
     implementation 'com.youth.banner:banner:1.4.10'
+    implementation 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
     implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
+    implementation 'com.github.f0ris.sweetalert:library:1.5.1'
+    implementation 'com.xhb:xmarqueeview:2.0.0'
 
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
     // LeanCloud 用户反馈包
     implementation 'cn.leancloud.android:avoscloud-feedback:v4.6.4@aar'
     // 推送与实时聊天需要的包
-    implementation ('cn.leancloud.android:avoscloud-push:v4.6.4@aar'){transitive = true}
+    implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
+    implementation 'cn.leancloud.android:Java-WebSocket:1.2.0-leancloud'
+
+    //avoscloud-statistics 为 LeanCloud 统计包
+    implementation 'cn.leancloud.android:avoscloud-statistics:v3.+@aar'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation files('libs/BaiduLBS_Android.jar')
+    implementation files('libs/IndoorscapeAlbumPlugin.jar')
 }

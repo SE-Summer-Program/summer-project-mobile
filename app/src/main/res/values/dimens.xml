@@ -20,7 +20,7 @@
     <dimen name="basePadding">12dp</dimen>
     <dimen name="footerPadding">11dp</dimen>
     <dimen name="noPadding">0dp</dimen>
-    <dimen name="iconPadding">25dp</dimen>
+    <dimen name="icon_padding">25dp</dimen>
     <dimen name="textPadding">5dp</dimen>
     <dimen name="toolbarPaddingTop">15dp</dimen>
 
@@ -39,6 +39,9 @@
 
     <!--字体大小-->
     <dimen name="smallText">14sp</dimen>
+    <dimen name="middlesmallText">16sp</dimen>
     <dimen name="middleText">18sp</dimen>
+    <dimen name="middlebigText">20sp</dimen>
     <dimen name="bigText">22sp</dimen>
+
 </resources>

@@ -25,3 +25,8 @@
 -keep class cn.smssdk.**{*;}
 -keep class cn.sharesdk.**{*;}
 -dontwarn com.mob.**
+
+#防止百度地图有关类被混淆导致网络错误等问题
+-keep class com.baidu.** {*;}
+-keep class vi.com.** {*;}
+-dontwarn com.baidu.**

@@ -7,7 +7,7 @@ package com.sjtubus.user;
 public class UserChangeEvent {
     private boolean login;
 
-    public UserChangeEvent(boolean login) {
+    UserChangeEvent(boolean login) {
         this.login = login;
     }
 
