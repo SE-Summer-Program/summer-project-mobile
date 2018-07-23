@@ -271,18 +271,21 @@ public class MapActivity extends BaseActivity {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
         String time = simpleDateFormat.format(new Date());
         System.out.println(time);
-        LatLng busLocation = simulator.getBusLocation(time);
-        System.out.println(busLocation.toString());
+        BusLocationSimulator.BusLocation busLocation = simulator.getBusLocation(time);
 
         MarkerOptions marker_temp = new MarkerOptions()
-                .position(busLocation)
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
+                .position(busLocation.location)
+                    .rotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180)
+                        .icon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
+                                                         BitmapDescriptorFactory.fromResource(R.drawable.bus_left))
+                            .scaleX(0.5f).scaleY(0.5f)
+                                .anchor(0.5f, 1.0f).zIndex(7);
         //添加marker
         Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
 
-        List<LatLng> points = simulator.points;
         //显示所有途经点
-        /*for(LatLng step:points){
+        /*List<LatLng> points = simulator.points;
+        for(LatLng step:points){
             MarkerOptions p = new MarkerOptions()
                     .position(step)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_geo)).anchor(0.5f, 0.5f).zIndex(7);

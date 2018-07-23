@@ -11,16 +11,23 @@ import java.util.List;
 public class BusLocationSimulator {
     private Double totalTime = 1080d;//校车开一圈用时为18分钟
     private Double totalLength = 0d;//线路总长度
-    public List<LatLng> points = new ArrayList<LatLng>();//存放所有途经点的位置
     private List<Double> distance = new ArrayList<Double>();//存放所有相邻距离
     private List<String> timeTable = new ArrayList<String>();
-    private LatLng result = new LatLng(31.024766399515144,121.43630746466236);//初始点设为菁菁堂
+    public List<LatLng> points = new ArrayList<LatLng>();//存放所有途经点的位置
+    public class BusLocation{
+        public LatLng location;
+        public float rotate;
+        public BusLocation(LatLng location,float rotate){
+            this.location = location;
+            this.rotate = rotate;
+        }
+    }
 
     public BusLocationSimulator(){
         setData();
     }
 
-    public LatLng getBusLocation(String time){
+    public BusLocation getBusLocation(String time){
         //计算当前巴士已运行的时间
         SimpleDateFormat simpleFormat = new SimpleDateFormat("HH-mm-ss");
         Double s1 = -1d;//s1为较早发车的班次
@@ -39,15 +46,24 @@ public class BusLocationSimulator {
         //将已运行时间转化为已行驶路程
         Double length = s1 / totalTime * totalLength;
         //计算已经行驶到何处
+        BusLocation result = new BusLocation(new LatLng(31.024766399515144,121.43630746466236),0);//初始点设为菁菁堂
         for(int i = 0; i < distance.size(); i++){
             if(length < distance.get(i)){
                 Double latitude_tmp = (points.get(i + 1).latitude - points.get(i).latitude) * length / distance.get(i) + points.get(i).latitude;
                 Double longitude_tmp = (points.get(i + 1).longitude - points.get(i).longitude) * length / distance.get(i) + points.get(i).longitude;
-                result = new LatLng(latitude_tmp, longitude_tmp);
+                Float rotate = Rotate(points.get(i), points.get(i + 1));
+                result = new BusLocation(new LatLng(latitude_tmp, longitude_tmp), rotate);
                 break;
             }
             else length -= distance.get(i);
         }
+        return result;
+    }
+
+    private Float Rotate(LatLng x, LatLng y){
+        Double v = (y.latitude - x.latitude) / (y.longitude - x.longitude);
+        float result = (float) (Math.atan(v) / Math.PI * 180);
+        if(y.longitude < x.longitude) result += 180;
         return result;
     }
 
