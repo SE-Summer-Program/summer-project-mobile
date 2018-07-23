@@ -1,6 +1,5 @@
 package com.sjtubus.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,23 +37,16 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
     private EditText phone_edit,password_edit;
 
     private static UserloginFragment mFragment = null;
-    private Activity mContext;
-
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
     }
 
-    public static UserloginFragment getInstance(Activity context) {
+    public static UserloginFragment getInstance() {
         if(mFragment == null){
             mFragment = new UserloginFragment();
-            mFragment.setActivity(context);
         }
         return mFragment;
-    }
-
-    public void setActivity(Activity mContext){
-        this.mContext = mContext;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,14 +66,14 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
     public void onClick(View view){
         switch (view.getId()){
             case R.id.txt_register:
-                Intent registerIntent = new Intent(mContext,RegisterActivity.class);
+                Intent registerIntent = new Intent(getActivity(),RegisterActivity.class);
                 startActivity(registerIntent);
                 break;
             case R.id.btn_login:
                 userLogin();
                 break;
             case R.id.jaccount_btn:
-                Intent jaccountIntent = new Intent(mContext,JaccountActivity.class);
+                Intent jaccountIntent = new Intent(getActivity(),JaccountActivity.class);
                 startActivity(jaccountIntent);
                 break;
             case R.id.txt_forget_password:
@@ -119,7 +111,7 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
                         if(response.getError()==0){
                             //更新用户信息
                             UserManager.getInstance().refresh();
-                            mContext.finish();
+                            if(getActivity()!=null) getActivity().finish();
                         }
                         ToastUtils.showShort(response.getMsg());
                     }

@@ -25,8 +25,8 @@ import com.baidu.mapapi.model.LatLng;
 import com.sjtubus.R;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
-import com.sjtubus.utils.RippleImageView;
 import com.sjtubus.utils.ToastUtils;
+import com.sjtubus.widget.RippleImageView;
 
 import java.util.ArrayList;
 import java.util.List;

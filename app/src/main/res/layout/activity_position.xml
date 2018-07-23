@@ -47,7 +47,7 @@
             android:padding="5dp"
             android:gravity="center" />
 
-        <com.sjtubus.utils.RippleImageView
+        <com.sjtubus.widget.RippleImageView
             android:id="@+id/position_rippleImageView"
             android:layout_width="match_parent"
             android:layout_height="130dp"
@@ -58,7 +58,7 @@
             android:layout_centerHorizontal="true"
             android:clickable="true"
             android:focusable="true">
-        </com.sjtubus.utils.RippleImageView>
+        </com.sjtubus.widget.RippleImageView>
 
         <com.baidu.mapapi.map.MapView
             android:id="@+id/position_map"

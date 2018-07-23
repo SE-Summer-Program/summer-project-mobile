@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.model.BusMessage;
+import com.sjtubus.model.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHolder> {
-    private List<BusMessage> messages;
+    private List<Message> messages;
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -36,7 +36,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         }
     }
 
-    public void setDataList(List<BusMessage> list) {
+    public void setDataList(List<Message> list) {
         messages = list;
         notifyDataSetChanged();
     }
@@ -55,12 +55,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MessageAdapter.ViewHolder holder, int position) {
-        BusMessage message = messages.get(position);
-        holder.messageTitle.setText(message.getTitle());
-        holder.messageContent.setText(message.getContent());
-        holder.messageSender.setText(message.getSender());
-        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.CHINA);
-        String time=format.format(message.getTime());
+        Message message = messages.get(position);
+        holder.messageTitle.setText(message.getMessageTitle());
+        holder.messageContent.setText(message.getMessageContent());
+        holder.messageSender.setText(message.getMessageType());
+        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd",Locale.CHINA);
+        String time=format.format(message.getStartDate());
         holder.messageTime.setText(time);
     }
 

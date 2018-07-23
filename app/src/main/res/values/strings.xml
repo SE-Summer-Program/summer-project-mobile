@@ -77,4 +77,5 @@
     <string name="driverlogin">司机登录</string>
     <string name="adminlogin">管理员登陆</string>
     <string name="gps_position">司机定位</string>
+    <string name="billboard">公告</string>
 </resources>

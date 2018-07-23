@@ -24,7 +24,7 @@ import static android.content.ContentValues.TAG;
 public class MessageActivity extends BaseActivity {
 
     private ProgressBar mProgressBar;
-    MessageAdapter mAdapter;
+    private MessageAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
