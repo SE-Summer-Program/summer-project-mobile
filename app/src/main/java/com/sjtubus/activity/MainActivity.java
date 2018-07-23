@@ -189,7 +189,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(recordIntent);
                 break;
             case R.id.position_btn:
-                ToastUtils.showShort("司机定位功能还不能使用哦~");
+                //ToastUtils.showShort("司机定位功能还不能使用哦~");
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
+                Intent positionIntent = new Intent(MainActivity.this, PositionActivity.class);
+                startActivity(positionIntent);
                 break;
             case R.id.schedule_btn:
                 Intent scheduleIntent = new Intent(MainActivity.this, LineActivity.class);
