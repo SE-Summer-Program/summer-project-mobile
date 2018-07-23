@@ -12,8 +12,7 @@
         android:orientation="horizontal"
         android:background="@color/shallow_white"
         android:layout_marginTop="@dimen/smallPadding"
-        android:layout_marginHorizontal="@dimen/largePadding"
-        android:paddingHorizontal="@dimen/screenPadding">
+        android:paddingStart="@dimen/largePadding">
 
         <ImageView
             android:layout_width="50dp"
@@ -29,9 +28,9 @@
                 android:id="@+id/line_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:textSize="20dp"
-                android:layout_marginLeft="@dimen/fab_margin"
+                android:layout_gravity="start"
+                android:textSize="20sp"
+                android:layout_marginStart="@dimen/fab_margin"
                 android:layout_marginTop="@dimen/fab_margin"
                 android:textStyle="bold"/>
             <TextView

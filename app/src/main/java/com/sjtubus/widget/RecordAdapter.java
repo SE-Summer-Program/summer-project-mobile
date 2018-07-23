@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.RecordActivity;
-import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ZxingUtils;
@@ -55,7 +54,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             departuremsg = view.findViewById(R.id.record_departuremsg);
             shiftid = view.findViewById(R.id.record_shiftid);
             status = view.findViewById(R.id.record_status);
-            detailbtn = view.findViewById(R.id.record_btn);
+            //detailbtn = view.findViewById(R.id.record_btn);
             qrcode = view.findViewById(R.id.record_qrcode);
         }
     }

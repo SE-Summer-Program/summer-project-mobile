@@ -91,14 +91,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         mToolbar.setNavigationIcon(R.mipmap.person);
 
         Button reserve_btn = findViewById(R.id.reserve_btn);
-        Button record_btn = findViewById(R.id.record_btn);
+        Button scan_btn = findViewById(R.id.scan_btn);
         Button position_btn = findViewById(R.id.position_btn);
         Button schedule_btn = findViewById(R.id.schedule_btn);
         Button map_btn = findViewById(R.id.map_btn);
         Button navigate_btn = findViewById(R.id.navigate_btn);
 
         reserve_btn.setOnClickListener(this);
-        record_btn.setOnClickListener(this);
+        scan_btn.setOnClickListener(this);
         position_btn.setOnClickListener(this);
         schedule_btn.setOnClickListener(this);
         map_btn.setOnClickListener(this);
@@ -180,16 +180,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
                 break;
-            case R.id.record_btn:
+            case R.id.scan_btn:
                 if(UserManager.getInstance().getUser() == null){
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
-                startActivity(recordIntent);
+                new IntentIntegrator(this)
+                        .setOrientationLocked(false)
+                        .setCaptureActivity(SimpleScanActivity.class) // 设置自定义的activity是CustomActivity
+                        .initiateScan(); // 初始化扫描
                 break;
             case R.id.position_btn:
-                //ToastUtils.showShort("司机定位功能还不能使用哦~");
                 if(UserManager.getInstance().getUser() == null){
                     ToastUtils.showShort("请先登录~");
                     break;
@@ -267,16 +268,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             case R.id.navigation_item_setting:
                 Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(settingIntent);
-                break;
-            case R.id.navigation_item_scan:
-                if(UserManager.getInstance().getUser()==null){
-                    ToastUtils.showShort("请先登录~");
-                    break;
-                }
-                new IntentIntegrator(this)
-                    .setOrientationLocked(false)
-                    .setCaptureActivity(SimpleScanActivity.class) // 设置自定义的activity是CustomActivity
-                    .initiateScan(); // 初始化扫描
                 break;
             default:
                 break;
