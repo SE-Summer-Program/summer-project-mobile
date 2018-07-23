@@ -154,8 +154,8 @@ public class MapActivity extends BaseActivity {
 
             @Override
             public boolean onMapPoiClick(MapPoi mapPoi) {
-                //mScrollLayout.scrollToExit();
-                mScrollLayout.scrollToOpen(); //FIXME ???为啥上面那行也行
+                mScrollLayout.scrollToExit();
+                //mScrollLayout.scrollToOpen(); //FIXME ???为啥上面那行也行
                 return false;
             }
         });

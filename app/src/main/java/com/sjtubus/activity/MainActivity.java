@@ -194,7 +194,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                Intent positionIntent = new Intent(MainActivity.this, PositionActivity.class);
+                Intent positionIntent = new Intent(MainActivity.this, GPSPositionActivity.class);
                 startActivity(positionIntent);
                 break;
             case R.id.schedule_btn:
