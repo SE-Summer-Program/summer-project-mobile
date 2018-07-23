@@ -137,6 +137,7 @@
 
     <!--往返返程栏-->
     <LinearLayout
+        android:id="@+id/order_linearlayout_double"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> {
     private List<String> times;
-//    private List<String> comments;
+    private List<String> comments;
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -28,20 +28,20 @@ public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> 
         ViewHolder(View view){
             super(view);
             shiftTime = (TextView) view.findViewById(R.id.shift_time);
-//            shiftComment = (TextView) view.findViewById(R.id.shift_comment);
+            shiftComment = (TextView) view.findViewById(R.id.shift_comment);
         }
     }
 
     public void setDataList(Schedule schedule) {
         times = schedule.getScheduleTime();
-//        comments = schedule.getScheduleComment();
+        comments = schedule.getScheduleComment();
         notifyDataSetChanged();
     }
 
     public ShiftAdapter(Context context){
         this.context = context;
         this.times = new ArrayList<>();
-//        this.comments = new ArrayList<>();
+        this.comments = new ArrayList<>();
     }
 
     @NonNull
@@ -54,9 +54,10 @@ public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ShiftAdapter.ViewHolder holder, int position) {
         String departure_time = StringCalendarUtils.HHmmssToHHmm(times.get(position));
-//        String comment = comments.get(position);
         holder.shiftTime.setText(departure_time);
-//        holder.shiftComment.setText(comment);
+
+        String comment = comments.get(position);
+        holder.shiftComment.setText(comment);
 
     }
 
