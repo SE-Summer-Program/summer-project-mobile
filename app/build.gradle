@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'yaozihang'
             keyPassword '123456yzh'
-            storeFile file('C:/Users/wxw/Desktop/map.jks')
+            storeFile file('C:/Users/SHIYONG/Desktop/map.jks')
             storePassword '123456yzh'
         }
     }
@@ -92,13 +92,14 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.9'
     implementation 'org.greenrobot:eventbus:3.1.1'
-//    implementation 'com.army.rippleimage.RippleImageView'
 
     //扫码相关
     implementation 'com.google.zxing:core:3.3.0'
     implementation "com.journeyapps:zxing-android-embedded:3.3.0"
 
     //自定义的view
+    implementation 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
     implementation 'com.youth.banner:banner:1.4.10'
     implementation 'com.yinglan.scrolllayout:scrolllayout:1.0.2'
     implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'

@@ -73,5 +73,8 @@
     <string name="password_confirm">请再次输入密码</string>
     <string name="child_collect">收藏</string>
     <string name="child_shift">详细信息</string>
+    <string name="userlogin">用户登陆</string>
+    <string name="driverlogin">司机登录</string>
+    <string name="adminlogin">管理员登陆</string>
     <string name="gps_position">司机定位</string>
 </resources>
