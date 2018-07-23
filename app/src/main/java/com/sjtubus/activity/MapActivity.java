@@ -39,18 +39,17 @@ import com.baidu.mapapi.search.route.WalkingRouteResult;
 import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
+import com.sjtubus.model.response.LocationResponse;
 import com.sjtubus.model.response.StationResponse;
 import com.sjtubus.network.RetrofitClient;
-import com.sjtubus.utils.BusLocationSimulator;
 import com.sjtubus.utils.MyLocationListener;
 import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.MyMarkerClickListener;
 import com.sjtubus.utils.ToastUtils;
 import com.yinglan.scrolllayout.ScrollLayout;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
@@ -95,7 +94,7 @@ public class MapActivity extends BaseActivity {
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
     private ScrollLayout mScrollLayout;
 
-    private Marker bus;
+    private HashMap<String,Marker> buses = new HashMap<>();
 
 
     @Override
@@ -281,30 +280,61 @@ public class MapActivity extends BaseActivity {
             public void run()
             {
                 //execute task
-                addBus();
+                RetrofitClient
+                    .getBusApi()
+                    .getLocation()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<LocationResponse>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            addDisposable(d);
+                        }
+
+                        @Override
+                        public void onNext(LocationResponse response) {
+                            addBus(response.getLocations());
+                            Log.d(TAG, "onNext: ");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                        }
+                        @Override
+                        public void onComplete() {
+                            Log.d(TAG, "onComplete: ");
+                            //mProgressBar.setVisibility(View.GONE);
+                        }
+                    });
             }
         };
         ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
         pool.scheduleAtFixedRate(task, 0 , 3000, TimeUnit.MILLISECONDS);
     }
 
-    private void addBus(){
-        BusLocationSimulator simulator = new BusLocationSimulator();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
-        String time = simpleDateFormat.format(new Date());
-        System.out.println(time);
-        LatLng busLocation = simulator.getBusLocation(time);
-        System.out.println(busLocation.toString());
-        if(bus == null){
-            MarkerOptions marker_temp = new MarkerOptions()
-                    .position(busLocation)
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
-            //添加marker
-            bus = (Marker) mBaiduMap.addOverlay(marker_temp);
+    private void addBus(Map<String,String>locations){
+//        BusLocationSimulator simulator = new BusLocationSimulator();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
+//        String time = simpleDateFormat.format(new Date());
+//        System.out.println(time);
+//        LatLng busLocation = simulator.getBusLocation(time);
+//        System.out.println(busLocation.toString());
+        for(String key:locations.keySet()){
+            if(buses.get(key) == null){
+                MarkerOptions marker_temp = new MarkerOptions()
+                        .position(new LatLng(Double.valueOf(locations.get(key).split(" ")[0]),
+                                             Double.valueOf(locations.get(key).split(" ")[0])))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
+                //添加marker
+                buses.put(key,(Marker) mBaiduMap.addOverlay(marker_temp));
+            }
+            buses.get(key).setPosition(new LatLng(Double.valueOf(locations.get(key).split(" ")[0]),
+                    Double.valueOf(locations.get(key).split(" ")[0])));
         }
-        bus.setPosition(busLocation);
 
-        List<LatLng> points = simulator.points;
+        //List<LatLng> points = simulator.points;
         //显示所有途经点
         /*for(LatLng step:points){
             MarkerOptions p = new MarkerOptions()

@@ -3,6 +3,7 @@ package com.sjtubus.network;
 import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.LineInfoResponse;
+import com.sjtubus.model.response.LocationResponse;
 import com.sjtubus.model.response.LoginResponse;
 import com.sjtubus.model.response.MessageResponse;
 import com.sjtubus.model.response.ProfileResponse;
@@ -75,4 +76,7 @@ public interface BusApi {
 
     @POST("/locate")
     Observable<HttpResponse> postLocation(@Body RequestBody location);
+
+    @GET("/location")
+    Observable<LocationResponse> getLocation();
 }

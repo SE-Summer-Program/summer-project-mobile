@@ -1,7 +1,6 @@
 package com.sjtubus.activity;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,8 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
@@ -28,17 +25,12 @@ import com.baidu.mapapi.model.LatLng;
 import com.sjtubus.R;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
-import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.RippleImageView;
-import com.sjtubus.utils.ShiftUtils;
-import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -100,7 +92,7 @@ public class PositionActivity extends BaseActivity implements View.OnClickListen
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.mipmap.icon_back_128);
 
-        rippleImageView=(RippleImageView)findViewById(R.id.position_rippleImageView);
+        rippleImageView = findViewById(R.id.position_rippleImageView);
         rippleImageView.startWaveAnimation();
         rippleImageView.setOnClickListener(this);
 
