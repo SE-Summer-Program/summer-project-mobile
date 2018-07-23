@@ -15,9 +15,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:background="@color/shallow_red"
-        app:itemTextColor="@color/primary_white"
-        app:itemIconTint="@color/primary_white"
+        android:background="@color/avoscloud_feedback_white"
+
+        app:itemTextColor="@color/avoscloud_timestamp_gray"
+        app:itemIconTint="@color/avoscloud_timestamp_gray"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/nav_drawer_main" />
