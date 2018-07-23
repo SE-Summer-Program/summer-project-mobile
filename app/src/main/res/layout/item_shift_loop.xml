@@ -5,25 +5,14 @@
     android:layout_height="wrap_content"
     android:background="@color/shallow_gray"
     android:layout_marginVertical="@dimen/basicPaddingSize"
-    android:layout_marginHorizontal="@dimen/largePadding">
+    android:layout_marginHorizontal="@dimen/screenPadding">
 
     <TextView
-        android:id="@+id/shift_time"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+        android:id="@+id/shift_time_loop"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/middleText"
         android:layout_gravity="center"
         android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/shift_comment"
-        android:layout_width="0dp"
-        android:layout_weight="4"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/middleText"
-        android:layout_gravity="left"
-        android:gravity="left"
-        android:paddingLeft="@dimen/smallPadding"/>
 
 </LinearLayout>

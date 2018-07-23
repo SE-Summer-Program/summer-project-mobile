@@ -1,17 +1,25 @@
 package com.sjtubus.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.TransitionRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.sjtubus.R;
+import com.sjtubus.activity.RecordActivity;
+import com.sjtubus.activity.ScheduleActivity;
 import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.ShiftAdapter;
 
@@ -27,7 +35,7 @@ import static android.content.ContentValues.TAG;
  * Time  2018/7/8
  */
 
-public class ShiftFragment extends BaseFragment {
+public class ShiftFragment extends BaseFragment implements View.OnClickListener{
     private static ShiftFragment mFragment = null;
 
 //    private String type = "NormalWorkday";
@@ -36,6 +44,11 @@ public class ShiftFragment extends BaseFragment {
     private String line_name;
 
     private ShiftAdapter mAdapter;
+
+    private TextView choose_station;
+    private String[] stationList = {"菁菁堂","校医院","东上院","东中院","新图书馆","行政B楼","电信学院","凯旋门","机动学院","庙门",
+            "船建学院","文选医学楼","学生服务中心","西区学生公寓","第四餐饮大楼","华联生活中心","包玉刚图书馆","材料学院"};
+    private int choose_index = 0;
 
     public static ShiftFragment getInstance(String type,String line_name) {
         if(mFragment == null){
@@ -56,7 +69,18 @@ public class ShiftFragment extends BaseFragment {
 
         RecyclerView mRecyclerView = view.findViewById(R.id.shift_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
-        mAdapter = new ShiftAdapter(mRecyclerView.getContext());
+
+        if (ShiftUtils.isLoopLine(line_name)) {
+            LinearLayout linearLayout = view.findViewById(R.id.choose_bar);
+            linearLayout.setVisibility(View.VISIBLE);
+            choose_station = view.findViewById(R.id.choose_station);
+            choose_station.setOnClickListener(this);
+
+            mAdapter = new ShiftAdapter(mRecyclerView.getContext(), true);
+        } else {
+            mAdapter = new ShiftAdapter(mRecyclerView.getContext(), false);
+        }
+
         mRecyclerView.setAdapter(mAdapter);
         retrieveData();
         return view;
@@ -96,6 +120,34 @@ public class ShiftFragment extends BaseFragment {
                     //mProgressBar.setVisibility(View.GONE);
                 }
             });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.choose_station:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("选择站点");
+                builder.setSingleChoiceItems(stationList, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        choose_index = which;
+                    }
+                });
+                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        choose_station.setText(stationList[choose_index]);
+                    }
+                });
+
+                builder.setNegativeButton("取消", null);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                break;
+            default:
+                break;
+        }
     }
 
 }

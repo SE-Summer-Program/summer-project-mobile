@@ -201,6 +201,13 @@ public class PositionActivity extends BaseActivity implements View.OnClickListen
 //                    currentPosition.append("区: ").append(location.getDistrict()).append("\n");
                     currentPosition.append("街道: ").append(location.getStreet()).append("\n");
                     currentPosition.append("定位方式: ");
+
+                    String street_txt = "定位已开启 当前位置：" + location.getStreet();
+                    currentStreet.setText(street_txt);
+
+                    location.setLatitude(latitude + 0.00643);
+                    location.setLongitude(longitude + 0.0064);
+
                     if (location.getLocType() == BDLocation.TypeGpsLocation){
                         currentPosition.append("GPS");
                     } else if (location.getLocType() == BDLocation.TypeNetWorkLocation){
@@ -208,8 +215,6 @@ public class PositionActivity extends BaseActivity implements View.OnClickListen
                     }
 //                    editText.setText(currentPosition);
 
-                    String street_txt = "定位已开启 当前位置：" + location.getStreet();
-                    currentStreet.setText(street_txt);
 
                     if (location.getLocType() == BDLocation.TypeGpsLocation
                             || location.getLocType() == BDLocation.TypeNetWorkLocation){
