@@ -11,9 +11,10 @@ import java.util.List;
 public class BusLocationSimulator {
     private Double totalTime = 1080d;//校车开一圈用时为18分钟
     private Double totalLength = 0d;//线路总长度
-    private List<Double> distance = new ArrayList<Double>();//存放所有相邻距离
-    private List<String> timeTable = new ArrayList<String>();
-    public List<LatLng> points = new ArrayList<LatLng>();//存放所有途经点的位置
+    private List<Double> distance = new ArrayList<>();//存放所有相邻距离
+    private List<String> AntiClockwise = new ArrayList<>();
+    private List<String> Clockwise = new ArrayList<>();
+    public List<LatLng> points = new ArrayList<>();//存放所有途经点的位置
     public class BusLocation{
         public LatLng location;
         public float rotate;
@@ -27,31 +28,59 @@ public class BusLocationSimulator {
         setData();
     }
 
-    public BusLocation getBusLocation(String time){
+    public List<BusLocation> getBusLocation(String time){
+        List<BusLocation> result = new ArrayList<BusLocation>();
         //计算当前巴士已运行的时间
         SimpleDateFormat simpleFormat = new SimpleDateFormat("HH-mm-ss");
         Double s1 = -1d;//s1为较早发车的班次
         Double s2 = -1d;//s2不一定存在
-        for(String tmp : timeTable){
+        Double s3 = -1d;//s3为顺时针班次
+        for(String tmp : AntiClockwise){
             try {
                 int s = (int) ((simpleFormat.parse(time).getTime() - simpleFormat.parse(tmp).getTime()) / 1000);
                 if((s < totalTime) && (s > 0)){
-                    if(s1 < 0) s1 = s * 1.0d;
-                    else s2 = s * 1.0d;
+                    if(s1 < 0) s1 = s / totalTime * totalLength;
+                    else s2 = s / totalTime * totalLength;
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        //将已运行时间转化为已行驶路程
-        Double length = s1 / totalTime * totalLength;
+        for(String tmp : Clockwise){
+            try {
+                int s = (int) ((simpleFormat.parse(time).getTime() - simpleFormat.parse(tmp).getTime()) / 1000);
+                if((s < totalTime) && (s > 0)){
+                    s3 = s / totalTime * totalLength;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(s3);
         //计算已经行驶到何处
-        BusLocation result = new BusLocation(new LatLng(31.024766399515144,121.43630746466236),0);//初始点设为菁菁堂
-        for(int i = 0; i < distance.size(); i++){
+        result.add(CalculateLocation(s1, "Anti"));
+        result.add(CalculateLocation(s2, "Anti"));
+        result.add(CalculateLocation(s3, "Along"));
+
+        return result;
+    }
+
+    private BusLocation CalculateLocation(Double length, String type){
+        BusLocation result = new BusLocation(new LatLng(31.024697,121.436855),0);//初始点设为停车场
+        if(length < 0) return result;
+        int start = 0, end = distance.size(), step = 1;
+        if(type == "Along"){
+            start = distance.size() - 1;
+            end = -1;
+            step = -1;
+        }
+        for(int i = start; i != end; i += step){
             if(length < distance.get(i)){
-                Double latitude_tmp = (points.get(i + 1).latitude - points.get(i).latitude) * length / distance.get(i) + points.get(i).latitude;
-                Double longitude_tmp = (points.get(i + 1).longitude - points.get(i).longitude) * length / distance.get(i) + points.get(i).longitude;
-                Float rotate = Rotate(points.get(i), points.get(i + 1));
+                Double latitude_tmp = (points.get(i + step).latitude - points.get(i).latitude) * length / distance.get(i) + points.get(i).latitude;
+                Double longitude_tmp = (points.get(i + step).longitude - points.get(i).longitude) * length / distance.get(i) + points.get(i).longitude;
+                Float rotate = Rotate(points.get(i), points.get(i + step));
                 result = new BusLocation(new LatLng(latitude_tmp, longitude_tmp), rotate);
                 break;
             }
@@ -111,40 +140,57 @@ public class BusLocationSimulator {
             totalLength += distance_tmp;
         }
         //载入首发时刻
-        timeTable.add("07-30-00");
-        timeTable.add("07-45-00");
-        timeTable.add("08-00-00");
-        timeTable.add("08-15-00");
-        timeTable.add("08-25-00");
-        timeTable.add("08-40-00");
-        timeTable.add("09-00-00");
-        timeTable.add("09-20-00");
-        timeTable.add("09-40-00");
-        timeTable.add("10-00-00");
-        timeTable.add("10-20-00");
-        timeTable.add("10-40-00");
-        timeTable.add("11-00-00");
-        timeTable.add("11-20-00");
-        timeTable.add("11-40-00");
-        timeTable.add("12-00-00");
-        timeTable.add("13-00-00");
-        timeTable.add("13-20-00");
-        timeTable.add("13-40-00");
-        timeTable.add("14-00-00");
-        timeTable.add("14-20-00");
-        timeTable.add("14-40-00");
-        timeTable.add("15-00-00");
-        timeTable.add("15-20-00");
-        timeTable.add("15-40-00");
-        timeTable.add("16-00-00");
-        timeTable.add("16-20-00");
-        timeTable.add("16-30-00");
-        timeTable.add("17-00-00");
-        timeTable.add("17-15-00");
-        timeTable.add("17-30-00");
-        timeTable.add("17-50-00");
-        timeTable.add("18-00-00");
-        timeTable.add("19-00-00");
-        timeTable.add("20-10-00");
+        AntiClockwise.add("07-30-00");
+        AntiClockwise.add("07-45-00");
+        AntiClockwise.add("08-00-00");
+        AntiClockwise.add("08-15-00");
+        AntiClockwise.add("08-25-00");
+        AntiClockwise.add("08-40-00");
+        AntiClockwise.add("09-00-00");
+        AntiClockwise.add("09-20-00");
+        AntiClockwise.add("09-40-00");
+        AntiClockwise.add("10-00-00");
+        AntiClockwise.add("10-20-00");
+        AntiClockwise.add("10-40-00");
+        AntiClockwise.add("11-00-00");
+        AntiClockwise.add("11-20-00");
+        AntiClockwise.add("11-40-00");
+        AntiClockwise.add("12-00-00");
+        AntiClockwise.add("13-00-00");
+        AntiClockwise.add("13-20-00");
+        AntiClockwise.add("13-40-00");
+        AntiClockwise.add("14-00-00");
+        AntiClockwise.add("14-20-00");
+        AntiClockwise.add("14-40-00");
+        AntiClockwise.add("15-00-00");
+        AntiClockwise.add("15-20-00");
+        AntiClockwise.add("15-40-00");
+        AntiClockwise.add("16-00-00");
+        AntiClockwise.add("16-20-00");
+        AntiClockwise.add("16-30-00");
+        AntiClockwise.add("17-00-00");
+        AntiClockwise.add("17-15-00");
+        AntiClockwise.add("17-30-00");
+        AntiClockwise.add("17-50-00");
+        AntiClockwise.add("18-00-00");
+        AntiClockwise.add("19-00-00");
+        AntiClockwise.add("20-10-00");
+
+        Clockwise.add("08-30-00");
+        Clockwise.add("08-50-00");
+        Clockwise.add("09-10-00");
+        Clockwise.add("09-30-00");
+        Clockwise.add("10-00-00");
+        Clockwise.add("10-30-00");
+        Clockwise.add("11-00-00");
+        Clockwise.add("11-30-00");
+        Clockwise.add("12-30-00");
+        Clockwise.add("13-30-00");
+        Clockwise.add("14-00-00");
+        Clockwise.add("14-30-00");
+        Clockwise.add("15-00-00");
+        Clockwise.add("15-30-00");
+        Clockwise.add("16-00-00");
+        Clockwise.add("16-30-00");
     }
 }

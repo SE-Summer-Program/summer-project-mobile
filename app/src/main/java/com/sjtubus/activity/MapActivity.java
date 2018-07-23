@@ -99,8 +99,11 @@ public class MapActivity extends BaseActivity {
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
     private ScrollLayout mScrollLayout;
 
-    private HashMap<String,Marker> buses = new HashMap<>();
-
+    //private HashMap<String,Marker> buses = new HashMap<>();
+    //巴士运行相关
+    private List<Marker> buses = new ArrayList<>();
+    private BusLocationSimulator simulator = new BusLocationSimulator();
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -261,7 +264,7 @@ public class MapActivity extends BaseActivity {
             BitmapDescriptor bd_temp = bitmaps.get(station.getName() + "_smallZoom");
             MarkerOptions marker_temp = new MarkerOptions()
                     .position(new LatLng(station.getLatitude(),station.getLongitude()))
-                    .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(7);
+                    .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(9);
             //添加marker
             Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
             //使用marker携带info信息，当点击事件的时候可以通过marker获得info信息
@@ -326,6 +329,21 @@ public class MapActivity extends BaseActivity {
 //        System.out.println(time);
 //        LatLng busLocation = simulator.getBusLocation(time);
 //        System.out.println(busLocation.toString());
+        String time = simpleDateFormat.format(new Date());//目前为当前时间，也可以为任意时间
+        List<BusLocationSimulator.BusLocation> busLocations = simulator.getBusLocation(time);//获得巴士坐标信息
+        for(BusLocationSimulator.BusLocation busLocation : busLocations){
+            MarkerOptions marker_temp = new MarkerOptions()
+                    .position(busLocation.location)//位置
+                    .rotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180)//角度
+                    .icon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
+                            BitmapDescriptorFactory.fromResource(R.drawable.bus_left))//图标源
+                    .scaleX(0.15f).scaleY(0.15f)//图标缩放比例
+                    .anchor(0.5f, 1.0f).zIndex(7);//锚点和纵轴坐标
+            //添加marker
+            Marker bus = (Marker) mBaiduMap.addOverlay(marker_temp);
+            buses.add(bus);
+        }
+
         for(String key:locations.keySet()){
             if(buses.get(key) == null){
                 MarkerOptions marker_temp = new MarkerOptions()
@@ -364,6 +382,27 @@ public class MapActivity extends BaseActivity {
             mBaiduMap.addOverlay(p);
             //Toast.makeText(MapActivity.this, step.getEntrance().getLocation().toString(), Toast.LENGTH_SHORT).show();
         }*/
+    }
+
+    private void upDateBus(){
+        final TimerTask task = new TimerTask(){
+            @Override
+            public void run(){
+                //获得当前巴士位置
+                String time = simpleDateFormat.format(new Date());//目前为当前时间，也可以为任意时间
+                List<BusLocationSimulator.BusLocation> busLocations = simulator.getBusLocation(time);//获得巴士坐标信息
+                for(int i = 0; i < busLocations.size(); i++){
+                    Marker bus = buses.get(i);
+                    BusLocationSimulator.BusLocation busLocation = busLocations.get(i);
+                    bus.setPosition(busLocations.get(i).location);
+                    bus.setRotate(busLocation.rotate < 90 ? busLocation.rotate : busLocation.rotate - 180);
+                    bus.setIcon(busLocation.rotate < 90 ? BitmapDescriptorFactory.fromResource(R.drawable.bus_right) :
+                            BitmapDescriptorFactory.fromResource(R.drawable.bus_left));
+                }
+            }
+        };
+        ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
+        pool.scheduleAtFixedRate(task, 0 , 3000, TimeUnit.MILLISECONDS);
     }
 
     private void initBitmap(){
