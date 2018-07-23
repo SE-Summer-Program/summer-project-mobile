@@ -2,15 +2,12 @@ package com.sjtubus.utils;
 
 import android.os.Bundle;
 import android.widget.TextView;
-import android.view.View;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.Marker;
-
-import com.yinglan.scrolllayout.ScrollLayout;
-
-import com.sjtubus.model.Station;
 import com.sjtubus.R;
+import com.sjtubus.model.Station;
+import com.yinglan.scrolllayout.ScrollLayout;
 
 public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     private ScrollLayout mScrollLayout;
@@ -25,10 +22,10 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
         Bundle bundle = marker.getExtraInfo();
         Station station = (Station) bundle.getSerializable("info");
         //将信息显示在界面上
-        TextView text = (TextView) mScrollLayout.findViewById(R.id.text_view);
+        TextView text = mScrollLayout.findViewById(R.id.map_station_name);
         String context = "";
         context += station.getName() + "\n";
-        if(station.getName() == "菁菁堂"){
+        if(station.getName().equals("菁菁堂")){
             context += "逆时针：" + "\n";
             for(String time:station.getAntiClockLoop()){
                 context += time + " ";

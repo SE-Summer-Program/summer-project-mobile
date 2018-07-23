@@ -18,9 +18,10 @@
             style="@style/editText_base"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableLeft="@mipmap/icon_telephone_128"
+            android:drawableLeft="@mipmap/icon_username_128"
             android:hint="@string/hint_username"
-            android:inputType="phone"
+            android:layout_marginBottom="30dp"
+            android:inputType="text"
             />
 
         <com.sjtubus.widget.ClearEditText
