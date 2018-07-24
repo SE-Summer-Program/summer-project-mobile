@@ -34,7 +34,7 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
-import static android.content.ContentValues.TAG;
+//import static android.content.ContentValues.TAG;
 
 public class GPSPositionActivity extends BaseActivity implements View.OnClickListener{
 
@@ -54,6 +54,8 @@ public class GPSPositionActivity extends BaseActivity implements View.OnClickLis
     private RippleImageView rippleImageView;
     private boolean isAnimationShown = true;
     private TextView currentStreet;
+
+    private static String TAG = "GPSPositionActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,6 +293,8 @@ public class GPSPositionActivity extends BaseActivity implements View.OnClickLis
                     .add("longitude", String.valueOf(location.getLongitude()))
                     .build();
             sendLocation(requestBody);
+
+            Log.i(TAG, "send");
         }
 
         public void setLocation(Boolean c){
@@ -330,21 +334,24 @@ public class GPSPositionActivity extends BaseActivity implements View.OnClickLis
             .subscribe(new Observer<HttpResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
+                    Log.i(TAG, "onSubscribe");
                     addDisposable(d);
                 }
 
                 @Override
                 public void onNext(HttpResponse response) {
-                    ToastUtils.showShort("向后台发送数据了~");
+
+                    Log.i(TAG, "向后台发送数据了~");
                 }
                 @Override
                 public void onError(Throwable e) {
+                    Log.i(TAG, "onError");
                     e.printStackTrace();
                 }
 
                 @Override
                 public void onComplete() {
-                    Log.d(TAG, "onComplete: ");
+                    Log.i(TAG, "onComplete: ");
                     //mProgressBar.setVisibility(View.GONE);
                 }
             });
