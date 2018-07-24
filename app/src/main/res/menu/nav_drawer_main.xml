@@ -8,6 +8,7 @@
         <item
             android:id="@+id/navigation_item_reserve"
             android:icon="@mipmap/bell"
+            android:color="@color/avoscloud_timestamp_gray"
             android:title="@string/reserve_record" />
         <item
             android:id="@+id/navigation_item_collect"
@@ -16,10 +17,13 @@
         <item
             android:id="@+id/navigation_item_message"
             android:icon="@mipmap/message"
+            android:color="@color/avoscloud_timestamp_gray"
+
             android:title="@string/billboard" />
         <item
             android:id="@+id/navigation_item_idea"
             android:icon="@mipmap/idea"
+            android:color="@color/avoscloud_timestamp_gray"
             android:title="@string/idea" />
         <item
             android:id="@+id/navigation_item_setting"
