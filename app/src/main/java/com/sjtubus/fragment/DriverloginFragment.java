@@ -54,7 +54,7 @@ public class DriverloginFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.btn_login:
+            case R.id.btn_driverlogin:
                 driverLogin();
                 break;
         }
@@ -97,6 +97,7 @@ public class DriverloginFragment extends BaseFragment implements View.OnClickLis
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        ToastUtils.showShort("服务器错误!登录失败!");
                     }
 
                     @Override
