@@ -71,7 +71,7 @@ public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ShiftAdapter.ViewHolder holder, int position) {
         if (isLoopLineFlag){
-            String departure_time = StringCalendarUtils.HHmmssToHHmm(times.get(position));
+            String departure_time = times.get(position);
             holder.shiftTimeLoop.setText(departure_time);
         } else {
             String departure_time = StringCalendarUtils.HHmmssToHHmm(times.get(position));
