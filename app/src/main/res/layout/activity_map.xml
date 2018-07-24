@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/mapview"
@@ -19,21 +20,152 @@
         android:layout_height="match_parent"
         android:background="#000000">
 
-            <RelativeLayout
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:background="#FFFFFF">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/map_station_name"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:padding="16dp"-->
+                    <!--android:focusable="true"-->
+                    <!--android:clickable="true"-->
+                    <!--android:text="测试"/>-->
+
+            <!--</RelativeLayout>-->
+
+        <ScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/shallow_gray">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#FFFFFF">
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <!-- 站点名 -->
                 <TextView
-                    android:id="@+id/map_station_name"
+                    android:id="@+id/detail_station_name"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="16dp"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:text="测试"/>
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/smallPadding"
+                    android:textSize="@dimen/middleText"
+                    android:textStyle="bold"
+                    android:textColor="@color/shallow_black"/>
 
-            </RelativeLayout>
+                <!-- 逆时针 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/smallPadding">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="逆时针"
+                        android:textSize="@dimen/middlesmallText"
+                        android:textStyle="bold"
+                        android:textColor="@color/primary_black"/>
+                    <TextView
+                        android:id="@+id/detail_anticlockwise"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/smallText"
+                        android:paddingVertical="@dimen/basicPaddingSize"
+                        android:lineSpacingExtra = "@dimen/basicPaddingSize"/>
+                </LinearLayout>
+
+                <!-- 顺时针 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/smallPadding">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="顺时针"
+                        android:textSize="@dimen/middlesmallText"
+                        android:textStyle="bold"
+                        android:textColor="@color/shallow_black"/>
+                    <TextView
+                        android:id="@+id/detail_clockwise"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/basicPaddingSize"
+                        android:lineSpacingExtra = "@dimen/basicPaddingSize"/>
+                </LinearLayout>
+
+                <!-- 寒暑假-逆时针 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/smallPadding">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="寒暑假-逆时针"
+                        android:textSize="@dimen/middlesmallText"
+                        android:textStyle="bold"
+                        android:textColor="@color/shallow_black"/>
+                    <TextView
+                        android:id="@+id/detail_anticlockwise_holiday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/basicPaddingSize"
+                        android:lineSpacingExtra = "@dimen/basicPaddingSize"/>
+                </LinearLayout>
+
+                <!-- 寒暑假-顺时针 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/smallPadding">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="寒暑假-顺时针"
+                        android:textSize="@dimen/middlesmallText"
+                        android:textStyle="bold"
+                        android:textColor="@color/shallow_black"/>
+                    <TextView
+                        android:id="@+id/detail_clockwise_holiday"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/basicPaddingSize"
+                        android:lineSpacingExtra = "@dimen/basicPaddingSize"/>
+                </LinearLayout>
+
+                <!-- Comment -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/smallPadding">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/middlesmallText"
+                        android:text="备注"
+                        android:textStyle="bold"
+                        android:textColor="@color/shallow_black"/>
+                    <TextView
+                        android:id="@+id/detail_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/basicPaddingSize"
+                        android:lineSpacingExtra = "@dimen/basicPaddingSize"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
 
     </com.yinglan.scrolllayout.ScrollLayout>
 
