@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'yaozihang'
             keyPassword '123456yzh'
-            storeFile file('C:/Users/wxw/Desktop/map.jks')
+            storeFile file('C:/Users/SHIYONG/Desktop/map.jks')
             storePassword '123456yzh'
         }
     }
@@ -105,6 +105,7 @@ dependencies {
     implementation 'cn.hugeterry.coordinatortablayout:coordinatortablayout:1.2.2'
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
     implementation 'com.xhb:xmarqueeview:2.0.0'
+    implementation 'com.github.vipulasri:timelineview:1.0.6'
 
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
