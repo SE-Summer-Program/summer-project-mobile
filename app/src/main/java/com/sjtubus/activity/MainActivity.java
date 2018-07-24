@@ -42,6 +42,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -357,9 +358,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(intentResult != null) {
             if(intentResult.getContents() == null) {
-                ToastUtils.showShort("内容为空");
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("扫描失败!")
+                        .setContentText("二维码内容为空!")
+                        .setConfirmText("确定")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                sDialog.cancel();
+                            }
+                        })
+                        .show();
             } else {
-                ToastUtils.showShort("扫描成功");
                 // ScanResult 为 获取到的字符串
                 String scanResult = intentResult.getContents();
                 String[] info = scanResult.split(";");
@@ -385,7 +395,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
 
                             @Override
                             public void onNext(HttpResponse response) {
-                                ToastUtils.showShort(response.getMsg());
+                                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("验证完成!")
+                                        .setContentText(response.getMsg())
+                                        .setConfirmText("确定")
+                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.cancel();
+                                            }
+                                        })
+                                        .show();
                             }
 
                             @Override
