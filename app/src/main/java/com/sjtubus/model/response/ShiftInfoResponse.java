@@ -1,10 +1,7 @@
 package com.sjtubus.model.response;
 
 import com.google.gson.annotations.SerializedName;
-import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.ShiftInfo;
-
-import java.util.List;
 
 public class ShiftInfoResponse extends HttpResponse{
 

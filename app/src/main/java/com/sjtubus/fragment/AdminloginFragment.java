@@ -97,6 +97,7 @@ public class AdminloginFragment extends BaseFragment implements View.OnClickList
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        ToastUtils.showShort("服务器错误!登录失败!");
                     }
 
                     @Override

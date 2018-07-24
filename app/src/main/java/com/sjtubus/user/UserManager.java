@@ -2,6 +2,8 @@ package com.sjtubus.user;
 
 import android.util.Log;
 
+import com.sjtubus.model.Administrator;
+import com.sjtubus.model.Driver;
 import com.sjtubus.model.User;
 import com.sjtubus.model.response.ProfileResponse;
 import com.sjtubus.network.RetrofitClient;
@@ -25,6 +27,7 @@ public class UserManager {
     static private UserManager instance;
     private User user;
     private boolean login = false;
+    private String role = "";
 
     private UserManager() {
     }
@@ -46,9 +49,14 @@ public class UserManager {
         return user;
     }
 
-    public void login(User user) {
+    public String getRole() {
+        return role;
+    }
+
+    public void login(User user,String role) {
         this.user = user;
-        login = true;
+        this.login = true;
+        this.role = role;
         Log.d("EventBus", "UserChange true");
         ToastUtils.showShort("已登陆~");
         EventBus.getDefault().post(new UserChangeEvent(true));
@@ -57,6 +65,7 @@ public class UserManager {
     public void logout() {
         user = null;
         login = false;
+        role = "";
         Log.d("EventBus", "UserChange false");
         EventBus.getDefault().post(new UserChangeEvent(false));
     }
@@ -75,7 +84,24 @@ public class UserManager {
                 @Override
                 public void onNext(ProfileResponse response) {
                     if(response.getError()==0){
-                        login(response.getUser());
+                        if(response.getRole().equals("user")) {
+                            login(response.getUser(),"user");
+                        }else if(response.getRole().equals("driver")){
+                            User user = new User();
+                            Driver driver = response.getDriver();
+                            user.setUsername(driver.getUsername());
+                            user.setPhone(driver.getPhone());
+                            user.setCredit(0);
+                            user.setTeacher(false);
+                            login(user,"driver");
+                        } else if(response.getRole().equals("admin")){
+                            User user = new User();
+                            Administrator admin = response.getAdmin();
+                            user.setUsername(admin.getUsername());
+                            user.setCredit(0);
+                            user.setTeacher(false);
+                            login(user,"admin");
+                        }
                     }
                 }
 

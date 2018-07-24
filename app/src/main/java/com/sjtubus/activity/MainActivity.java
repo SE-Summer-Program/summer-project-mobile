@@ -62,7 +62,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private TextView login_txt;
     private TextView register_txt;
     private XMarqueeView billboard;
-    private MarqueeViewAdapter billboard_adapter;
 
     //private View decorView;
 
@@ -93,14 +92,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         mToolbar.setNavigationIcon(R.mipmap.person);
 
         Button reserve_btn = findViewById(R.id.reserve_btn);
-        Button record_btn = findViewById(R.id.record_btn);
+        Button scan_btn = findViewById(R.id.scan_btn);
         Button position_btn = findViewById(R.id.position_btn);
         Button schedule_btn = findViewById(R.id.schedule_btn);
         Button map_btn = findViewById(R.id.map_btn);
         Button navigate_btn = findViewById(R.id.navigate_btn);
 
         reserve_btn.setOnClickListener(this);
-        record_btn.setOnClickListener(this);
+        scan_btn.setOnClickListener(this);
         position_btn.setOnClickListener(this);
         schedule_btn.setOnClickListener(this);
         map_btn.setOnClickListener(this);
@@ -130,7 +129,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         messages.add("2018.8.19即明日,校园巴士停运一天!");
         messages.add("好消息！校车时速已达到100km/S!");
         messages.add("恭喜学号为1的同学喜提校车一辆!");
-        billboard_adapter = new MarqueeViewAdapter(messages, this);
+        MarqueeViewAdapter billboard_adapter = new MarqueeViewAdapter(messages, this);
         //刷新公告
         //billboard_adapter.setData(messages);
         billboard.setAdapter(billboard_adapter);
@@ -155,6 +154,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             username.setText(user.getUsername());
             username.setVisibility(View.VISIBLE);
             String role = user.getTeacher()?"教工":"普通用户";
+            if(UserManager.getInstance().getRole().equals("driver")){
+                role = "司机";
+            }else if(UserManager.getInstance().getRole().equals("admin")){
+                role = "管理员";
+            }
             String userinfo_str = "身份:"+role+"   "+"信用积分:"+user.getCredit();
             userinfo.setText(userinfo_str);
             userinfo.setVisibility(View.VISIBLE);
@@ -182,18 +186,27 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
                 break;
-            case R.id.record_btn:
+            case R.id.scan_btn:
                 if(UserManager.getInstance().getUser() == null){
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                Intent recordIntent = new Intent(MainActivity.this, RecordActivity.class);
-                startActivity(recordIntent);
+                if(UserManager.getInstance().getRole().equals("user")){
+                    ToastUtils.showShort("抱歉~您没有管理员或司机权限");
+                    break;
+                }
+                new IntentIntegrator(this)
+                        .setOrientationLocked(false)
+                        .setCaptureActivity(SimpleScanActivity.class) // 设置自定义的activity是CustomActivity
+                        .initiateScan(); // 初始化扫描
                 break;
             case R.id.position_btn:
-                //ToastUtils.showShort("司机定位功能还不能使用哦~");
-                if(UserManager.getInstance().getUser() == null){
+                if(UserManager.getInstance().getRole() == null){
                     ToastUtils.showShort("请先登录~");
+                    break;
+                }
+                if(UserManager.getInstance().getRole().equals("user")){
+                    ToastUtils.showShort("抱歉~您没有管理员或司机权限");
                     break;
                 }
                 Intent positionIntent = new Intent(MainActivity.this, GPSPositionActivity.class);
@@ -262,23 +275,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(messageIntent);
                 break;
             case R.id.navigation_item_idea:
-                ToastUtils.showShort("意见功能还不能使用哦~");
                 FeedbackAgent agent = new FeedbackAgent(App.getInstance());
                 agent.startDefaultThreadActivity();
                 break;
             case R.id.navigation_item_setting:
                 Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
                 startActivity(settingIntent);
-                break;
-            case R.id.navigation_item_scan:
-                if(UserManager.getInstance().getUser()==null){
-                    ToastUtils.showShort("请先登录~");
-                    break;
-                }
-                new IntentIntegrator(this)
-                    .setOrientationLocked(false)
-                    .setCaptureActivity(SimpleScanActivity.class) // 设置自定义的activity是CustomActivity
-                    .initiateScan(); // 初始化扫描
                 break;
             default:
                 break;

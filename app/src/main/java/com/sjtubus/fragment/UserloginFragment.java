@@ -119,6 +119,7 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
+                        ToastUtils.showShort("服务器错误!登录失败!");
                     }
 
                     @Override
