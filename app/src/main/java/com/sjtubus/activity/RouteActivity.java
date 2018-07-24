@@ -7,6 +7,8 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
@@ -51,6 +53,9 @@ import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 
+import com.sjtubus.utils.MyMapStatusChangeListener;
+import com.yinglan.scrolllayout.ScrollLayout;
+
 import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
@@ -83,6 +88,10 @@ public class RouteActivity extends BaseActivity {
     OverlayManager routeOverlay = null;  //该类提供一个能够显示和管理多个Overlay的基类
     boolean useDefaultIcon = true;
     DrivingRoutePlanOption routePlan = new DrivingRoutePlanOption();
+
+    private ScrollLayout mScrollLayout;
+    private MyMapStatusChangeListener mMapStatusChangeListener = null;
+    Button btn_choose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,11 +126,43 @@ public class RouteActivity extends BaseActivity {
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setCompassEnable(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为卫星显示
-        //msu = MapStatusUpdateFactory.zoomTo(15.0f);// 设置地图初始化缩放比例
-        //mBaiduMap.setMapStatus(msu);
-        //mBaiduMap.setCompassIcon(BitmapFactory.
-        //        decodeResource(getResources(),R.mipmap.compass));
 
+        btn_choose = findViewById(R.id.btn_choose);
+        btn_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mScrollLayout.setToOpen();
+                btn_choose.setVisibility(View.GONE);
+                //btn_choose.setVisibility(View.VISIBLE);
+            }
+        });
+
+        mScrollLayout = findViewById(R.id.scroll_down_layout);
+
+        /*设置 setting*/
+        mScrollLayout.setMinOffset(0);
+        mScrollLayout.setMaxOffset((int) (this.getResources().getDisplayMetrics().heightPixels));
+        mScrollLayout.setExitOffset(-100);
+        mScrollLayout.setIsSupportExit(true);
+        mScrollLayout.setAllowHorizontalScroll(true);
+        mScrollLayout.setOnScrollChangedListener(mOnScrollChangedListener);
+        mScrollLayout.setToExit();
+        mScrollLayout.getBackground().setAlpha(0);
+
+        mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                mScrollLayout.scrollToExit();
+            }
+
+            @Override
+            public boolean onMapPoiClick(MapPoi mapPoi) {
+                mScrollLayout.scrollToExit();
+                return false;
+            }
+        });
+        mMapStatusChangeListener = new MyMapStatusChangeListener(mScrollLayout);
+        mBaiduMap.setOnMapStatusChangeListener(mMapStatusChangeListener);
     }
 
     private void initLocation(){
@@ -220,8 +261,7 @@ public class RouteActivity extends BaseActivity {
     }
 
     @Override
-    public void onStart()
-    {
+    public void onStart(){
         super.onStart();
         if (!mLocationClient.isStarted())
         {
@@ -237,8 +277,7 @@ public class RouteActivity extends BaseActivity {
     }
 
     @Override
-    public void onStop()
-    {
+    public void onStop() {
         super.onStop();
         mBaiduMap.setMyLocationEnabled(false);
         mLocationClient.stop();//停止定位
@@ -268,8 +307,8 @@ public class RouteActivity extends BaseActivity {
 
     private class MyDrivingRouteOverlay extends DrivingRouteOverlay {
 
-        public MyDrivingRouteOverlay(BaiduMap baiduMap) {
-            super(baiduMap);
+        public MyDrivingRouteOverlay(BaiduMap baiduMap, boolean setMarker) {
+            super(baiduMap, setMarker);
         }
 
         @Override
@@ -289,6 +328,30 @@ public class RouteActivity extends BaseActivity {
         }
     }
 
+    private ScrollLayout.OnScrollChangedListener mOnScrollChangedListener = new ScrollLayout.OnScrollChangedListener() {
+        //实现滑动时的背景变化
+        @Override
+        public void onScrollProgressChanged(float currentProgress) {
+            if (currentProgress >= 0) {
+                float precent = 255 * currentProgress;
+                if (precent > 255) {
+                    precent = 255;
+                } else if (precent < 0) {
+                    precent = 0;
+                }
+                mScrollLayout.getBackground().setAlpha(255 - (int) precent);
+            }
+        }
+
+        @Override
+        public void onScrollFinished(ScrollLayout.Status currentStatus) {
+        }
+
+        @Override
+        public void onChildScroll(int top) {
+        }
+    };
+
     private class MyGetRoutePlanResultListener implements
             OnGetRoutePlanResultListener {
 
@@ -302,9 +365,17 @@ public class RouteActivity extends BaseActivity {
                 Toast.makeText(RouteActivity.this, result.error.toString(), Toast.LENGTH_SHORT).show();
             }
 
+            if (result.error == SearchResult.ERRORNO.AMBIGUOUS_ROURE_ADDR) {
+                // 起终点或途经点地址有岐义，通过以下接口获取建议查询信息
+                // result.getSuggestAddrInfo()
+                return;
+            }
             if (result.error == SearchResult.ERRORNO.NO_ERROR) {
+                //nodeIndex = -1;
+                //mBtnPre.setVisibility(View.VISIBLE);
+                //mBtnNext.setVisibility(View.VISIBLE);
                 route = result.getRouteLines().get(0);
-                DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap);
+                DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap,true);
                 routeOverlay = overlay;
                 mBaiduMap.setOnMarkerClickListener(overlay);
                 overlay.setData(result.getRouteLines().get(0));  //设置路线数据

@@ -24,14 +24,14 @@ import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.RecordAdapter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static android.content.ContentValues.TAG;
 
 public class RecordActivity extends BaseActivity implements View.OnClickListener, RecordAdapter.OnItemClickListener{
 
@@ -45,8 +45,13 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
 
     private String[] filter_list = {"仅显示近一周", "仅显示近一月", "仅显示近三个月", "自定义"};
     private String[] sort_list = {"按预定时间由近到远", "按班次时间由近到远", "自定义"};
-    private int filter_select = -1;
-    private int sort_select = -1;
+    private int filter_select = 0;
+    private int sort_select = 0;
+
+    private boolean sortBySubmitTime = false;
+    private boolean sortByDepartureTime = false;
+
+    private static String TAG = "RecordActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +139,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.record_sort:
                 setAlertDialog("选择排序方式", sort_list, false);
+//                ToastUtils.showShort(sort_select +"");
                 break;
             default:
                 break;
@@ -166,13 +172,39 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
 
                 @Override
                 public void onNext(RecordInfoResponse response) {
-                    Log.d(TAG, "onNext: ");
+                    Log.i(TAG, "onNext: ");
                     if(response.getRecordInfos()!=null && response.getRecordInfos().size()!=0){
-                        recordAdapter.setDataList(response.getRecordInfos());
+                        List<RecordInfo> recordInfos = response.getRecordInfos();
+
+                        /* 排序 */
+                        if (sortBySubmitTime){
+                            Log.i(TAG, "hello sort");
+                            Collections.sort(recordInfos, new Comparator<RecordInfo>() {
+                                @Override
+                                public int compare(RecordInfo o1, RecordInfo o2) {
+                                    return o2.getSubmiTime().compareTo(o1.getSubmiTime());
+                                }
+                            });
+                            sortBySubmitTime = false;
+                        } else if (sortByDepartureTime){
+                            Log.i(TAG, "hello sort");
+                            Collections.sort(recordInfos, new Comparator<RecordInfo>() {
+                                @Override
+                                public int compare(RecordInfo o1, RecordInfo o2) {
+                                    return (o2.getDepartureDate() + " "+ o2.getDepartureTime())
+                                            .compareTo(o1.getDepartureDate() + " " + o1.getDepartureTime());
+                                }
+                            });
+                            sortByDepartureTime = false;
+                        }
+
+                        Log.i(TAG, "end");
+
+                        recordAdapter.setDataList(recordInfos);
                     }
                     swipeRefresh.setRefreshing(false);
 
-                    int total_amount = response.getRecordInfos().size();
+                    int total_amount = response.getRecordInfos()==null?0:response.getRecordInfos().size();
                     int filter_amount = 0;
                     String record_info = "共计 " + total_amount + " 条预约记录，当前显示 " + (total_amount - filter_amount) + " 条";
                     record_total.setText(record_info);
@@ -199,17 +231,39 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         builder.setSingleChoiceItems(list, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                if (isFliterFlag){
+                if (isFliterFlag) {
                     filter_select = which;
-                    ToastUtils.showShort(filter_list[which]);
                 } else {
                     sort_select = which;
-                    ToastUtils.showShort(sort_list[which]);
                 }
-
             }
         });
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (isFliterFlag){
+//                    filter_select = which;
+                    ToastUtils.showShort(filter_list[which]);
+                } else {
+                    switch (sort_select){
+                        case 0:
+                            Log.i(TAG, "selected.");
+                            sortBySubmitTime = true;
+                            refreshRecord();
+                            break;
+                        case 1:
+                            sortByDepartureTime = true;
+                            refreshRecord();
+                            break;
+                        case 2:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        });
+
         builder.setNegativeButton("取消", null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

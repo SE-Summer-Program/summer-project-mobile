@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:background="@color/shallow_gray"
+    android:layout_marginVertical="@dimen/basicPaddingSize"
+    android:layout_marginHorizontal="@dimen/screenPadding">
+
+    <TextView
+        android:id="@+id/shift_time_loop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/middleText"
+        android:layout_gravity="center"
+        android:gravity="center"/>
+
+</LinearLayout>

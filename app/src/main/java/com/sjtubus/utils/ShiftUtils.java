@@ -118,4 +118,8 @@ public class ShiftUtils {
     public static String getEngLineName(String linename) { return name_chiToeng.get(linename); }
 
     public static String getChiLineName(String linename) { return name_engTochi.get(linename); }
+
+    public static boolean isLoopLine(String linename){
+        return (linename.equals("LoopLineAntiClockwise") || linename.equals("LoopLineClockwise"));
+    }
 }

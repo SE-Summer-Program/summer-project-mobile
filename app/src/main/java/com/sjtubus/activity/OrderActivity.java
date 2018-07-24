@@ -156,44 +156,37 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         arrive_date.setText(date_str);
         shiftid.setText(shiftid_str);
         shift_type.setText(ShiftUtils.getChiType(shift_type_str));
-
         comment.setOnClickListener(this);
 
-        TextView double_departure_place = findViewById(R.id.order_departureplace_double);
-        TextView double_departure_time = findViewById(R.id.order_departuretime_double);
-        TextView double_departure_date = findViewById(R.id.order_departuredate_double);
-        TextView double_arrive_place = findViewById(R.id.order_arriveplace_double);
-        TextView double_arrive_time = findViewById(R.id.order_arrivetime_double);
-        TextView double_arrive_date = findViewById(R.id.order_arrivedate_double);
-        TextView double_shiftid = findViewById(R.id.order_shiftid_double);
-        TextView double_shift_type = findViewById(R.id.order_shifttype_double);
-        TextView double_comment = findViewById(R.id.order_comment_double);
+        LinearLayout linearLayout = findViewById(R.id.order_linearlayout_double);
 
-        double_departure_place.setText(double_departure_place_str);
-        double_arrive_place.setText(double_arrive_place_str);
-        double_departure_time.setText(double_departure_time_str);
-        double_arrive_time.setText(double_arrive_time_str);
-        double_departure_date.setText(double_date_str);
-        double_arrive_date.setText(double_date_str);
-        double_shiftid.setText(double_shiftid_str);
-        double_shift_type.setText(ShiftUtils.getChiType(double_shift_type_str));
+        if (isSingleWayFlag){
+            linearLayout.setVisibility(View.GONE);
+        } else {
+            TextView double_departure_place = findViewById(R.id.order_departureplace_double);
+            TextView double_departure_time = findViewById(R.id.order_departuretime_double);
+            TextView double_departure_date = findViewById(R.id.order_departuredate_double);
+            TextView double_arrive_place = findViewById(R.id.order_arriveplace_double);
+            TextView double_arrive_time = findViewById(R.id.order_arrivetime_double);
+            TextView double_arrive_date = findViewById(R.id.order_arrivedate_double);
+            TextView double_shiftid = findViewById(R.id.order_shiftid_double);
+            TextView double_shift_type = findViewById(R.id.order_shifttype_double);
+            TextView double_comment = findViewById(R.id.order_comment_double);
 
-        double_comment.setOnClickListener(this);
+            double_departure_place.setText(double_departure_place_str);
+            double_arrive_place.setText(double_arrive_place_str);
+            double_departure_time.setText(double_departure_time_str);
+            double_arrive_time.setText(double_arrive_time_str);
+            double_departure_date.setText(double_date_str);
+            double_arrive_date.setText(double_date_str);
+            double_shiftid.setText(double_shiftid_str);
+            double_shift_type.setText(ShiftUtils.getChiType(double_shift_type_str));
+
+            double_comment.setOnClickListener(this);
+        }
 
         Button submit_btn = findViewById(R.id.order_confirm);
         submit_btn.setOnClickListener(this);
-
-        if (isSingleWayFlag){
-            double_departure_place.setVisibility(View.GONE);
-            double_arrive_place.setVisibility(View.GONE);
-            double_departure_time.setVisibility(View.GONE);
-            double_arrive_time.setVisibility(View.GONE);
-            double_departure_date.setVisibility(View.GONE);
-            double_arrive_date.setVisibility(View.GONE);
-            double_shiftid.setVisibility(View.GONE);
-            double_shift_type.setVisibility(View.GONE);
-            double_comment.setVisibility(View.GONE);
-        }
     }
 
     private void initRemindView() {

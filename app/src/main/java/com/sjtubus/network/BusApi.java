@@ -3,6 +3,7 @@ package com.sjtubus.network;
 import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.LineInfoResponse;
+import com.sjtubus.model.response.LocationResponse;
 import com.sjtubus.model.response.LoginResponse;
 import com.sjtubus.model.response.MessageResponse;
 import com.sjtubus.model.response.ProfileResponse;
@@ -31,6 +32,12 @@ public interface BusApi {
     @POST("account/login")
     Observable<LoginResponse> login(@Body RequestBody info);
 
+    @POST("driver/login")
+    Observable<LoginResponse> driverlogin(@Body RequestBody info);
+
+    @POST("account/admin")
+    Observable<LoginResponse> adminlogin(@Body RequestBody info);
+
     @POST("account/logout")
     Observable<HttpResponse> logout();
 
@@ -40,30 +47,36 @@ public interface BusApi {
     @GET("account/profile")
     Observable<ProfileResponse> getProfile();
 
-    @GET("account/messages")
+    @GET("message/all")
     Observable<MessageResponse> getMessages();
 
-    @GET("/shift/search_schedule")
+    @GET("shift/search_schedule")
     Observable<ScheduleResponse> getSchedule(@Query("type") String type, @Query("line_name") String line_name);
 
-    @GET("/shift/infos")
+    @GET("shift/infos")
     Observable<ShiftInfoResponse> getShiftInfos(@Query("shiftid") String shiftid);
 
-    @GET("/line/stations")
+    @GET("line/stations")
     Observable<StationResponse> getLineStation(@Query("line_name") String line_name);
 
-    @GET("/line/infos")
+    @GET("line/infos")
     Observable<LineInfoResponse> getLineInfos(@Query("type") String type);
 
-    @GET("/appointment/infos")
+    @GET("appointment/infos")
     Observable<AppointResponse> getAppointment(@Query("line_name") String line_name, @Query("type") String type, @Query("appoint_date") String appoint_date);
 
-    @GET("/appointment/record")
+    @GET("appointment/record")
     Observable<RecordInfoResponse> getRecordInfos(@Query("username")String username);
 
-    @POST("/appointment/appoint")
+    @POST("appointment/appoint")
     Observable<HttpResponse> appoint(@Body RequestBody appointinfo);
 
-    @POST("/appointment/verify")
+    @POST("appointment/verify")
     Observable<HttpResponse> verifyUser(@Body RequestBody info);
+
+    @POST("locate")
+    Observable<HttpResponse> postLocation(@Body RequestBody location);
+
+    @GET("location")
+    Observable<LocationResponse> getLocation();
 }

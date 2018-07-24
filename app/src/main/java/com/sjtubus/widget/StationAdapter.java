@@ -24,7 +24,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
 
         ViewHolder(View view){
             super(view);
-            stationName = view.findViewById(R.id.shift_time);
+            stationName = view.findViewById(R.id.station_name);
         }
     }
 
@@ -41,7 +41,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
     @NonNull
     @Override
     public StationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_shift, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_station, parent, false);
         return new StationAdapter.ViewHolder(view);
     }
 
