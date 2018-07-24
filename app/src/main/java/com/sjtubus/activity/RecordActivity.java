@@ -33,8 +33,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static android.content.ContentValues.TAG;
-
 public class RecordActivity extends BaseActivity implements View.OnClickListener, RecordAdapter.OnItemClickListener{
 
     private RecordInfo recordInfo;
@@ -206,7 +204,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                     }
                     swipeRefresh.setRefreshing(false);
 
-                    int total_amount = response.getRecordInfos().size();
+                    int total_amount = response.getRecordInfos()==null?0:response.getRecordInfos().size();
                     int filter_amount = 0;
                     String record_info = "共计 " + total_amount + " 条预约记录，当前显示 " + (total_amount - filter_amount) + " 条";
                     record_total.setText(record_info);

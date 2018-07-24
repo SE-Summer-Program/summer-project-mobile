@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.TransitionRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,8 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.activity.RecordActivity;
-import com.sjtubus.activity.ScheduleActivity;
 import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ShiftUtils;

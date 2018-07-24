@@ -1,6 +1,5 @@
 package com.sjtubus.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -30,23 +29,17 @@ public class AdminloginFragment extends BaseFragment implements View.OnClickList
     private EditText username_edit,password_edit;
 
     private static AdminloginFragment mFragment = null;
-    private Activity mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
     }
 
-    public static AdminloginFragment getInstance(Activity context) {
+    public static AdminloginFragment getInstance() {
         if(mFragment == null){
             mFragment = new AdminloginFragment();
-            mFragment.setActivity(context);
         }
         return mFragment;
-    }
-
-    public void setActivity(Activity mContext){
-        this.mContext = mContext;
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -96,7 +89,7 @@ public class AdminloginFragment extends BaseFragment implements View.OnClickList
                         if(response.getError()==0){
                             //更新用户信息
                             UserManager.getInstance().refresh();
-                            mContext.finish();
+                            if(getActivity()!=null) getActivity().finish();
                         }
                         ToastUtils.showShort(response.getMsg());
                     }

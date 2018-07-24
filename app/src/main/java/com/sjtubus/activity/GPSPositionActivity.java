@@ -19,23 +19,13 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.overlayutil.OverlayManager;
-import com.baidu.mapapi.search.core.RouteLine;
-import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
-import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.sjtubus.R;
-import com.sjtubus.model.Station;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
-import com.sjtubus.utils.RippleImageView;
 import com.sjtubus.utils.ToastUtils;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.sjtubus.widget.RippleImageView;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;

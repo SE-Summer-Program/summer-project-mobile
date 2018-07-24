@@ -1,5 +1,6 @@
-package com.sjtubus.utils;
+package com.sjtubus.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -7,7 +8,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -17,11 +17,6 @@ import android.widget.RelativeLayout;
 
 import com.sjtubus.R;
 
-/**
- * Description :
- * Author : liujun
- * Email : liujin2son@163.com
- */
 public class RippleImageView extends RelativeLayout {
     private static final int SHOW_SPACING_TIME=700;
     private static final int MSG_WAVE2_ANIMATION = 1;
@@ -40,6 +35,7 @@ public class RippleImageView extends RelativeLayout {
     /**水波纹和背景图片的大小*/
     private float imageViewWidth=IMAMGEVIEW_SIZE;
     private float imageViewHeigth=IMAMGEVIEW_SIZE;
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
 
         @Override
@@ -95,7 +91,7 @@ public class RippleImageView extends RelativeLayout {
         LayoutParams params=new LayoutParams(dip2px(context,imageViewWidth),dip2px(context,imageViewHeigth));
         //添加一个规则
         params.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
-        /**添加水波纹图片*/
+        /*添加水波纹图片*/
         for (int i = 0; i <SIZE ; i++) {
             imgs[i] = new ImageView(context);
             imgs[i].setImageResource(R.mipmap.point_empty);
@@ -105,7 +101,7 @@ public class RippleImageView extends RelativeLayout {
         //添加一个规则
         params_bg.addRule(RelativeLayout.CENTER_IN_PARENT,RelativeLayout.TRUE);
 
-        /**添加背景图片*/
+        /*添加背景图片*/
         img_bg=new ImageView(context);
         img_bg.setImageResource(R.mipmap.point_end);
         addView(img_bg, params_bg);

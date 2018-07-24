@@ -16,7 +16,7 @@
         <item
             android:id="@+id/navigation_item_message"
             android:icon="@mipmap/message"
-            android:title="@string/message" />
+            android:title="@string/billboard" />
         <item
             android:id="@+id/navigation_item_idea"
             android:icon="@mipmap/idea"

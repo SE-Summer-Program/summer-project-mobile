@@ -345,18 +345,20 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     String appoint_endtime = departure_date + " " + arrive_time;
                     List<RecordInfo> recordInfos = response.getRecordInfos();
                     //输出为空
-                    for (RecordInfo recordInfo : recordInfos) {
-                        String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
-                        String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
-                        //ToastUtils.showShort(record_starttime + " " + record_endtime);
-                        //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
-                        if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
-                            hasConflictSchedule = false;
-                        else if (StringCalendarUtils.isBeforeTimeOfSecondPara(record_endtime, appoint_starttime))
-                            hasConflictSchedule = false;
-                        else {
-                            hasConflictSchedule = true;
-                            break;
+                    if(recordInfos != null) {
+                        for (RecordInfo recordInfo : recordInfos) {
+                            String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
+                            String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
+                            //ToastUtils.showShort(record_starttime + " " + record_endtime);
+                            //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
+                            if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
+                                hasConflictSchedule = false;
+                            else if (StringCalendarUtils.isBeforeTimeOfSecondPara(record_endtime, appoint_starttime))
+                                hasConflictSchedule = false;
+                            else {
+                                hasConflictSchedule = true;
+                                break;
+                            }
                         }
                     }
                 }
