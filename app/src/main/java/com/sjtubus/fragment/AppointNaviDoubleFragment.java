@@ -149,6 +149,10 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                             String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
                             String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
 
+                            if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
+                                ToastUtils.showShort("不能预约已经发出的班次哦~");
+                                return;
+                            }
                             if (StringCalendarUtils.isBeforeDateOfSecondPara(doubledate_str, dateStr)){
                                 ToastUtils.showShort("回程的时间不能早于去程哦~");
                                 return;
@@ -175,6 +179,10 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                             String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
                             String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
 
+                            if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
+                                ToastUtils.showShort("不能预约已经发出的班次哦~");
+                                return;
+                            }
                             if (StringCalendarUtils.isBeforeDateOfSecondPara(dateStr, singledate_str)){
                                 ToastUtils.showShort("回程的时间不能早于去程哦~");
                                 return;

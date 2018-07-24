@@ -145,6 +145,11 @@ public class AppointNaviFragment extends BaseFragment {
                             String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
                             String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
                             String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
+
+                            if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
+                                ToastUtils.showShort("不能预约已经发出的班次哦~");
+                                return;
+                            }
                             textView_date.setText(dateStr);
 
                             year = year_choose;

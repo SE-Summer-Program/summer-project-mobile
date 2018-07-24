@@ -44,7 +44,7 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
 
     private ShiftAdapter mAdapter;
 
-    private TextView choose_station;
+    private TextView choose_station, choose_hint;
     private String[] stationList = {"菁菁堂","校医院","东上院","东中院","新图书馆","行政B楼","电信学院","凯旋门","机动学院","庙门",
             "船建学院","文选医学楼","学生服务中心","西区学生公寓","第四餐饮大楼","华联生活中心","包玉刚图书馆","材料学院"};
     private int choose_index = 0;
@@ -74,6 +74,8 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
             linearLayout.setVisibility(View.VISIBLE);
             choose_station = view.findViewById(R.id.choose_station);
             choose_station.setOnClickListener(this);
+            choose_hint = view.findViewById(R.id.choose_hint);
+            choose_hint.setOnClickListener(this);
 
             mAdapter = new ShiftAdapter(mRecyclerView.getContext(), true);
             mRecyclerView.setAdapter(mAdapter);
@@ -105,7 +107,12 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
 
                 @Override
                 public void onNext(ScheduleResponse response) {
-                    Log.d(TAG, "onNext: ");
+                    Log.i(TAG, "onNext: ");
+
+                    if (response.getSchedule() == null){
+                        ToastUtils.showShort("网络请求失败！");
+                        return;
+                    }
                     mAdapter.setDataList(response.getSchedule());
                 }
 
@@ -137,8 +144,10 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
                 @Override
                 public void onNext(StationSingleResponse response) {
                     Log.d(TAG, "onNext: ");
-                    if (line_name.equals("LoopLineAntiClockwise") && type.equals("NormalWorkday"))
+                    if (line_name.equals("LoopLineAntiClockwise") && type.equals("NormalWorkday")) {
+                        ToastUtils.showShort("hhh: "+response.getStation().getAntiClockTotal().get(0));
                         mAdapter.setDataListOfLoopLine(response.getStation().getAntiClockTotal());
+                    }
                     else if (line_name.equals("LoopLineAntiClockwise") && type.equals("HolidayWorkday"))
                         mAdapter.setDataListOfLoopLine(response.getStation().getVacAntiClockTotal());
                     else if (line_name.equals("LoopLineClockwise") && type.equals("NormalWorkday"))
@@ -166,6 +175,7 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.choose_hint:
             case R.id.choose_station:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("选择站点");
@@ -178,6 +188,7 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+//                        choose_index = which;
                         choose_station.setText(stationList[choose_index]);
                         retrieveDataOfLoopLine((String) choose_station.getText());
                     }

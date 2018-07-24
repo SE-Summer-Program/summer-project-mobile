@@ -86,7 +86,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/map_btn"
+                android:id="@+id/navigate_btn"
                 android:background="#ffffff"
                 android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@mipmap/icon_map_128"
@@ -96,7 +96,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/navigate_btn"
+                android:id="@+id/map_btn"
                 android:background="#ffffff"
                 android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@mipmap/icon_navigate_128"

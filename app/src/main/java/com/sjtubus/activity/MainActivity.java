@@ -201,7 +201,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                         .initiateScan(); // 初始化扫描
                 break;
             case R.id.position_btn:
-                if(UserManager.getInstance().getRole() == null){
+                if(UserManager.getInstance().getUser() == null){
                     ToastUtils.showShort("请先登录~");
                     break;
                 }

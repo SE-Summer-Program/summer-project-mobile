@@ -13,6 +13,7 @@
         android:paddingTop="@dimen/smallPadding"
         android:visibility="gone">
         <TextView
+            android:id="@+id/choose_hint"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
