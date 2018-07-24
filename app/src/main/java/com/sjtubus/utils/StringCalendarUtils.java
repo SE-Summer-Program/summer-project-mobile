@@ -166,6 +166,22 @@ public class StringCalendarUtils {
         return date.before(current);
     }
 
+    public static boolean isBeforeCurrentTimeHHmm(String time) {
+
+        @SuppressLint("SimpleDateFormat")
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        Date date = new Date();
+        Date current = new Date();
+
+        try {
+            date = timeFormat.parse(time);
+            current = timeFormat.parse(timeFormat.format(new Date()));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return date.before(current);
+    }
+
     /**
      * @ description: 比较某个日期和现在日期的先后
      */

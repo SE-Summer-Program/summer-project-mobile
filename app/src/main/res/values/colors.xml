@@ -11,6 +11,7 @@
     <color name="primary_gray">#bfbfbf</color>
     <color name="shallow_gray">#F2F2F2</color>
     <color name="primary_black">#000000</color>
+    <color name="shallow_black">#262626</color>
     <color name="primary_blue">#01006d</color>
     <color name="light_gray">#e6e6e6</color>
     <color name="dark_gray">#606060</color>

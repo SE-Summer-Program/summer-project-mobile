@@ -25,7 +25,7 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
         Bundle bundle = marker.getExtraInfo();
         Station station = (Station) bundle.getSerializable("info");
         //将信息显示在界面上
-        TextView text = (TextView) mScrollLayout.findViewById(R.id.text_view);
+        TextView text = (TextView) mScrollLayout.findViewById(R.id.map_station_name);
         String context = "";
         context += station.getName() + "\n";
         if(station.getName() == "菁菁堂"){
@@ -48,6 +48,8 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
             //还有假期的四个时刻表没加
         }
         text.setText(context);
+
+
         mScrollLayout.setToOpen();
         return true;
     }

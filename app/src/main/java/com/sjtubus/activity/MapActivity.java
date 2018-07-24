@@ -257,7 +257,7 @@ public class MapActivity extends BaseActivity {
             BitmapDescriptor bd_temp = bitmaps.get(station.getName() + "_smallZoom");
             MarkerOptions marker_temp = new MarkerOptions()
                     .position(new LatLng(station.getLatitude(),station.getLongitude()))
-                    .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(7);
+                    .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(8);
             //添加marker
             Marker marker = (Marker) mBaiduMap.addOverlay(marker_temp);
             //使用marker携带info信息，当点击事件的时候可以通过marker获得info信息
@@ -488,6 +488,7 @@ public class MapActivity extends BaseActivity {
         public void onChildScroll(int top) {
         }
     };
+
     //数据应当从数据库读取
     private List<Station> retrieveData(){
         List<Station> result = new ArrayList<>();
@@ -504,7 +505,9 @@ public class MapActivity extends BaseActivity {
 
                     @Override
                     public void onNext(StationResponse response) {
+
                         setStations(response.getStations());
+
                         initRoutePlan();
                         addMarker();
                         Log.d(TAG, "onNext: ");
