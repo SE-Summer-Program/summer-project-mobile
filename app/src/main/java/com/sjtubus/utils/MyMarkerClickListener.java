@@ -23,6 +23,7 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     public boolean onMarkerClick(Marker marker) {
         //从marker中获取info信息
         Bundle bundle = marker.getExtraInfo();
+        if(bundle == null) return false;
         Station station = (Station) bundle.getSerializable("info");
         //将信息显示在界面上
         TextView text = (TextView) mScrollLayout.findViewById(R.id.text_view);
