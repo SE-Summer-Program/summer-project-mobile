@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ShiftInfoResponse extends HttpResponse{
 
-    @SerializedName("shiftInfos")
+    @SerializedName("shiftInfo")
     private ShiftInfo shiftInfo;
 
     public ShiftInfo getShiftInfo() { return shiftInfo; }

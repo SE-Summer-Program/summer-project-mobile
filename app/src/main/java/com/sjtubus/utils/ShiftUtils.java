@@ -89,6 +89,24 @@ public class ShiftUtils {
         }
     }
 
+    public static String getTypeOfToday(){
+        Calendar calendar = Calendar.getInstance();
+        boolean isWeekendFlag = StringCalendarUtils.isWeekend(calendar);
+        boolean isHoildayFlag = StringCalendarUtils.isHoilday(calendar);
+        if (!isHoildayFlag && !isWeekendFlag){
+            return type_list_E[0];
+        }
+        else if (!isHoildayFlag){
+            return type_list_E[1];
+        }
+        else if (!isWeekendFlag){
+            return type_list_E[2];
+        }
+        else{
+            return type_list_E[3];
+        }
+    }
+
     public static String getLineByDepartureAndArrive(String departure_place_str, String arrive_place_str){
         if (departure_place_str.contains("闵行") && arrive_place_str.contains("徐汇")) {
             return line_list_E[0];

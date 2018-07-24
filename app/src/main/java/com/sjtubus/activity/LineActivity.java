@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.sjtubus.R;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.LineAdapter;
 
@@ -46,9 +47,9 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
 
     TextView line_total;
 
-    private String[] type_list = {"在校期-工作日", "在校期-双休日、节假日", "寒暑假-工作日","寒暑假-双休日"};
+    private String[] type_list = {"在校期-工作日", "在校期-双休日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
-    private int select = 0;
+    private int select;
 
     //private SwipeRefreshView mSwipeRefreshView;
 
@@ -99,17 +100,28 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
 
             }
         });
-        String type = "NormalWorkday";
+        String type = ShiftUtils.getTypeOfToday();
+        initSelected(type);
         setAndShowSchedule(type);
 
         swipeRefresh = findViewById(R.id.refresh_schedule);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshSchedule();
+                refreshSchedule(type_list_E[select]);
             }
         });
 
+    }
+
+    private void initSelected(String type){
+        for (int i = 0; i < type_list_E.length; i++){
+            if (type.equals(type_list_E[i])){
+                select = i;
+                return;
+            }
+        }
+        select = 2;
     }
 
     public void setAndShowSchedule(String type){
@@ -130,7 +142,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                     adapter.setDataList(response.getLineInfos());
 
                     int total_amount = response.getLineInfos().size();
-                    String line_info = "今日共有 " + total_amount +  " 条线路正常运行";
+                    String line_info = type_list[select] + "共有 " + total_amount +  " 条线路正常运行";
                     line_total.setText(line_info);
                 }
 
@@ -169,9 +181,9 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
         dialog.show();
     }
 
-    public void refreshSchedule(){
+    public void refreshSchedule(String type){
         RetrofitClient.getBusApi()
-            .getLineInfos(type_list_E[select])
+            .getLineInfos(type)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<LineInfoResponse>() {

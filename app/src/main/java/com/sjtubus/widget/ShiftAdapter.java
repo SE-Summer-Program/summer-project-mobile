@@ -36,10 +36,16 @@ public class ShiftAdapter extends RecyclerView.Adapter<ShiftAdapter.ViewHolder> 
         }
     }
 
+    /* 校园巴士和校区巴士不共用一套setdatalist了 */
     public void setDataList(Schedule schedule) {
         times = schedule.getScheduleTime();
-        if (! isLoopLineFlag)
-            comments = schedule.getScheduleComment();
+//        if (! isLoopLineFlag)
+        comments = schedule.getScheduleComment();
+        notifyDataSetChanged();
+    }
+
+    public void setDataListOfLoopLine(List<String> schedule){
+        times = schedule;
         notifyDataSetChanged();
     }
 

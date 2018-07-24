@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.response.ScheduleResponse;
+import com.sjtubus.model.response.StationResponse;
+import com.sjtubus.model.response.StationSingleResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.ToastUtils;
@@ -74,12 +76,14 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
             choose_station.setOnClickListener(this);
 
             mAdapter = new ShiftAdapter(mRecyclerView.getContext(), true);
+            mRecyclerView.setAdapter(mAdapter);
+            retrieveDataOfLoopLine((String) choose_station.getText());
         } else {
             mAdapter = new ShiftAdapter(mRecyclerView.getContext(), false);
+            mRecyclerView.setAdapter(mAdapter);
+            retrieveData();
         }
 
-        mRecyclerView.setAdapter(mAdapter);
-        retrieveData();
         return view;
     }
 
@@ -119,6 +123,46 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
             });
     }
 
+    private void retrieveDataOfLoopLine(String station) {
+        RetrofitClient.getBusApi()
+            .getScheduleOfLoopLine(station)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<StationSingleResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
+                }
+
+                @Override
+                public void onNext(StationSingleResponse response) {
+                    Log.d(TAG, "onNext: ");
+                    if (line_name.equals("LoopLineAntiClockwise") && type.equals("NormalWorkday"))
+                        mAdapter.setDataListOfLoopLine(response.getStation().getAntiClockTotal());
+                    else if (line_name.equals("LoopLineAntiClockwise") && type.equals("HolidayWorkday"))
+                        mAdapter.setDataListOfLoopLine(response.getStation().getVacAntiClockTotal());
+                    else if (line_name.equals("LoopLineClockwise") && type.equals("NormalWorkday"))
+                        mAdapter.setDataListOfLoopLine(response.getStation().getClockTotal());
+                    else if (line_name.equals("LoopLineClockwise") && type.equals("HolidayWorkday"))
+                        mAdapter.setDataListOfLoopLine(response.getStation().getVacClockTotal());
+                    else
+                        ToastUtils.showShort("发生未知错误！");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                    ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, "onComplete: ");
+                    //mProgressBar.setVisibility(View.GONE);
+                }
+            });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -135,12 +179,14 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         choose_station.setText(stationList[choose_index]);
+                        retrieveDataOfLoopLine((String) choose_station.getText());
                     }
                 });
 
                 builder.setNegativeButton("取消", null);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+
                 break;
             default:
                 break;

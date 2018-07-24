@@ -97,4 +97,29 @@ public class Station  implements Serializable{
     public List<String> getVacClockNonLoop() {
         return this.VacClockNonLoop;
     }
+
+    public List<String> getAntiClockTotal(){
+        List<String> list1 = this.AntiClockLoop;
+        List<String> list2 = this.AntiClockNonLoop;
+        list1.addAll(list2);
+        return list1;
+    }
+    public List<String> getClockTotal(){
+        List<String> list1 = this.ClockLoop;
+        List<String> list2 = this.ClockNonLoop;
+        list1.addAll(list2);
+        return list1;
+    }
+    public List<String> getVacAntiClockTotal(){
+        List<String> list1 = this.VacAntiClockLoop;
+        List<String> list2 = this.VacAntiClockNonLoop;
+        list1.addAll(list2);
+        return list1;
+    }
+    public List<String> getVacClockTotal(){
+        List<String> list1 = this.VacClockLoop;
+        List<String> list2 = this.VacClockNonLoop;
+        list1.addAll(list2);
+        return list1;
+    }
 }
