@@ -157,8 +157,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         String comment_text = "1. <font color='#FF6347'><strong>红色班次</strong></font>提前6分钟从东川路地铁站发车，" +
                 "巴士站点设在地铁站南侧的公交车集中候车点内。" + "<br>" +
                 "2. <font color='#6495ED'><strong>蓝色班次</strong></font>终点站为东川路地铁站校园巴士专用站。" + "<br>" +
-                "3. 周六、周日及法定节假日停运。" + "<br>" +
-                "4. 问询电话：后勤保障处 54743939" + "<br>";
+                "3. <font color='#66CD00'><strong>绿色班次</strong></font>为普通环线，<font color='#D1D1D1'><strong>灰色班次</strong></font>为已发出班次。" + "<br>" +
+                "4. 周六、周日及法定节假日停运。" + "<br>" +
+                "5. 问询电话：后勤保障处 54743939" + "<br>";
 
         comment.setText(Html.fromHtml(comment_text));
     }
