@@ -1,285 +1,372 @@
-//package com.sjtubus.activity;
-//
-//import android.Manifest;
-//import android.content.Context;
-//import android.content.Intent;
-//import android.content.pm.PackageManager;
-//import android.location.Criteria;
-//import android.location.Location;
-//import android.location.LocationListener;
-//import android.location.LocationManager;
-//import android.location.LocationProvider;
-//import android.os.Bundle;
-//import android.provider.Settings;
-//import android.support.v4.app.ActivityCompat;
-//import android.util.Log;
-//import android.view.View;
-//import android.widget.Button;
-//import android.widget.EditText;
-//
-//import com.baidu.mapapi.model.inner.GeoPoint;
-//import com.sjtubus.R;
-//import com.sjtubus.utils.ToastUtils;
-//
-//import java.util.List;
-//
-//public class GPSPositionActivity extends BaseActivity implements View.OnClickListener {
-//
-//    private EditText editText;
-//    private Button startbtn;
-//    private LocationManager locationManager;
-//    private String locationProvider;
-//    private static final String TAG = "GPSPositionActivity";
-//
-//    /*
-//     * 生命周期管理 oncreate - onstart - onresume - onpause - onstop - ondestroy
-//     */
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        locationManager.removeUpdates(locationListener);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        locationManager.removeUpdates(locationListener);
-//    }
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        initViews();
-//        startGPSservice();
-//    }
-//
-//    @Override
-//    protected int getContentViewId() {
-//        return R.layout.activity_position;
-//    }
-//
-//    private void initViews(){
-//        editText = (EditText) findViewById(R.id.position_edittext);
-//        startbtn = (Button) findViewById(R.id.position_startbtn);
-//        startbtn.setOnClickListener(this);
-//    }
-//
-//    private void startGPSservice() {
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//
-//        /* 判断GPS是否正常启动 */
-//        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            ToastUtils.showShort("请开启GPS导航...");
-//            /* 返回开启GPS导航设置界面 */
-//            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//            startActivityForResult(intent, 0);
-//        }
-//
-//        /* 获取Location */
-//        if (ActivityCompat.checkSelfPermission(GPSPositionActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                && ActivityCompat.checkSelfPermission(GPSPositionActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ToastUtils.showShort("未获取权限");
-//            return;
-//        }
-//
-//        //获取所有可用的位置提供器
-//        List<String> providers = locationManager.getProviders(true);
-//        if (providers.contains(LocationManager.GPS_PROVIDER)) {
-//            //如果是GPS
-//            locationProvider = LocationManager.GPS_PROVIDER;
-//        } else if (providers.contains(LocationManager.NETWORK_PROVIDER)) {
-//            //如果是Network
-//            locationProvider = LocationManager.NETWORK_PROVIDER;
-//        } else {
-//            ToastUtils.showShort("没有可用的位置提供器");
-//            return;
-//        }
-//
-//        Log.i(TAG, locationProvider);
-//
-//        /* 为获取地理位置信息时设置查询条件 */
-////        String bestProvider = locationManager.getBestProvider(getCriteria(), true);
-////
-////        Log.i(TAG, "GPS=" + LocationManager.GPS_PROVIDER);
-////        Log.i(TAG, "bestProvider=" + bestProvider);
-//
-//        /* 获取位置信息 */
-//        /* 如果不设置查询要求，getLastKnownLocation方法传人的参数为LocationManager.GPS_PROVIDER */
-////        Location location = null;
-////        while (location == null) {
-////            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-////                // TODO: Consider calling
-////                //    ActivityCompat#requestPermissions
-////                // here to request the missing permissions, and then overriding
-////                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-////                //                                          int[] grantResults)
-////                // to handle the case where the user grants the permission. See the documentation
-////                // for ActivityCompat#requestPermissions for more details.
-////                return;
-////            }
-////            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-////            Log.i(TAG, "long");
-////        }
-//
-//        Location location = locationManager.getLastKnownLocation(locationProvider);
-//
-////        while(location  == null) {
-////            mgr.requestLocationUpdates("gps", 60000, 1, locationListener);
-////        }
-////
-////        if(location!=null) {
-////            //定位我的位置
-////            MapController controller = mapView.getController();
-////            controller.setZoom(16);
-////            //latitude 纬度 longitude 经度
-////            GeoPoint point =  new GeoPoint((int) (location.getLatitude()*1E6),
-////                    (int) (location.getLongitude()*1E6));
-////            controller.setCenter(point); //设置地图中心
-////            mapView.getOverlays().clear(); //清除地图上所有覆盖物
-////            MyLocationOverlay locationOverlay = new MyLocationOverlay(mapView);
-////            LocationData locationData = new LocationData();
-////            locationData.latitude = location.getLatitude(); //纬度
-////            locationData.longitude = location.getLongitude(); //经度
-////            locationOverlay.setData(locationData);
-////            //添加覆盖物
-////            mapView.getOverlays().add(locationOverlay);
-////            mapView.refresh(); //刷新
-////        }
-//
-//
-//       updateView(location);
-//
-//        /* 监听状态 */
-//        /* 绑定监听，有4个参数
-//          参数1，设备：有GPS_PROVIDER和NETWORK_PROVIDER两种
-//          参数2，位置信息更新周期，单位毫秒
-//          参数3，位置变化最小距离：当位置距离变化超过此值时，将更新位置信息
-//          参数4，监听
-//
-//          备注：参数2和3，如果参数3不为0，则以参数3为准；参数3为0，则通过时间来定时更新；两者为0，则随时刷新
-//          1秒更新一次，或最小位移变化超过1米更新一次
-//          注意：此处更新准确度非常低，推荐在service里面启动一个Thread，在run中sleep(10000);然后执行handler.sendMessage(),更新位置
-//          */
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 2, locationListener);
-//    }
-//
-//    /* 位置监听 */
-//    private LocationListener locationListener = new LocationListener() {
-//
-//        /*
-//         * 位置信息变化时触发
-//         */
-//        @Override
-//        public void onLocationChanged(Location location) {
-//            Log.i(TAG, "onLocationChanged");
-//            updateView(location);
-//            Log.i(TAG, "时间：" + location.getTime());
-//            Log.i(TAG, "经度：" + location.getLongitude());
-//            Log.i(TAG, "纬度：" + location.getLatitude());
-//            Log.i(TAG, "海拔：" + location.getAltitude());
-//        }
-//
-//        /*
-//         * GPS状态变化时触发
-//         */
-//        @Override
-//        public void onStatusChanged(String provider, int status, Bundle extras) {
-//            Log.i(TAG, "onStatusChanged");
-//            switch (status) {
-//                //GPS状态为可见时
-//                case LocationProvider.AVAILABLE:
-//                    Log.i(TAG, "当前GPS状态为可见状态");
-//                    break;
-//                //GPS状态为服务区外时
-//                case LocationProvider.OUT_OF_SERVICE:
-//                    Log.i(TAG, "当前GPS状态为服务区外状态");
-//                    break;
-//                //GPS状态为暂停服务时
-//                case LocationProvider.TEMPORARILY_UNAVAILABLE:
-//                    Log.i(TAG, "当前GPS状态为暂停服务状态");
-//                    break;
-//            }
-//        }
-//
-//        /*
-//         * GPS开启时触发
-//         */
-//        @Override
-//        public void onProviderEnabled(String provider) {
-//            Log.i(TAG, "onproviderEnabled");
-//            if (ActivityCompat.checkSelfPermission(GPSPositionActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-//                    && ActivityCompat.checkSelfPermission(GPSPositionActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                // TODO: Consider calling
-//                //    ActivityCompat#requestPermissions
-//                // here to request the missing permissions, and then overriding
-//                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                //                                          int[] grantResults)
-//                // to handle the case where the user grants the permission. See the documentation
-//                // for ActivityCompat#requestPermissions for more details.
-//                return;
-//            }
-//            Location location = locationManager.getLastKnownLocation(provider);
-//            updateView(location);
-//        }
-//
-//        /*
-//         * GPS禁用时触发
-//         */
-//        @Override
-//        public void onProviderDisabled(String provider) {
-//            Log.i(TAG, "onProviderDisabled");
-//            updateView(null);
-//        }
-//    };
-//
-//    /*
-//     * 实时更新文本内容
-//     */
-//    private void updateView(Location location){
-//        Log.i(TAG,"readyToUpdateView");
-//
-//        if (location != null){
-//            Log.i(TAG,"updateView");
-//            editText.setText("设备位置信息:\n\n经度：");
-//            editText.append(String.valueOf(location.getLongitude()));
-//            editText.append("\n纬度：");
-//            editText.append(String.valueOf(location.getLatitude()));
-//        } else {
-//            // 清空EditText对象
-//            Log.i(TAG,"null");
-//            editText.getEditableText().clear();
-//        }
-//    }
-//
-//    /*
-//     * 返回查询条件
-//     */
-//    private Criteria getCriteria(){
-//        Log.i(TAG, "getCriteria()");
-//        Criteria criteria = new Criteria();
-//        //设置定位精确度 Criteria.ACCURACY_COARSE比较粗略，Criteria.ACCURACY_FINE则比较精细
-//        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-//        //设置是否要求速度
-//        criteria.setSpeedRequired(false);
-//        // 设置是否允许运营商收费
-//        criteria.setCostAllowed(false);
-//        //设置是否需要方位信息
-//        criteria.setBearingRequired(false);
-//        //设置是否需要海拔信息
-//         criteria.setAltitudeRequired(false);
-//        // 设置对电源的需求
-//        criteria.setPowerRequirement(Criteria.POWER_LOW);
-//        return criteria;
-//    }
-//
-//
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.position_startbtn:
-//                startGPSservice();
-//                break;
-//        }
-//    }
-//
-//}
+package com.sjtubus.activity;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.overlayutil.OverlayManager;
+import com.baidu.mapapi.search.core.RouteLine;
+import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
+import com.baidu.mapapi.search.route.RoutePlanSearch;
+import com.sjtubus.R;
+import com.sjtubus.model.Station;
+import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.RippleImageView;
+import com.sjtubus.utils.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
+
+import static android.content.ContentValues.TAG;
+
+public class GPSPositionActivity extends BaseActivity implements View.OnClickListener{
+
+    //百度地图相关
+    private MapView mMapView;
+    private MapStatusUpdate msu = null;
+    private BaiduMap mBaiduMap;
+
+    //定位相关
+    public LocationClient mLocationClient = null;
+    private MyGPSLocationListener myListener;
+    private static final int BAIDU_READ_PHONE_STATE =100;
+
+    //Marker相关
+//    private List<LatLng> latLng = new ArrayList<>();
+//    private List<Marker> markerList = new ArrayList<>();
+//    private List<OverlayOptions> overlayOptions = new ArrayList<>();
+//    private List<Station> stations = new ArrayList<>();
+
+    //搜索相关
+//    RoutePlanSearch mSearch = null;
+//    RouteLine route = null;  //路线
+//    OverlayManager routeOverlay = null;  //该类提供一个能够显示和管理多个Overlay的基类
+//    boolean useDefaultIcon = true;
+//    DrivingRoutePlanOption routePlan = new DrivingRoutePlanOption();
+
+    //View相关
+    private RippleImageView rippleImageView;
+    private boolean isAnimationShown = true;
+    private TextView currentStreet;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+        //注意该方法要再setContentView方法之前实现
+        SDKInitializer.initialize(getApplicationContext());
+
+        initPermission();
+        initView();
+        initLocation();
+//        initRoutePlan();
+    }
+
+    public int getContentViewId(){
+        return R.layout.activity_position;
+    }
+
+    private void initPermission(){
+        //h获得定位权限
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                ) {
+            ToastUtils.showShort("没有权限,请手动开启定位权限");
+            // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义）
+            ActivityCompat.requestPermissions(GPSPositionActivity.this,new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, BAIDU_READ_PHONE_STATE);
+        }
+    }
+
+    private void initView(){
+
+        Toolbar mToolbar = findViewById(R.id.toolbar_position);
+        mToolbar.setTitle("");
+        mToolbar.setNavigationIcon(R.mipmap.icon_back_128);
+
+        rippleImageView = (RippleImageView) findViewById(R.id.position_rippleImageView);
+        rippleImageView.startWaveAnimation();
+        rippleImageView.setOnClickListener(this);
+
+        currentStreet = findViewById(R.id.position_text);
+        currentStreet.setText("定位已关闭");
+
+        //获取地图控件引用
+        mMapView = findViewById(R.id.position_map);
+        mBaiduMap = mMapView.getMap();
+        mBaiduMap.setCompassEnable(true);
+        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为卫星显示
+        //msu = MapStatusUpdateFactory.zoomTo(15.0f);// 设置地图初始化缩放比例
+        //mBaiduMap.setMapStatus(msu);
+        //mBaiduMap.setCompassIcon(BitmapFactory.
+        //        decodeResource(getResources(),R.mipmap.compass));
+
+    }
+
+    private void initLocation(){
+        myListener = new MyGPSLocationListener(mBaiduMap);
+        //声明LocationClient类
+        mLocationClient = new LocationClient(getApplicationContext());
+        //注册监听函数
+        mLocationClient.registerLocationListener(myListener);
+
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        //可选，设置定位模式，默认高精度
+        //LocationMode.Hight_Accuracy：高精度；
+        //LocationMode. Battery_Saving：低功耗；
+        //LocationMode. Device_Sensors：仅使用设备；
+        option.setCoorType("bd09ll");
+        //可选，设置返回经纬度坐标类型，默认gcj02
+        //gcj02：国测局坐标；
+        //bd09ll：百度经纬度坐标；
+        //bd09：百度墨卡托坐标；
+        //海外地区定位，无需设置坐标类型，统一返回wgs84类型坐标
+        option.setScanSpan(1000);
+        //可选，设置发起定位请求的间隔，int类型，单位ms
+        //如果设置为0，则代表单次定位，即仅定位一次，默认为0
+        //如果设置非0，需设置1000ms以上才有效
+        option.setOpenGps(true);
+        //可选，设置是否使用gps，默认false
+        //使用高精度和仅用设备两种定位模式的，参数必须设置为true
+        option.setLocationNotify(true);
+        //可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false
+        option.setIgnoreKillProcess(false);
+        //可选，定位SDK内部是一个service，并放到了独立进程。
+        //设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
+        option.SetIgnoreCacheException(false);
+        //可选，设置是否收集Crash信息，默认收集，即参数为false
+        option.setWifiCacheTimeOut(5*60*1000);
+        //可选，7.2版本新增能力
+        //如果设置了该接口，首次启动定位时，会先判断当前WiFi是否超出有效期，若超出有效期，会先重新扫描WiFi，然后定位
+        option.setEnableSimulateGps(false);
+        //可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
+        option.setIsNeedAddress(true);
+        //可选，是否需要地址信息，默认为不需要，即参数为false
+        //如果开发者需要获得当前点的地址信息，此处必须为true
+        option.setIsNeedLocationDescribe(true);
+        //可选，是否需要位置描述信息，默认为不需要，即参数为false
+        //如果开发者需要获得当前点的位置信息，此处必须为true
+        mLocationClient.setLocOption(option);
+        //mLocationClient为第二步初始化过的LocationClient对象
+        //需将配置好的LocationClientOption对象，通过setLocOption方法传递给LocationClient对象使用
+        //更多LocationClientOption的配置，请参照类参考中LocationClientOption类的详细说明
+
+        // 开启定位图层
+        mBaiduMap.setMyLocationEnabled(true);
+
+        //MyLocationConfiguration.LocationMode mCurrentMode = MyLocationConfiguration.LocationMode.FOLLOWING;//定位跟随态
+        //mCurrentMode = MyLocationConfiguration.LocationMode.NORMAL;   //默认为 LocationMode.NORMAL 普通态
+        //mCurrentMode = MyLocationConfiguration.LocationMode.COMPASS;  //定位罗盘态
+
+        // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+//        BitmapDescriptorFactory mCurrentMarker = BitmapDescriptorFactory
+//                .fromResource(R.drawable.icon_geo);
+//        MyLocationConfiguration config = new MyLocationConfiguration(mCurrentMode, true, mCurrentMarker);
+//        mBaiduMap.setMyLocationConfiguration(config);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationClient.unRegisterLocationListener(myListener);
+        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        mMapView.onDestroy();
+//        mSearch.destroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mMapView.onResume();
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        if (!mLocationClient.isStarted())
+        {
+            mLocationClient.start();//开启定位
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
+        mMapView.onPause();
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        mBaiduMap.setMyLocationEnabled(false);
+        mLocationClient.stop();//停止定位
+    }
+
+    //Android6.0申请权限的回调方法
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            // requestCode即所声明的权限获取码，在checkSelfPermission时传入
+            case BAIDU_READ_PHONE_STATE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 获取到权限，作相应处理（调用定位SDK应当确保相关权限均被授权，否则可能引起定位失败）
+                    // 没有获取到权限，做特殊处理
+                    ToastUtils.showShort("成功获取位置~");
+                } else {
+                    // 没有获取到权限，做特殊处理
+                    ToastUtils.showShort("获取位置权限失败，请手动开启");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public class MyGPSLocationListener extends BDAbstractLocationListener {
+        private BaiduMap baiduMap;
+        private Boolean isFirstGetLocation = true;
+        private Boolean onSetLocation = true;
+
+        public MyGPSLocationListener(BaiduMap baiduMap){
+            this.baiduMap = baiduMap;
+        }
+
+        @Override
+        public void onReceiveLocation(BDLocation location){
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取地址相关的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+
+            String addr = location.getAddrStr();    //获取详细地址信息
+            String country = location.getCountry();    //获取国家
+            String province = location.getProvince();    //获取省份
+            String city = location.getCity();    //获取城市
+            String district = location.getDistrict();    //获取区县
+            String street = location.getStreet();    //获取街道信息
+            double latitude = location.getLatitude();  //获取纬度信息
+            double longitude = location.getLongitude();  //获取经度信息
+
+            if (isAnimationShown) {
+                String street_txt = "定位已开启 当前位置：" + street;
+                currentStreet.setText(street_txt);
+            }
+
+            //判断是否为首次获取到位置数据
+            if (isFirstGetLocation && onSetLocation)
+            {
+                //如果为首次定位，则直接定位到当前用户坐标
+                LatLng latLng=new LatLng(location.getLatitude(), location.getLongitude());
+                MapStatusUpdate msuLocationMapStatusUpdate= MapStatusUpdateFactory//
+                        .newLatLng(latLng);
+                baiduMap.animateMapStatus(msuLocationMapStatusUpdate);
+
+                isFirstGetLocation=false;
+            }
+
+            MyLocationData locData = new MyLocationData.Builder()
+                    .accuracy(location.getRadius())
+                    // 此处设置开发者获取到的方向信息，顺时针0-360
+                    .direction(100).latitude(location.getLatitude())
+                    .longitude(location.getLongitude()).build();
+
+            // 设置定位数据
+            baiduMap.setMyLocationData(locData);
+
+            RequestBody requestBody = new FormBody.Builder()
+                    .add("latitude", String.valueOf(location.getLatitude()))
+                    .add("longitude", String.valueOf(location.getLongitude()))
+                    .build();
+            sendLocation(requestBody);
+        }
+
+        public void setLocation(Boolean c){
+            this.onSetLocation = c;
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.position_rippleImageView:
+                // 定位开着，点了以后就关了
+                if (isAnimationShown) {
+                    isAnimationShown = false;
+                    rippleImageView.changeViewIcon(R.mipmap.point_start);
+                    currentStreet.setText("定位已关闭");
+                }
+                // 点了以后就开了
+                else {
+                    isAnimationShown = true;
+                    rippleImageView.changeViewIcon(R.mipmap.point_end);
+                    initLocation();
+                    //initView();
+                    //问题在这里，关掉以后开不起来
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void sendLocation(RequestBody requestBody){
+        RetrofitClient.getBusApi()
+            .postLocation(requestBody)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<HttpResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    addDisposable(d);
+                }
+
+                @Override
+                public void onNext(HttpResponse response) {
+                    ToastUtils.showShort("向后台发送数据了~");
+                }
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, "onComplete: ");
+                    //mProgressBar.setVisibility(View.GONE);
+                }
+            });
+    }
+}
