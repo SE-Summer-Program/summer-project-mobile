@@ -6,7 +6,7 @@ android {
         config {
             keyAlias 'yaozihang'
             keyPassword '123456yzh'
-            storeFile file('C:/Users/SHIYONG/Desktop/map.jks')
+            storeFile file('C:/Users/wxw/Desktop/map.jks')
             storePassword '123456yzh'
         }
     }
