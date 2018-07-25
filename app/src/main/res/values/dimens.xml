@@ -22,7 +22,7 @@
     <dimen name="noPadding">0dp</dimen>
     <dimen name="icon_padding">25dp</dimen>
     <dimen name="textPadding">5dp</dimen>
-    <dimen name="toolbarPaddingTop">15dp</dimen>
+    <dimen name="toolbarPaddingTop">17dp</dimen>
 
     <!--button尺寸-->
     <dimen name="buttonCornerSize">2dp</dimen>

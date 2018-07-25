@@ -109,7 +109,7 @@ public class MapActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        App.setStatusBarColor(this, getResources().getColor(R.color.primary_red));
         getPermission();
         initView();
         initLocation();
