@@ -106,6 +106,7 @@ public class MapActivity extends BaseActivity {
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
 
     private TimerTask task;
+    private ScheduledExecutorService pool;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -315,7 +316,7 @@ public class MapActivity extends BaseActivity {
                     });
             }
         };
-        ScheduledExecutorService pool = Executors.newScheduledThreadPool(1);
+        pool = Executors.newScheduledThreadPool(1);
         pool.scheduleAtFixedRate(task, 0 , 3000, TimeUnit.MILLISECONDS);
     }
 
@@ -352,7 +353,9 @@ public class MapActivity extends BaseActivity {
             if (busmap.get(key) == null) {
                 MarkerOptions marker_temp = new MarkerOptions()
                         .position(latLng)
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_markb)).anchor(0.5f, 1.0f).zIndex(7);
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_left))
+                        .scaleX(0.15f).scaleY(0.15f)//图标缩放比例
+                        .anchor(0.5f, 1.0f).zIndex(7);
                 //添加marker
                 busmap.put(key, (Marker) mBaiduMap.addOverlay(marker_temp));
             }else{
@@ -408,6 +411,7 @@ public class MapActivity extends BaseActivity {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         task.cancel();
+        pool.shutdown();
         mMapView.onPause();
     }
 

@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.sjtubus.R;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
-import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.LineAdapter;
 
@@ -100,7 +99,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
 
             }
         });
-        String type = ShiftUtils.getTypeOfToday();
+        //String type = ShiftUtils.getTypeOfToday();
+        String type = "NormalWorkday";
         initSelected(type);
         setAndShowSchedule(type);
 
