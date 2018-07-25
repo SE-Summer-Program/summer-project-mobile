@@ -48,4 +48,13 @@ public class MyDateUtils {
         return StringCalendarUtils.CalendarToString(cal);
     }
 
+    /* 判断所给的日期是否在将来一周以内 */
+    public static boolean isWithinOneWeek(String datestr){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getBeginOfDay(StringCalendarUtils.getCurrrentDate()));
+        cal.add(Calendar.WEEK_OF_MONTH, 1);
+        String oneWeekLater = StringCalendarUtils.CalendarToString(cal);
+
+        return StringCalendarUtils.isBeforeDateOfSecondPara(datestr, oneWeekLater);
+    }
 }

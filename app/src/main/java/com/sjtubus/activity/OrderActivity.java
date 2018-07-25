@@ -274,11 +274,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.order_setremindtime:
                 final TextView settime =  v.findViewById(v.getId());
-                setAlertDialog("提醒", remind_list, settime, "");
+                setAlertDialog("设置提醒时间", remind_list, settime, "");
                 break;
             case R.id.order_phonelocation:
                 final TextView location =  v.findViewById(v.getId());
-                setAlertDialog("手机区域", phone_location_list, location, " :");
+                setAlertDialog("选择手机区域", phone_location_list, location, " :");
                 break;
             case R.id.order_confirm:
                 new AlertDialog.Builder(this)
@@ -435,7 +435,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 checked_array[pos] = isChecked;
-                ToastUtils.showShort(check_msg[pos] + checked_array[pos]);
+//                ToastUtils.showShort(check_msg[pos] + checked_array[pos]);
             }
         });
     }

@@ -49,7 +49,13 @@ public class AppointParentViewHolder extends BaseViewHolder{
         departure_time.setText(StringCalendarUtils.HHmmssToHHmm(bean.getDeparture_time()));
         String arrive_time_text = "约" + StringCalendarUtils.HHmmssToHHmm(bean.getArrive_time());
         arrive_time.setText(arrive_time_text);
-        String remain_text = "剩余"+bean.getRemain_seat()+"座";
+
+        String remain_text = "";
+        if (bean.getRemain_seat() == 0){
+            remain_text = "已无座";
+        } else {
+            remain_text = "剩余"+bean.getRemain_seat()+"座";
+        }
         remain_seat.setText(remain_text);
 
         if (bean.isExpand()) {

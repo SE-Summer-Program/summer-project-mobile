@@ -67,7 +67,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="逆时针"
+                        android:text="@string/anticlockwise"
                         android:textSize="@dimen/middlesmallText"
                         android:textStyle="bold"
                         android:textColor="@color/primary_black"/>
@@ -89,7 +89,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="顺时针"
+                        android:text="@string/clockwise"
                         android:textSize="@dimen/middlesmallText"
                         android:textStyle="bold"
                         android:textColor="@color/shallow_black"/>
@@ -110,7 +110,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="寒暑假-逆时针"
+                        android:text="@string/vac_anticlockwise"
                         android:textSize="@dimen/middlesmallText"
                         android:textStyle="bold"
                         android:textColor="@color/shallow_black"/>
@@ -131,7 +131,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="寒暑假-顺时针"
+                        android:text="@string/vac_clockwise"
                         android:textSize="@dimen/middlesmallText"
                         android:textStyle="bold"
                         android:textColor="@color/shallow_black"/>
@@ -153,7 +153,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/middlesmallText"
-                        android:text="备注"
+                        android:text="@string/remark"
                         android:textStyle="bold"
                         android:textColor="@color/shallow_black"/>
                     <TextView

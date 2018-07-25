@@ -28,5 +28,13 @@ public class AppointChildViewHolder extends BaseViewHolder{
         collect_btn.setOnClickListener(listener);
         info_btn.setTag(pos);
         info_btn.setOnClickListener(listener);
+
+        if (bean.getRemain_seat() == 0){
+            reserve_btn.setBackgroundColor(0xffbfbfbf);
+            //0xFFBFBFBF是int类型的数据，分组一下0x|FF|BFBFBF，
+            //0x是代表颜色整数的标记，ff是表示透明度，bfbfbf表示颜色，(primary_gray)
+            //注意：这里0xFFBFBFBF必须是8个的颜色表示，不接受BFBFBF这种6个的颜色表示。
+            reserve_btn.setText("无座");
+        }
     }
 }

@@ -88,18 +88,6 @@
 
     </LinearLayout>
 
-    <!--<Button-->
-        <!--android:id="@+id/appoint_searchbtn"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text= "查 询"-->
-        <!--android:textSize="@dimen/normalTextSize"-->
-        <!--android:layout_marginTop="@dimen/largePadding"-->
-        <!--android:textColor="@color/primary_white"-->
-        <!--android:background="@color/primary_red"-->
-        <!--android:paddingVertical="@dimen/smallPadding"-->
-        <!--android:layout_marginHorizontal="@dimen/smallPadding" />-->
-
     <Button
         android:id="@+id/appoint_searchbtn"
         style="@style/bigButton"
@@ -108,6 +96,28 @@
         android:layout_margin="20dp"
         android:layout_marginTop="30dp"
         android:background="@color/primary_red"
-        android:text="查询" />
+        android:text="@string/search" />
+
+    <!-- Comment -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/smallPadding"
+        android:layout_marginHorizontal="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/middlesmallText"
+            android:text="@string/remark"
+            android:textStyle="bold"
+            android:textColor="@color/shallow_black"/>
+        <TextView
+            android:id="@+id/appoint_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/basicPaddingSize"
+            android:lineSpacingExtra = "@dimen/basicPaddingSize"/>
+    </LinearLayout>
 
 </LinearLayout >

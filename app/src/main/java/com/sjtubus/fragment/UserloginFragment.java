@@ -54,11 +54,13 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
         TextView register_txt = view.findViewById(R.id.txt_register);
         Button login_btn = view.findViewById(R.id.btn_login);
         TextView jaccount_btn = view.findViewById(R.id.jaccount_btn);
+        TextView forget_password_btn = view.findViewById(R.id.txt_forget_password);
         phone_edit = view.findViewById(R.id.login_phone_edit);
         password_edit = view.findViewById(R.id.login_pwd_edit);
         jaccount_btn.setOnClickListener(this);
         login_btn.setOnClickListener(this);
         register_txt.setOnClickListener(this);
+        forget_password_btn.setOnClickListener(this);
         return view;
     }
 
@@ -86,11 +88,11 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
         String phone = phone_edit.getText().toString().trim();
         String password = password_edit.getText().toString().trim();
         if(TextUtils.isEmpty(phone)){
-            ToastUtils.showShort("手机号码为空!");
+            ToastUtils.showShort("手机号码不能为空哦~");
             return;
         }
         if(TextUtils.isEmpty(password)){
-            ToastUtils.showShort("密码不能为空!");
+            ToastUtils.showShort("密码不能为空哦~");
         }
         RequestBody requestBody = new FormBody.Builder()
                 .add("password", password)
@@ -119,7 +121,7 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        ToastUtils.showShort("服务器错误!登录失败!");
+                        ToastUtils.showShort("服务器错误!登录失败orz");
                     }
 
                     @Override

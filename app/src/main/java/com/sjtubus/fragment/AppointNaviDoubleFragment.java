@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
+import com.sjtubus.utils.MyDateUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
@@ -36,8 +38,7 @@ public class AppointNaviDoubleFragment extends BaseFragment {
     private TextView arrive_place;
     private TextView singleway_date;
     private TextView doubleway_date;
-    private Button search_btn;
-    private ImageView revert_btn;
+    private TextView appoint_comment;
 
     private int departure_index = 0;//闵行校区
     private int arrive_index = 1;  //徐汇校区
@@ -71,8 +72,10 @@ public class AppointNaviDoubleFragment extends BaseFragment {
         arrive_place = view.findViewById(R.id.appoint_arriveplace);
         singleway_date = view.findViewById(R.id.appoint_singlewaydate);
         doubleway_date = view.findViewById(R.id.appoint_doublewaydate);
-        search_btn = view.findViewById(R.id.appoint_searchbtn);
-        revert_btn = view.findViewById(R.id.revert_place_btn);
+        Button search_btn = view.findViewById(R.id.appoint_searchbtn);
+        ImageView revert_btn = view.findViewById(R.id.revert_place_btn);
+        appoint_comment = view.findViewById(R.id.appoint_comment);
+        initAppointComment();
 
         departure_place.setOnClickListener(listener);
         arrive_place.setOnClickListener(listener);
@@ -152,8 +155,10 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                             if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
                                 ToastUtils.showShort("不能预约已经发出的班次哦~");
                                 return;
-                            }
-                            if (StringCalendarUtils.isBeforeDateOfSecondPara(doubledate_str, dateStr)){
+                            } else if (!MyDateUtils.isWithinOneWeek(dateStr)){
+                                ToastUtils.showShort("仅可预约一周以内的班次~");
+                                return;
+                            } else if (StringCalendarUtils.isBeforeDateOfSecondPara(doubledate_str, dateStr)){
                                 ToastUtils.showShort("回程的时间不能早于去程哦~");
                                 return;
                             }
@@ -182,8 +187,10 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                             if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
                                 ToastUtils.showShort("不能预约已经发出的班次哦~");
                                 return;
-                            }
-                            if (StringCalendarUtils.isBeforeDateOfSecondPara(dateStr, singledate_str)){
+                            } else if (!MyDateUtils.isWithinOneWeek(dateStr)){
+                                ToastUtils.showShort("仅可预约一周以内的班次~");
+                                return;
+                            } else if (StringCalendarUtils.isBeforeDateOfSecondPara(dateStr, singledate_str)){
                                 ToastUtils.showShort("回程的时间不能早于去程哦~");
                                 return;
                             }
@@ -239,5 +246,15 @@ public class AppointNaviDoubleFragment extends BaseFragment {
         year = calendar.get(Calendar.YEAR);       //获取年月日时分秒
         month = calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private void initAppointComment(){
+        String comment = "1. 用户仅可预约未来一周以内的班次。" + "<br>" +
+                "2. 教职工、研究生在校区巴士的高优先级不变。" + "<br>" +
+                "3. 点击出发地、目的地、出发时间即可调整。" + "<br>" +
+                "4. 暂无卢湾校区、法华校区的班车；暂无徐汇校区与七宝校区之间的班车。" + "<br>" +
+                "5. 问询电话：暂无" + "<br>";
+
+        appoint_comment.setText(Html.fromHtml(comment));
     }
 }

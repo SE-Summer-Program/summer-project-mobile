@@ -3,6 +3,7 @@ package com.sjtubus.utils;
 import android.annotation.SuppressLint;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,6 +23,19 @@ public class StringCalendarUtils {
             e.printStackTrace();
         }
         return calendar;
+    }
+
+    /* 由 2018-07-17 格式的字符串获取 date */
+    public static Date StringToDate(String datestr){
+        Date date= new Date();
+        @SuppressLint("SimpleDateFormat")
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            date = dateFormat.parse(datestr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     /* calendar转化成 2018-07-18 的格式 */
@@ -88,7 +102,7 @@ public class StringCalendarUtils {
     }
 
     /* 获取当天的日期，格式 2018-07-18 */
-    private static String getCurrrentDate(){
+    public static String getCurrrentDate(){
         String current_date;
         Date date = new Date();
         @SuppressLint("SimpleDateFormat")
@@ -273,4 +287,5 @@ public class StringCalendarUtils {
     public static boolean isToday(String datestr){
         return datestr.equals(getCurrrentDate());
     }
+
 }

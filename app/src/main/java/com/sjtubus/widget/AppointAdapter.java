@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
@@ -163,84 +164,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     String departure_date = info_reserve.getDate();
 
                     hasConflictSchedule = false;
-                    retrofitRecord(departure_time, arrive_time, departure_date);
-                    if (hasConflictSchedule){
-                        ToastUtils.showShort("不能预约行程冲突的班次哦~");
-                        break;
-                    }
+                    retrofitRecord(departure_time, arrive_time, departure_date, info_reserve);
 
-                    /* 单程 */
-                    if (isSingleWayFlag) {
-                        Intent orderIntent = new Intent(context, OrderActivity.class);
-                        orderIntent.putExtra("departure_place", info_reserve.getDeparture_place());
-                        orderIntent.putExtra("arrive_place", info_reserve.getArrive_place());
-                        orderIntent.putExtra("departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
-                        orderIntent.putExtra("arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
-                        orderIntent.putExtra("departure_date", departure_date);
-                        orderIntent.putExtra("shiftid", info_reserve.getShiftid());
-                        orderIntent.putExtra("shift_type", info_reserve.getLine_type());
-
-                        orderIntent.putExtra("appoint_type", 0);
-                        context.startActivity(orderIntent);
-                    }
-
-                    /* 往返去程 */
-                    else if (! isSecondPageFlag){
-                        Intent appointDoubleIntent = new Intent(context, AppointDoubleActivity.class);
-
-                        appointDoubleIntent.putExtra("single_departure_place", info_reserve.getDeparture_place());
-                        appointDoubleIntent.putExtra("single_arrive_place", info_reserve.getArrive_place());
-                        appointDoubleIntent.putExtra("single_departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
-                        //ToastUtils.showShort(StringCalendarUtils.HHmmssToHHmm(departure_time));
-                        appointDoubleIntent.putExtra("single_arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
-                        appointDoubleIntent.putExtra("single_departure_date", departure_date);
-                        appointDoubleIntent.putExtra("single_shiftid", info_reserve.getShiftid());
-                        appointDoubleIntent.putExtra("single_shift_type", info_reserve.getLine_type());
-
-                        appointDoubleIntent.putExtra("double_departure_date", double_date_str);
-                        appointDoubleIntent.putExtra("target_page", 1);
-
-                        context.startActivity(appointDoubleIntent);
-
-                    }
-
-                    /* 往返返程 */
-                    else{
-                        String single_starttime = appointInfo.getDate() + " " + appointInfo.getDeparture_time();
-                        String single_endtime =  appointInfo.getDate() + " " + appointInfo.getArrive_time();
-                        String double_starttime = departure_date + " " + StringCalendarUtils.HHmmssToHHmm(departure_time);
-                        String double_endtime = departure_date + " " + StringCalendarUtils.HHmmssToHHmm(arrive_time);
-                       // ToastUtils.showLong(single_starttime + " " + single_endtime + " " + double_starttime + " " + double_endtime);
-
-                        if (StringCalendarUtils.isBeforeTimeOfSecondParaHHmm(double_endtime, single_starttime)){
-                            ToastUtils.showShort("返程的时间不能早于去程哦~");
-                            break;
-                        } else if (! StringCalendarUtils.isBeforeTimeOfSecondParaHHmm(single_endtime, double_starttime)){
-                            ToastUtils.showShort("不能预约行程冲突的班次哦~");
-                            break;
-                        }
-
-                        Intent orderDoubleIntent = new Intent(context, OrderActivity.class);
-
-                        orderDoubleIntent.putExtra("departure_place", appointInfo.getDeparture_place());
-                        orderDoubleIntent.putExtra("arrive_place", appointInfo.getArrive_place());
-                        orderDoubleIntent.putExtra("departure_time", appointInfo.getDeparture_time());
-                        orderDoubleIntent.putExtra("arrive_time", appointInfo.getArrive_time());
-                        orderDoubleIntent.putExtra("departure_date", appointInfo.getDate());
-                        orderDoubleIntent.putExtra("shiftid", appointInfo.getShiftid());
-                        orderDoubleIntent.putExtra("shift_type", appointInfo.getLine_type());
-
-                        orderDoubleIntent.putExtra("double_departure_place", info_reserve.getDeparture_place());
-                        orderDoubleIntent.putExtra("double_arrive_place", info_reserve.getArrive_place());
-                        orderDoubleIntent.putExtra("double_departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
-                        orderDoubleIntent.putExtra("double_arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
-                        orderDoubleIntent.putExtra("double_departure_date", departure_date);
-                        orderDoubleIntent.putExtra("double_shiftid", info_reserve.getShiftid());
-                        orderDoubleIntent.putExtra("double_shift_type", info_reserve.getLine_type());
-
-                        orderDoubleIntent.putExtra("appoint_type", 1);
-                        context.startActivity(orderDoubleIntent);
-                    }
                     break;
 
                 case R.id.appointitem_collectbtn:
@@ -314,8 +239,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.onScrollListener = onScrollListener;
     }
 
-
-    private void retrofitRecord(final String departure_time, final String arrive_time, final String departure_date){
+    private void retrofitRecord(final String departure_time, final String arrive_time, final String departure_date, final AppointInfo info_reserve){
         //获取当前用户的username
         String username = UserManager.getInstance().getUser().getUsername();
 
@@ -361,6 +285,13 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                             }
                         }
                     }
+
+                    if (hasConflictSchedule){
+                        ToastUtils.showShort("不能预约行程冲突的班次哦~");
+                        return;
+                    }
+
+                    pressReserveButton(departure_time, arrive_time, departure_date, info_reserve);
                 }
 
                 @Override
@@ -431,4 +362,78 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.compositeDisposable.add(s);
     }
 
+    private void pressReserveButton(String departure_time, String arrive_time, String departure_date, AppointInfo info_reserve){
+        /* 单程 */
+        if (isSingleWayFlag) {
+            Intent orderIntent = new Intent(context, OrderActivity.class);
+            orderIntent.putExtra("departure_place", info_reserve.getDeparture_place());
+            orderIntent.putExtra("arrive_place", info_reserve.getArrive_place());
+            orderIntent.putExtra("departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
+            orderIntent.putExtra("arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
+            orderIntent.putExtra("departure_date", departure_date);
+            orderIntent.putExtra("shiftid", info_reserve.getShiftid());
+            orderIntent.putExtra("shift_type", info_reserve.getLine_type());
+
+            orderIntent.putExtra("appoint_type", 0);
+            context.startActivity(orderIntent);
+        }
+
+        /* 往返去程 */
+        else if (! isSecondPageFlag){
+            Intent appointDoubleIntent = new Intent(context, AppointDoubleActivity.class);
+
+            appointDoubleIntent.putExtra("single_departure_place", info_reserve.getDeparture_place());
+            appointDoubleIntent.putExtra("single_arrive_place", info_reserve.getArrive_place());
+            appointDoubleIntent.putExtra("single_departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
+            //ToastUtils.showShort(StringCalendarUtils.HHmmssToHHmm(departure_time));
+            appointDoubleIntent.putExtra("single_arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
+            appointDoubleIntent.putExtra("single_departure_date", departure_date);
+            appointDoubleIntent.putExtra("single_shiftid", info_reserve.getShiftid());
+            appointDoubleIntent.putExtra("single_shift_type", info_reserve.getLine_type());
+
+            appointDoubleIntent.putExtra("double_departure_date", double_date_str);
+            appointDoubleIntent.putExtra("target_page", 1);
+
+            context.startActivity(appointDoubleIntent);
+
+        }
+
+        /* 往返返程 */
+        else{
+            String single_starttime = appointInfo.getDate() + " " + appointInfo.getDeparture_time();
+            String single_endtime =  appointInfo.getDate() + " " + appointInfo.getArrive_time();
+            String double_starttime = departure_date + " " + StringCalendarUtils.HHmmssToHHmm(departure_time);
+            String double_endtime = departure_date + " " + StringCalendarUtils.HHmmssToHHmm(arrive_time);
+            // ToastUtils.showLong(single_starttime + " " + single_endtime + " " + double_starttime + " " + double_endtime);
+
+            if (StringCalendarUtils.isBeforeTimeOfSecondParaHHmm(double_endtime, single_starttime)){
+                ToastUtils.showShort("返程的时间不能早于去程哦~");
+                return;
+            } else if (! StringCalendarUtils.isBeforeTimeOfSecondParaHHmm(single_endtime, double_starttime)){
+                ToastUtils.showShort("不能预约行程冲突的班次哦~");
+                return;
+            }
+
+            Intent orderDoubleIntent = new Intent(context, OrderActivity.class);
+
+            orderDoubleIntent.putExtra("departure_place", appointInfo.getDeparture_place());
+            orderDoubleIntent.putExtra("arrive_place", appointInfo.getArrive_place());
+            orderDoubleIntent.putExtra("departure_time", appointInfo.getDeparture_time());
+            orderDoubleIntent.putExtra("arrive_time", appointInfo.getArrive_time());
+            orderDoubleIntent.putExtra("departure_date", appointInfo.getDate());
+            orderDoubleIntent.putExtra("shiftid", appointInfo.getShiftid());
+            orderDoubleIntent.putExtra("shift_type", appointInfo.getLine_type());
+
+            orderDoubleIntent.putExtra("double_departure_place", info_reserve.getDeparture_place());
+            orderDoubleIntent.putExtra("double_arrive_place", info_reserve.getArrive_place());
+            orderDoubleIntent.putExtra("double_departure_time", StringCalendarUtils.HHmmssToHHmm(departure_time));
+            orderDoubleIntent.putExtra("double_arrive_time", StringCalendarUtils.HHmmssToHHmm(arrive_time));
+            orderDoubleIntent.putExtra("double_departure_date", departure_date);
+            orderDoubleIntent.putExtra("double_shiftid", info_reserve.getShiftid());
+            orderDoubleIntent.putExtra("double_shift_type", info_reserve.getLine_type());
+
+            orderDoubleIntent.putExtra("appoint_type", 1);
+            context.startActivity(orderDoubleIntent);
+        }
+    }
 }
