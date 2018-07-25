@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,5 +11,131 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusable="true"
-        android:clickable="true"/>
-</LinearLayout>
+        android:clickable="true"
+        android:visibility="visible"/>
+
+    <com.yinglan.scrolllayout.ScrollLayout
+        android:id="@+id/scroll_down_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation = "vertical"
+            android:background="#FFFFFF"
+            android:focusable="true"
+            android:clickable="true">
+
+            <Button
+                android:id="@+id/MinToXuA"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="闵行->徐汇（直达）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/MinToXuB"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="闵行->徐汇（途经罗阳、上中、天钥、交大新村）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/MinToXuC"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="闵行->徐汇（直达田林）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/MinToXuD"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="闵行->徐汇（直达古美）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/XuToMinA"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="徐汇->闵行（直达）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/XuToMinB"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="徐汇->闵行（天钥始发，途径上中、罗阳）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/XuToMinC"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="徐汇->闵行（田林始发，途径古美）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/XuToMinD"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="徐汇->闵行（交大新村始发）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/XuToMinE"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="徐汇->闵行（田林始发）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <Button
+                android:id="@+id/XuToMinF"
+                android:layout_margin="5dp"
+                android:background="#dddddd"
+                android:padding="10dp"
+                android:gravity="center_vertical|start"
+                android:text="徐汇->闵行（古美始发）"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+
+        </LinearLayout>
+
+    </com.yinglan.scrolllayout.ScrollLayout>
+
+    <RelativeLayout
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/chooseRoute_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/icon_choose"
+            app:backgroundTint="#90cef4"/>
+    </RelativeLayout>
+
+</RelativeLayout>
