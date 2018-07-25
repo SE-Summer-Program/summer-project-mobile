@@ -54,8 +54,8 @@ public class MyMapStatusChangeListener implements BaiduMap.OnMapStatusChangeList
     @Override
     public void onMapStatusChangeFinish(MapStatus status){
         Float zoom_new = status.zoom;
-        if((zoom_new < 18.0f && this.zoom < 18.0f) ||
-                (zoom_new >= 18.0f && this.zoom >= 18.0f))
+        if((zoom_new < 17.0f && this.zoom < 17.0f) ||
+                (zoom_new >= 17.0f && this.zoom >= 17.0f))
                     return;
         for(Marker marker : markers){
             //从marker中获取info信息
@@ -63,11 +63,11 @@ public class MyMapStatusChangeListener implements BaiduMap.OnMapStatusChangeList
             Station station = (Station) bundle.getSerializable("info");
 
             BitmapDescriptor bd_temp = null;
-            if(zoom_new >= 18.0f){
+            if(zoom_new >= 17.0f){
                 bd_temp = bitmaps.get(station.getName() + "_bigZoom");
                 marker.setIcon(bd_temp);
             }
-            if(zoom_new < 18.0f){
+            if(zoom_new < 17.0f){
                 bd_temp = bitmaps.get(station.getName() + "_smallZoom");
                 marker.setIcon(bd_temp);
             }

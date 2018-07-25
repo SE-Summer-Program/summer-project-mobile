@@ -65,6 +65,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
@@ -101,7 +102,6 @@ public class MapActivity extends BaseActivity {
     private BusLocationSimulator simulator = new BusLocationSimulator();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH-mm-ss");
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +116,7 @@ public class MapActivity extends BaseActivity {
         initRoutePlan();
         addMarker();
         addBus();
-        upDateBus();
+        updateBus();
     }
 
     private void getPermission(){
@@ -303,7 +303,7 @@ public class MapActivity extends BaseActivity {
         }*/
     }
 
-    private void upDateBus(){
+    private void updateBus(){
         final TimerTask task = new TimerTask(){
             @Override
             public void run(){

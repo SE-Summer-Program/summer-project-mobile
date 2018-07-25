@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.ArrayMap;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import com.baidu.mapapi.search.route.WalkingRouteLine;
 import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
 
+import com.sjtubus.model.Route;
 import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.yinglan.scrolllayout.ScrollLayout;
 
@@ -61,7 +63,9 @@ import com.sjtubus.model.Station;
 import com.sjtubus.utils.MyLocationListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class RouteActivity extends BaseActivity {
 
@@ -82,15 +86,17 @@ public class RouteActivity extends BaseActivity {
     private List<Station> stations = new ArrayList<>();
 
     //搜索相关
-    RoutePlanSearch mSearch = null;
-    RouteLine route = null;  //路线
-    OverlayManager routeOverlay = null;  //该类提供一个能够显示和管理多个Overlay的基类
+    private RoutePlanSearch mSearch = null;
+    private RouteLine route = null;  //路线
+    private OverlayManager routeOverlay = null;  //该类提供一个能够显示和管理多个Overlay的基类
+    private DrivingRoutePlanOption routePlan = new DrivingRoutePlanOption();
+    private Map<String, Route> routeMap = new ArrayMap<>();
     boolean useDefaultIcon = true;
-    DrivingRoutePlanOption routePlan = new DrivingRoutePlanOption();
 
+    //路线选择相关
     private ScrollLayout mScrollLayout;
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
-    Button btn_choose;
+    private Button chooseRoute_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +110,7 @@ public class RouteActivity extends BaseActivity {
         initView();
         initLocation();
         initRoutePlan();
+        doRoutePlan("MinToXuA");
     }
 
     private void getPermission(){
@@ -126,42 +133,47 @@ public class RouteActivity extends BaseActivity {
         mBaiduMap.setCompassEnable(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为卫星显示
 
-        btn_choose = findViewById(R.id.btn_choose);
-        btn_choose.setOnClickListener(new View.OnClickListener() {
+        chooseRoute_btn = findViewById(R.id.chooseRoute_btn);
+        chooseRoute_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mScrollLayout.setToOpen();
-                btn_choose.setVisibility(View.GONE);
-                //btn_choose.setVisibility(View.VISIBLE);
+                mScrollLayout.setToClosed();
             }
         });
 
         mScrollLayout = findViewById(R.id.scroll_down_layout);
-
         /*设置 setting*/
         mScrollLayout.setMinOffset(0);
-        mScrollLayout.setMaxOffset((int) (this.getResources().getDisplayMetrics().heightPixels));
+        mScrollLayout.setMaxOffset(-100);
         mScrollLayout.setExitOffset(-100);
         mScrollLayout.setIsSupportExit(true);
-        mScrollLayout.setAllowHorizontalScroll(true);
+        mScrollLayout.setAllowHorizontalScroll(false);
         mScrollLayout.setOnScrollChangedListener(mOnScrollChangedListener);
-        mScrollLayout.setToExit();
+        mScrollLayout.setToOpen();
         mScrollLayout.getBackground().setAlpha(0);
 
-        mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                mScrollLayout.scrollToExit();
-            }
-
-            @Override
-            public boolean onMapPoiClick(MapPoi mapPoi) {
-                mScrollLayout.scrollToExit();
-                return false;
-            }
-        });
-        mMapStatusChangeListener = new MyMapStatusChangeListener(mScrollLayout);
-        mBaiduMap.setOnMapStatusChangeListener(mMapStatusChangeListener);
+        ChooseRouteListener listener = new ChooseRouteListener();
+        Button MinToXuA_btn = findViewById(R.id.MinToXuA);
+        MinToXuA_btn.setOnClickListener(listener);
+        Button MinToXuB_btn = findViewById(R.id.MinToXuB);
+        MinToXuB_btn.setOnClickListener(listener);
+        Button MinToXuC_btn = findViewById(R.id.MinToXuC);
+        MinToXuC_btn.setOnClickListener(listener);
+        Button MinToXuD_btn = findViewById(R.id.MinToXuD);
+        MinToXuD_btn.setOnClickListener(listener);
+        Button XuToMinA_btn = findViewById(R.id.XuToMinA);
+        XuToMinA_btn.setOnClickListener(listener);
+        Button XuToMinB_btn = findViewById(R.id.XuToMinB);
+        XuToMinB_btn.setOnClickListener(listener);
+        Button XuToMinC_btn = findViewById(R.id.XuToMinC);
+        XuToMinC_btn.setOnClickListener(listener);
+        Button XuToMinD_btn = findViewById(R.id.XuToMinD);
+        XuToMinD_btn.setOnClickListener(listener);
+        Button XuToMinE_btn = findViewById(R.id.XuToMinE);
+        XuToMinE_btn.setOnClickListener(listener);
+        Button XuToMinF_btn = findViewById(R.id.XuToMinF);
+        XuToMinF_btn.setOnClickListener(listener);
+        
     }
 
     private void initLocation(){
@@ -232,12 +244,19 @@ public class RouteActivity extends BaseActivity {
         MyGetRoutePlanResultListener routeListener = new MyGetRoutePlanResultListener();
         mSearch.setOnGetRoutePlanResultListener(routeListener);
         //此处暂时为硬编码，应导入数据库数据
+        getData();
+    }
+
+    private void doRoutePlan(String route_name){
         //拾取坐标系统给的经纬度是反的！！！切记！！！
-        PlanNode stNode = PlanNode.withLocation(new LatLng(31.028653,121.437663));
-        PlanNode enNode = PlanNode.withCityNameAndPlaceName("上海", "包兆龙图书馆");
+        List<LatLng> Node = routeMap.get(route_name).getLocation();
+        Integer N = Node.size();
+        PlanNode stNode = PlanNode.withLocation(Node.get(0));
+        PlanNode enNode = PlanNode.withLocation(Node.get(N - 1));
         List<PlanNode> paNode = new ArrayList<PlanNode>();
-        PlanNode p1 = PlanNode.withCityNameAndPlaceName("上海", "上海浦江郊野公园");
-        paNode.add(p1);
+        for(int i = 1; i < N - 2; i++)
+            paNode.add(PlanNode.withLocation(Node.get(i)));
+
         //开始规划路线
         routePlan.from(stNode).passBy(paNode).to(enNode);
         mSearch.drivingSearch(routePlan);
@@ -327,32 +346,7 @@ public class RouteActivity extends BaseActivity {
         }
     }
 
-    private ScrollLayout.OnScrollChangedListener mOnScrollChangedListener = new ScrollLayout.OnScrollChangedListener() {
-        //实现滑动时的背景变化
-        @Override
-        public void onScrollProgressChanged(float currentProgress) {
-            if (currentProgress >= 0) {
-                float precent = 255 * currentProgress;
-                if (precent > 255) {
-                    precent = 255;
-                } else if (precent < 0) {
-                    precent = 0;
-                }
-                mScrollLayout.getBackground().setAlpha(255 - (int) precent);
-            }
-        }
-
-        @Override
-        public void onScrollFinished(ScrollLayout.Status currentStatus) {
-        }
-
-        @Override
-        public void onChildScroll(int top) {
-        }
-    };
-
-    private class MyGetRoutePlanResultListener implements
-            OnGetRoutePlanResultListener {
+    private class MyGetRoutePlanResultListener implements OnGetRoutePlanResultListener {
 
         @Override
         public void onGetDrivingRouteResult(DrivingRouteResult result) {
@@ -373,6 +367,7 @@ public class RouteActivity extends BaseActivity {
                 //nodeIndex = -1;
                 //mBtnPre.setVisibility(View.VISIBLE);
                 //mBtnNext.setVisibility(View.VISIBLE);
+                mBaiduMap.clear();
                 route = result.getRouteLines().get(0);
                 DrivingRouteOverlay overlay = new MyDrivingRouteOverlay(mBaiduMap,true);
                 routeOverlay = overlay;
@@ -402,5 +397,153 @@ public class RouteActivity extends BaseActivity {
         @Override
         public void onGetBikingRouteResult(BikingRouteResult result) {
         }
+    }
+
+    private ScrollLayout.OnScrollChangedListener mOnScrollChangedListener = new ScrollLayout.OnScrollChangedListener() {
+        //实现滑动时的背景变化
+        @Override
+        public void onScrollProgressChanged(float currentProgress) {
+            if (currentProgress >= 0) {
+                float precent = 255 * currentProgress;
+                if (precent > 255) {
+                    precent = 255;
+                } else if (precent < 0) {
+                    precent = 0;
+                }
+                mScrollLayout.getBackground().setAlpha(255 - (int) precent);
+            }
+        }
+
+        @Override
+        public void onScrollFinished(ScrollLayout.Status currentStatus) {
+            if(currentStatus.equals(ScrollLayout.Status.CLOSED))
+                chooseRoute_btn.setVisibility(View.GONE);
+            else chooseRoute_btn.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onChildScroll(int top) {
+        }
+    };
+
+    private class ChooseRouteListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v){
+            switch (v.getId()){
+                case R.id.MinToXuA:
+                    doRoutePlan("MinToXuA");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.MinToXuB:
+                    doRoutePlan("MinToXuB");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.MinToXuC:
+                    doRoutePlan("MinToXuC");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.MinToXuD:
+                    doRoutePlan("MinToXuD");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.XuToMinA:
+                    doRoutePlan("XuToMinA");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.XuToMinB:
+                    doRoutePlan("XuToMinB");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.XuToMinC:
+                    doRoutePlan("XuToMinC");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.XuToMinD:
+                    doRoutePlan("XuToMinD");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.XuToMinE:
+                    doRoutePlan("XuToMinE");
+                    mScrollLayout.setToExit();
+                    break;
+                case R.id.XuToMinF:
+                    doRoutePlan("XuToMinF");
+                    mScrollLayout.setToExit();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void getData(){
+        List<Double> latitude = new ArrayList<>();
+        List<Double> longtitude = new ArrayList<>();
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        latitude.add(31.206204);longtitude.add(121.439497);//徐汇
+        Route MinToXuA = new Route("MinToXuA", latitude, longtitude);
+        routeMap.put("MinToXuA", MinToXuA);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        latitude.add(31.022281);longtitude.add(121.432624);//交大新村
+        latitude.add(31.128109);longtitude.add(121.417986);//罗阳
+        latitude.add(31.137863);longtitude.add(121.424893);//上中
+        latitude.add(31.191928);longtitude.add(121.452459);//天钥
+        latitude.add(31.206204);longtitude.add(121.439497);//徐汇
+        Route MinToXuB = new Route("MinToXuB", latitude, longtitude);
+        routeMap.put("MinToXuB", MinToXuB);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        latitude.add(31.181237);longtitude.add(121.428312);//田林
+        Route MinToXuC = new Route("MinToXuC", latitude, longtitude);
+        routeMap.put("MinToXuC", MinToXuC);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        latitude.add(31.148032);longtitude.add(121.414226);//古美
+        Route MinToXuD = new Route("MinToXuD", latitude, longtitude);
+        routeMap.put("MinToXuD", MinToXuD);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.206204);longtitude.add(121.439497);//徐汇
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        Route XuToMinA = new Route("XuToMinA", latitude, longtitude);
+        routeMap.put("XuToMinA", XuToMinA);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.191928);longtitude.add(121.452459);//天钥
+        latitude.add(31.137863);longtitude.add(121.424893);//上中
+        latitude.add(31.128109);longtitude.add(121.417986);//罗阳
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        Route XuToMinB = new Route("XuToMinB", latitude, longtitude);
+        routeMap.put("XuToMinB", XuToMinB);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.181237);longtitude.add(121.428312);//田林
+        latitude.add(31.148032);longtitude.add(121.414226);//古美
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        Route XuToMinC = new Route("XuToMinC", latitude, longtitude);
+        routeMap.put("XuToMinC", XuToMinC);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.022281);longtitude.add(121.432624);//交大新村
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        Route XuToMinD = new Route("XuToMinD", latitude, longtitude);
+        routeMap.put("XuToMinD", XuToMinD);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.181237);longtitude.add(121.428312);//田林
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        Route XuToMinE = new Route("XuToMinE", latitude, longtitude);
+        routeMap.put("XuToMinE", XuToMinE);
+
+        latitude.clear();longtitude.clear();
+        latitude.add(31.148032);longtitude.add(121.414226);//古美
+        latitude.add(31.02858);longtitude.add(121.437534);//闵行
+        Route XuToMinF = new Route("XuToMinF", latitude, longtitude);
+        routeMap.put("XuToMinF", XuToMinF);
     }
 }
