@@ -48,7 +48,9 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="end"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/screenPadding"
+            android:textSize="@dimen/middlesmallText" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,10 +75,13 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="end"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/screenPadding"
+            android:textSize="@dimen/middlesmallText" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/person_phone_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/shallow_white"
@@ -98,7 +103,9 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="end"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/screenPadding"
+            android:textSize="@dimen/middlesmallText" />
     </LinearLayout>
 
     <LinearLayout
@@ -123,10 +130,13 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="end"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/screenPadding"
+            android:textSize="@dimen/middlesmallText" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/person_studentnum_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/shallow_white"
@@ -148,10 +158,13 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="end"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/screenPadding"
+            android:textSize="@dimen/middlesmallText" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/person_realname_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/shallow_white"
@@ -173,7 +186,9 @@
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="end"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/screenPadding"
+            android:textSize="@dimen/middlesmallText" />
     </LinearLayout>
 
     <LinearLayout

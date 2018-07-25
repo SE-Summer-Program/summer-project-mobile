@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         billboard = findViewById(R.id.billboard);
         messages.add("2018.8.19即明日,校园巴士停运一天!");
         messages.add("好消息！校车时速已达到100km/S!");
-        messages.add("恭喜学号为1的同学喜提校车一辆!");
+        messages.add("恭喜学号为2333的同学喜提校车一辆!");
         MarqueeViewAdapter billboard_adapter = new MarqueeViewAdapter(messages, this);
         //刷新公告
         //billboard_adapter.setData(messages);
@@ -182,6 +182,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
+                if(! UserManager.getInstance().getRole().equals("user")){
+                    ToastUtils.showShort("抱歉~预约请用乘客账号哦~");
+                    break;
+                }
                 Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
                 break;
@@ -191,7 +195,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     break;
                 }
                 if(UserManager.getInstance().getRole().equals("user")){
-                    ToastUtils.showShort("抱歉~您没有管理员或司机权限");
+                    ToastUtils.showShort("抱歉~您没有管理员权限哦~");
                     break;
                 }
                 new IntentIntegrator(this)
@@ -205,7 +209,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     break;
                 }
                 if(UserManager.getInstance().getRole().equals("user")){
-                    ToastUtils.showShort("抱歉~您没有管理员或司机权限");
+                    ToastUtils.showShort("抱歉~您没有司机权限哦~");
                     break;
                 }
                 Intent positionIntent = new Intent(MainActivity.this, GPSPositionActivity.class);
@@ -374,7 +378,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 String scanResult = intentResult.getContents();
                 String[] info = scanResult.split(";");
                 if(info.length < 3){
-                    ToastUtils.showShort("二维码格式不正确!");
+                    ToastUtils.showShort("二维码格式不正确哦~");
                     return;
                 }
                 RequestBody requestBody = new FormBody.Builder()

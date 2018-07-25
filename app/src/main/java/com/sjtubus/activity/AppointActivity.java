@@ -43,6 +43,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private AppointAdapter appointAdapter;
     private SwipeRefreshLayout swipeRefresh;
 
+    /* datestr不要乱用，是传进来的值，可能会被改变的 */
     private String departure_place_str;
     private String arrive_place_str;
     private String date_str;
@@ -168,7 +169,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         String datestr = year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose;
 
                         if (StringCalendarUtils.isBeforeCurrentDate(datestr)){
-                            ToastUtils.showShort("不能预约已经发出的班次哦~");
+                            ToastUtils.showShort("不能预约已经发出的班次~");
+                            return;
+                        } else if (!MyDateUtils.isWithinOneWeek(datestr)){
+                            ToastUtils.showShort("仅可预约一周以内的班次~");
                             return;
                         }
                         //textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
@@ -197,7 +201,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_yesterday:
                 if (isTodayFlag){
                     yesterday_btn.setEnabled(false);
-                    ToastUtils.showShort("不能预约更前面的班次了哦~");
+                    ToastUtils.showShort("不能预约更前面的班次了~");
                     break;
                 }
                 //modifyDate(-1);
@@ -213,6 +217,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             case R.id.appoint_nextday:
                 //modifyDate(1);
                 String tomorrow = MyDateUtils.getTomorrowStr((String) date.getText());
+                if (!MyDateUtils.isWithinOneWeek(tomorrow)){
+                    ToastUtils.showShort("仅可预约一周以内的班次~");
+                    break;
+                }
                 date.setText(tomorrow);
                 yesterday_btn.setEnabled(true);
                 yesterday_btn.setTextColor(getResources().getColor(R.color.primary_white));
@@ -267,14 +275,19 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         info.setId(i+"");
                         info.setLine_type(line_type);
                         info.setType(0);
-                        info.setDate(date_str);
+                        info.setDate((String) date.getText());
                         info.setArrive_place(arrive_place_str);
                         info.setDeparture_place(departure_place_str);
                         info.setAppoint_status(shortinfo.getRemain_seat()>0?1:0) ;
                         i++;
                         infos.add(info);
                     }
-                    String left_appoint_info = "当日剩余可预约班次: "+infos.size();
+                    String left_appoint_info = "";
+                    if (infos.size() == 0){
+                        left_appoint_info = "今日所有班次都已发出,去预约其他班次吧~";
+                    } else {
+                        left_appoint_info = "当日剩余可预约班次: " + infos.size();
+                    }
                     left_appoint.setText(left_appoint_info);
                     appointAdapter.setDataList(infos);
                     swipeRefresh.setRefreshing(false);

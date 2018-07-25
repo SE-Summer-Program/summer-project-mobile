@@ -64,11 +64,11 @@ public class AdminloginFragment extends BaseFragment implements View.OnClickList
         String username = username_edit.getText().toString().trim();
         String password = password_edit.getText().toString().trim();
         if(TextUtils.isEmpty(username)){
-            ToastUtils.showShort("用户名为空!");
+            ToastUtils.showShort("用户名不能为空哦~");
             return;
         }
         if(TextUtils.isEmpty(password)){
-            ToastUtils.showShort("密码不能为空!");
+            ToastUtils.showShort("密码不能为空哦~");
         }
         RequestBody requestBody = new FormBody.Builder()
                 .add("password", password)
@@ -97,7 +97,7 @@ public class AdminloginFragment extends BaseFragment implements View.OnClickList
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        ToastUtils.showShort("服务器错误!登录失败!");
+                        ToastUtils.showShort("服务器错误!登录失败orz");
                     }
 
                     @Override

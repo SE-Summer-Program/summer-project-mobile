@@ -44,8 +44,8 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
         initViewPager();
         mCoordinatorTabLayout = findViewById(R.id.appoint_coordinatortablayout);
         int[] mImageArray = new int[]{
-                R.drawable.bus_background,
-                R.drawable.bus_background};
+                R.drawable.background3,
+                R.drawable.background5};
         int[] mColorArray = new int[]{
                 R.color.primary_red,
                 R.color.primary_red};

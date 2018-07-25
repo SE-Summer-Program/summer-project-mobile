@@ -12,6 +12,9 @@ public class RecordInfo {
 
     private String confirmDate; //提交预约申请的时间
 
+    private String id;
+    private RecordInfo bean;
+
     @SerializedName("lineName")
     private String lineName;
 
@@ -31,6 +34,22 @@ public class RecordInfo {
     private String submitTime;
 
     private String departureMsg; //根据item_record的格式来的
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public RecordInfo getBean() {
+        return bean;
+    }
+
+    public void setBean(RecordInfo bean) {
+        this.bean = bean;
+    }
 
     public String getConfirmDate() {
         return confirmDate;
