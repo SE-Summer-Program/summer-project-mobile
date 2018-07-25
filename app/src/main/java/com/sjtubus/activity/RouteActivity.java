@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.util.ArrayMap;
 import android.view.View;
@@ -96,7 +97,7 @@ public class RouteActivity extends BaseActivity {
     //路线选择相关
     private ScrollLayout mScrollLayout;
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
-    private Button chooseRoute_btn;
+    private FloatingActionButton chooseRoute_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
