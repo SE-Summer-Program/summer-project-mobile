@@ -193,7 +193,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         phoneNum = phonenum_edit.getText().toString().trim();
         //检查号码格式是否正确
         Pattern pattern= Pattern.compile("[1][358]\\d{9}");
-        Matcher matcher=pattern.matcher(phoneNum);
+        Matcher matcher = pattern.matcher(phoneNum);
         //发送短信，传入国家号和电话---使用SMSSDK核心类之前一定要在MyApplication中初始化，否侧不能使用
         if (TextUtils.isEmpty(phoneNum)) {
             ToastUtils.showShort("手机号码不能为空~");

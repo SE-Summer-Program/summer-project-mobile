@@ -43,6 +43,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private AppointAdapter appointAdapter;
     private SwipeRefreshLayout swipeRefresh;
 
+    /* datestr不要乱用，是传进来的值，可能会被改变的 */
     private String departure_place_str;
     private String arrive_place_str;
     private String date_str;
@@ -274,7 +275,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         info.setId(i+"");
                         info.setLine_type(line_type);
                         info.setType(0);
-                        info.setDate(date_str);
+                        info.setDate((String) date.getText());
                         info.setArrive_place(arrive_place_str);
                         info.setDeparture_place(departure_place_str);
                         info.setAppoint_status(shortinfo.getRemain_seat()>0?1:0) ;

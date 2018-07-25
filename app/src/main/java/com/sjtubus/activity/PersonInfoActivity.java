@@ -1,10 +1,15 @@
 package com.sjtubus.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sjtubus.R;
@@ -15,10 +20,15 @@ import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.utils.ZxingUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 import static android.content.ContentValues.TAG;
 
@@ -30,6 +40,9 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
     private TextView credit;
     private TextView studentnum;
     private ImageView qrcode;
+    private LinearLayout phone_bar;
+    private LinearLayout realname_bar;
+    private LinearLayout studentnum_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -48,6 +61,19 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         Button logout_btn = findViewById(R.id.btn_logout);
         qrcode = findViewById(R.id.user_qrcode);
         logout_btn.setOnClickListener(this);
+
+        phone_bar = findViewById(R.id.person_phone_bar);
+        realname_bar = findViewById(R.id.person_realname_bar);
+        studentnum_bar = findViewById(R.id.person_studentnum_bar);
+        phone_bar.setOnClickListener(this);
+        realname_bar.setOnClickListener(this);
+        studentnum_bar.setOnClickListener(this);
+
+        //设置点击权限
+        if (UserManager.getInstance().getUser() != null
+                && UserManager.getInstance().getRole().equals("user")){
+            phone_bar.setEnabled(false);
+        }
     }
 
     public void initUser(){
@@ -59,7 +85,6 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         realname.setText(user.getRealname());
         studentnum.setText(user.getStudentNumber());
         qrcode.setImageBitmap(ZxingUtils.createQRImage(user.getUsername(),250,250));
-
     }
 
     @Override
@@ -108,6 +133,97 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
             case R.id.btn_logout:
                 userLogout();
                 break;
+            case R.id.person_phone_bar:
+                showUpdateDialog("完善手机号码信息", phone, true);
+                break;
+            case R.id.person_studentnum_bar:
+                showUpdateDialog("完善学号/工号信息", studentnum, false);
+                break;
+            case R.id.person_realname_bar:
+//                final EditText editText = new EditText(this);
+//                editText.setMinLines(2);
+//                new AlertDialog.Builder(this)
+//                        .setTitle("完善真实姓名信息")
+//                        .setIcon(android.R.drawable.ic_dialog_info)
+//                        .setView(editText)
+//                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface arg0, int arg1) {
+//                                realname.setText(editText.getText().toString());
+//                                completeInfos();
+//                            }
+//                        })
+//                        .setNegativeButton("取消", null)
+//                        .show();
+                showUpdateDialog("完善真实姓名信息", realname, false);
+                break;
+            default:
+                break;
         }
+    }
+
+    public void completeInfos(){
+        String userId_txt = UserManager.getInstance().getUser().getUserId();
+        String phone_txt = (String) phone.getText();
+        String studentnum_txt = (String) studentnum.getText();
+        String realname_txt = (String) realname.getText();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userId", userId_txt)
+                .add("phone", phone_txt)
+                .add("studentnum", studentnum_txt)
+                .add("realname", realname_txt)
+                .build();
+        RetrofitClient
+            .getBusApi()
+            .updatePersonInfos(requestBody)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<HttpResponse>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                }
+
+                @Override
+                public void onNext(HttpResponse response) {
+                   ToastUtils.showShort("个人信息已更新~");
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.d(TAG, "onComplete: ");
+                    //mProgressBar.setVisibility(View.GONE);
+                }
+            });
+    }
+
+    private void showUpdateDialog(String title, final TextView textView, final boolean isPhoneUpdate){
+        final EditText editText = new EditText(this);
+        editText.setMinLines(2);
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setIcon(R.mipmap.update)
+                .setView(editText)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        String text = editText.getText().toString().trim();
+                        if (isPhoneUpdate){
+                            Pattern pattern= Pattern.compile("[1][358]\\d{9}");
+                            Matcher matcher = pattern.matcher(text);
+                            //发送短信，传入国家号和电话---使用SMSSDK核心类之前一定要在MyApplication中初始化，否侧不能使用
+                            if(!matcher.matches()){
+                                ToastUtils.showShort("手机号码格式不正确~");
+                                return;
+                            }
+                        }
+                        textView.setText(text);
+                        completeInfos();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .show();
     }
 }

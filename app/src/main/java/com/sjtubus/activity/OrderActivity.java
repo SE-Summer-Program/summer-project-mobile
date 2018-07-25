@@ -293,6 +293,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                     .add("submit_time", StringCalendarUtils.getCurrentTime())
                                     .add("username",UserManager.getInstance().getUser().getUsername())
                                     .build();
+
                                 submitAppoint(requestBody);
 
 //                                try {
@@ -333,6 +334,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
        // finish();
     }
 
+    private static String TAG = "orderactivity";
+
     public void submitAppoint(RequestBody requestBody){
         RetrofitClient.getBusApi()
             .appoint(requestBody)
@@ -341,6 +344,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             .subscribe(new Observer<HttpResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
+                    Log.i(TAG, "onsubscribe");
                     addDisposable(d);
                 }
 
@@ -356,6 +360,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                             message = "您已成功预约【" + double_date_str + " " + double_departure_time_str + "从" + double_departure_place_str
                                     + "开往" + double_arrive_place_str + "的" + double_shiftid_str + "号校区巴士】，请记得按时前去乘坐哦~";
                         }
+
+//                        Log.i(TAG, message);
                         new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("预约成功~")
                                 .setContentText(message)
@@ -384,6 +390,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                 })
                                 .show();
                     }else{
+//                        Log.i(TAG, "fail");
                         new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("预约失败!")
                                 .setContentText("没有剩余座位或网络出错!")
@@ -392,12 +399,13 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 }
                 @Override
                 public void onError(Throwable e) {
+                    Log.i(TAG, "onerror");
                     e.printStackTrace();
                 }
 
                 @Override
                 public void onComplete() {
-                    Log.d(TAG, "onComplete: ");
+                    Log.i(TAG, "onComplete ");
                     //mProgressBar.setVisibility(View.GONE);
                 }
             });

@@ -152,6 +152,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     };
 
+    private static String TAG = "appointadapter";
+
     private View.OnClickListener ChildListener = new View.OnClickListener() {
         @Override
         public void onClick(View v){
@@ -164,12 +166,13 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     String departure_date = info_reserve.getDate();
 
                     hasConflictSchedule = false;
+                    Log.i(TAG, departure_time + " " + arrive_time+ " " + departure_date);
                     retrofitRecord(departure_time, arrive_time, departure_date, info_reserve);
 
                     break;
 
                 case R.id.appointitem_collectbtn:
-
+                    ToastUtils.showShort("班次收藏功能还不能使用哦~");
                     break;
 
                 case R.id.appointitem_infobtn:
@@ -267,12 +270,18 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
                     String appoint_starttime = departure_date + " " + departure_time;
                     String appoint_endtime = departure_date + " " + arrive_time;
+
+                    Log.i(TAG, "appoint_starttime" + appoint_starttime);
+                    Log.i(TAG, "appoint_endtime" + appoint_endtime);
                     List<RecordInfo> recordInfos = response.getRecordInfos();
                     //输出为空
                     if(recordInfos != null) {
                         for (RecordInfo recordInfo : recordInfos) {
                             String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
                             String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
+
+                            Log.i(TAG, "record_starttime" + record_starttime);
+                            Log.i(TAG, "record_endtime" + record_endtime);
                             //ToastUtils.showShort(record_starttime + " " + record_endtime);
                             //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
                             if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
@@ -283,6 +292,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                 hasConflictSchedule = true;
                                 break;
                             }
+                            Log.i(TAG, "false");
+                            Log.i(TAG, "--------");
                         }
                     }
 
@@ -410,7 +421,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 ToastUtils.showShort("返程的时间不能早于去程哦~");
                 return;
             } else if (! StringCalendarUtils.isBeforeTimeOfSecondParaHHmm(single_endtime, double_starttime)){
-                ToastUtils.showShort("不能预约行程冲突的班次哦~");
+                ToastUtils.showShort("不能预约行程冲突的班次哦~~");
                 return;
             }
 

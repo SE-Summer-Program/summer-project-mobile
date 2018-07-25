@@ -46,6 +46,9 @@ public interface BusApi {
     @POST("account/register")
     Observable<HttpResponse> register(@Body RequestBody info);
 
+    @POST("account/update_infos")
+    Observable<HttpResponse> updatePersonInfos(@Body RequestBody info);
+
     @GET("account/profile")
     Observable<ProfileResponse> getProfile();
 
@@ -75,6 +78,9 @@ public interface BusApi {
 
     @POST("appointment/appoint")
     Observable<HttpResponse> appoint(@Body RequestBody appointinfo);
+
+    @POST("appointment/delete")
+    Observable<HttpResponse> deleteAppoint(@Body RequestBody info);
 
     @POST("appointment/verify")
     Observable<HttpResponse> verifyUser(@Body RequestBody info);

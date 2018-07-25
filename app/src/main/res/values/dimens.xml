@@ -29,6 +29,8 @@
     <dimen name="dialog_round_radius">4dp</dimen>
     <dimen name="smallButtonHeight">32dp</dimen>
     <dimen name="smallButtonWidth">48dp</dimen>
+    <dimen name="middleButtonHeight">40dp</dimen>
+    <dimen name="middleButtonWidth">64dp</dimen>
     <dimen name="normalButtonHeight">48dp</dimen>
     <dimen name="normalButtonWidth">80dp</dimen>
 

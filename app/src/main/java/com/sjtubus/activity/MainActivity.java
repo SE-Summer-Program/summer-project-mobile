@@ -183,6 +183,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
+                if(! UserManager.getInstance().getRole().equals("user")){
+                    ToastUtils.showShort("抱歉~预约请用乘客账号哦~");
+                    break;
+                }
                 Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
                 break;

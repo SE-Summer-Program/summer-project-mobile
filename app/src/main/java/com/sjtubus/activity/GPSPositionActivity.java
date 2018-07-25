@@ -310,12 +310,14 @@ public class GPSPositionActivity extends BaseActivity implements View.OnClickLis
                 if (isAnimationShown) {
                     isAnimationShown = false;
                     rippleImageView.changeViewIcon(R.mipmap.point_start);
+                    rippleImageView.stopWaveAnimation();
                     currentStreet.setText("定位已关闭");
                 }
                 // 点了以后就开了
                 else {
                     isAnimationShown = true;
                     rippleImageView.changeViewIcon(R.mipmap.point_end);
+                    rippleImageView.startWaveAnimation();
                     initLocation();
                     //initView();
                     //问题在这里，关掉以后开不起来
