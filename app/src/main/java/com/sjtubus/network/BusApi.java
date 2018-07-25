@@ -12,7 +12,6 @@ import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.model.response.StationResponse;
 import com.sjtubus.model.response.StationSingleResponse;
-import com.sjtubus.widget.StationAdapter;
 
 import java.util.List;
 

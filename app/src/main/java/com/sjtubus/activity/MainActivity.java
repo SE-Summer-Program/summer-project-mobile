@@ -157,6 +157,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 role = "司机";
             }else if(UserManager.getInstance().getRole().equals("admin")){
                 role = "管理员";
+            }else if(UserManager.getInstance().getRole().equals("jaccountuser")){
+                role = "Jaccount认证用户";
             }
             String userinfo_str = "身份:"+role+"   "+"信用积分:"+user.getCredit();
             userinfo.setText(userinfo_str);
@@ -182,7 +184,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                if(! UserManager.getInstance().getRole().equals("user")){
+                if(!(UserManager.getInstance().getRole().equals("user")||UserManager.getInstance().getRole().equals("jaccountuser"))){
                     ToastUtils.showShort("抱歉~预约请用乘客账号哦~");
                     break;
                 }
@@ -194,7 +196,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                if(UserManager.getInstance().getRole().equals("user")){
+                if(UserManager.getInstance().getRole().equals("user")||UserManager.getInstance().getRole().equals("jaccountuser")){
                     ToastUtils.showShort("抱歉~您没有管理员权限哦~");
                     break;
                 }
@@ -208,7 +210,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                if(UserManager.getInstance().getRole().equals("user")){
+                if(UserManager.getInstance().getRole().equals("user")||UserManager.getInstance().getRole().equals("jaccountuser")){
                     ToastUtils.showShort("抱歉~您没有司机权限哦~");
                     break;
                 }

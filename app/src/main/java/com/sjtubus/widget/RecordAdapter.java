@@ -1,7 +1,6 @@
 package com.sjtubus.widget;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +16,8 @@ import com.sjtubus.R;
 import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.response.HttpResponse;
-import com.sjtubus.model.response.ScheduleResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
-import com.sjtubus.utils.ShiftUtils;
-import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.utils.ZxingUtils;
 

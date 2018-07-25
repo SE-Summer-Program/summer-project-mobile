@@ -7,7 +7,6 @@ import com.sjtubus.model.Driver;
 import com.sjtubus.model.User;
 import com.sjtubus.model.response.ProfileResponse;
 import com.sjtubus.network.RetrofitClient;
-import com.sjtubus.utils.ToastUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -58,7 +57,6 @@ public class UserManager {
         this.login = true;
         this.role = role;
         Log.d("EventBus", "UserChange true");
-        ToastUtils.showShort("已登陆~");
         EventBus.getDefault().post(new UserChangeEvent(true));
     }
 
