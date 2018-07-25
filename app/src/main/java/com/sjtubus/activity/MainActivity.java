@@ -11,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +30,6 @@ import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.GlideImageLoader;
 import com.sjtubus.utils.ToastUtils;
-import com.sjtubus.utils.VirtualUtils;
 import com.sjtubus.widget.MarqueeViewAdapter;
 import com.stx.xmarqueeview.XMarqueeView;
 import com.youth.banner.Banner;
@@ -312,6 +310,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     public void onStart() {
         super.onStart();
         billboard.startFlipping();
+        UserManager.getInstance().refresh();
     }
 
     @Override

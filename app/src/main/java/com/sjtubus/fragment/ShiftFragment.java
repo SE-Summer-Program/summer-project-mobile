@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.response.ScheduleResponse;
-import com.sjtubus.model.response.StationResponse;
 import com.sjtubus.model.response.StationSingleResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ShiftUtils;
@@ -179,7 +178,7 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
             case R.id.choose_station:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("选择站点");
-                builder.setSingleChoiceItems(stationList, 0, new DialogInterface.OnClickListener() {
+                builder.setSingleChoiceItems(stationList, choose_index, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         choose_index = which;
@@ -188,7 +187,7 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        choose_index = which;
+                        choose_index = which;
                         choose_station.setText(stationList[choose_index]);
                         retrieveDataOfLoopLine((String) choose_station.getText());
                     }

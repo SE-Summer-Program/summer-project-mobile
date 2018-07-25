@@ -3,10 +3,8 @@ package com.sjtubus.widget;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.Station;
@@ -14,19 +12,9 @@ import com.sjtubus.model.Station;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHolder> {
+public class StationAdapter extends RecyclerView.Adapter<StationTimeLineViewHolder> {
     private List<Station> stations;
     private Context context;
-
-    static class ViewHolder extends RecyclerView.ViewHolder{
-
-        TextView stationName;
-
-        ViewHolder(View view){
-            super(view);
-            stationName = view.findViewById(R.id.station_name);
-        }
-    }
 
     public void setDataList(List<Station> stations) {
         this.stations = stations;
@@ -40,19 +28,18 @@ public class StationAdapter extends RecyclerView.Adapter<StationAdapter.ViewHold
 
     @NonNull
     @Override
-    public StationAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_station, parent, false);
-        return new StationAdapter.ViewHolder(view);
+    public StationTimeLineViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = View.inflate(parent.getContext(), R.layout.item_station, null);
+        return new StationTimeLineViewHolder(view, viewType);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StationAdapter.ViewHolder holder, int position) {
-        //Station station = stations.get(position);
-        holder.stationName.setText(stations.get(position).getName());
+    public void onBindViewHolder(@NonNull StationTimeLineViewHolder holder, int position) {
+        holder.setData(stations.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return stations.size();
+        return stations==null?0:stations.size();
     }
 }

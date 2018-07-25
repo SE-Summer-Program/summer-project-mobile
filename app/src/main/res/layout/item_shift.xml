@@ -1,29 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/shallow_gray"
-    android:layout_marginVertical="@dimen/basicPaddingSize"
-    android:layout_marginHorizontal="@dimen/largePadding">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp">
+    <com.github.vipulasri.timelineview.TimelineView
+        android:id="@+id/time_marker"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:marker="@color/primary_red"
+        app:markerSize="20dp"
+        app:lineSize="3dp"
+        app:line="@color/primary_red"/>
 
-    <TextView
-        android:id="@+id/shift_time"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/middleText"
-        android:layout_gravity="center"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/shift_comment"
-        android:layout_width="0dp"
-        android:layout_weight="4"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/middleText"
-        android:layout_gravity="left"
-        android:gravity="left"
-        android:paddingLeft="@dimen/smallPadding"/>
-
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_gravity="center_vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="15dp"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/shift_time"
+                android:textSize="18sp" />
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/shift_comment"
+                android:textColor="@color/primary_gray"/>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
