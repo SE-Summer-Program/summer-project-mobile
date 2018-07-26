@@ -22,7 +22,6 @@ import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
-import com.sjtubus.utils.ToastUtils;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
@@ -31,8 +30,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
-
-import static android.content.ContentValues.TAG;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener{
 

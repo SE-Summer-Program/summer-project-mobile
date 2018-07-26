@@ -3,15 +3,12 @@ package com.sjtubus.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.sjtubus.R;
 import com.sjtubus.fragment.AppointNaviDoubleFragment;
 import com.sjtubus.fragment.AppointNaviFragment;
-import com.sjtubus.utils.VirtualUtils;
 import com.sjtubus.widget.AppointPagerAdapter;
 
 import java.util.ArrayList;

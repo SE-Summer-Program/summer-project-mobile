@@ -1,5 +1,7 @@
 package com.sjtubus.utils;
 
+import android.annotation.SuppressLint;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +13,7 @@ public class MyDateUtils {
      * 获取昨天的开始时间。如2018-07-18调用，返回2018-07-17 00:00:00
      */
     public static Date getBeginOfDay(String datestr) {
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = null;
         try {
