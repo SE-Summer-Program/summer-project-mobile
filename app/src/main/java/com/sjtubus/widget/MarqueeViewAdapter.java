@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.utils.ToastUtils;
 import com.stx.xmarqueeview.XMarqueeView;
 import com.stx.xmarqueeview.XMarqueeViewAdapter;
 

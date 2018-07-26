@@ -64,10 +64,10 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
 //        phone_bar = findViewById(R.id.person_phone_bar);
         realname_bar = findViewById(R.id.person_realname_bar);
         studentnum_bar = findViewById(R.id.person_studentnum_bar);
-        phone_bar.setOnClickListener(this);
+//        phone_bar.setOnClickListener(this);
         realname_bar.setOnClickListener(this);
         studentnum_bar.setOnClickListener(this);
-        phone_bar.setEnabled(false);
+        //phone_bar.setEnabled(false);
         realname_bar.setEnabled(false);
         studentnum_bar.setEnabled(false);
 
@@ -83,7 +83,7 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
 
         if (UserManager.getInstance().getUser() != null){
             if (UserManager.getInstance().getRole().equals("user")) {
-                phone_bar.setEnabled(true);
+                //phone_bar.setEnabled(true);
                 realname_bar.setEnabled(true);
                 studentnum_bar.setEnabled(true);
             } else if (UserManager.getInstance().getRole().equals("admin")) {

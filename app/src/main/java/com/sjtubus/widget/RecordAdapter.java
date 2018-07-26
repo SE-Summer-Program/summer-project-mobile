@@ -24,6 +24,7 @@ import com.sjtubus.utils.ZxingUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -182,6 +183,20 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
                 @Override
                 public void onNext(HttpResponse response) {
+                    if(response.getError()==0){
+                        new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("取消成功!")
+                                .setContentText(response.getMsg())
+                                .setConfirmText("确定")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.cancel();
+                                        context.finish();
+                                    }
+                                })
+                                .show();
+                    }
                     Log.i(TAG, "onNext: ");
                     
                 }

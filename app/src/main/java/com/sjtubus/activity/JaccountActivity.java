@@ -36,6 +36,7 @@ public class JaccountActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.setStatusBarColor(this, getResources().getColor(R.color.primary_red));
         bus_url = getString(R.string.sjtubus_host);
         redirect_url = bus_url + "auth/redirect";
         auth_url = bus_url + "auth/jaccount";

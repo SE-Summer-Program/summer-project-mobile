@@ -151,7 +151,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    private void refreshRecord(){
+    public void refreshRecord(){
         //获取当前用户的username
         String username = UserManager.getInstance().getUser().getUsername();
         //获取当前的时间
