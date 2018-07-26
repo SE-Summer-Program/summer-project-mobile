@@ -62,21 +62,41 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         qrcode = findViewById(R.id.user_qrcode);
         logout_btn.setOnClickListener(this);
 
-        phone_bar = findViewById(R.id.person_phone_bar);
+//        phone_bar = findViewById(R.id.person_phone_bar);
         realname_bar = findViewById(R.id.person_realname_bar);
         studentnum_bar = findViewById(R.id.person_studentnum_bar);
         phone_bar.setOnClickListener(this);
         realname_bar.setOnClickListener(this);
         studentnum_bar.setOnClickListener(this);
+        phone_bar.setEnabled(false);
+        realname_bar.setEnabled(false);
+        studentnum_bar.setEnabled(false);
 
-        //设置点击权限
-        if (UserManager.getInstance().getUser() != null
-                && UserManager.getInstance().getRole().equals("user")){
-            phone_bar.setEnabled(false);
+        //设置点击权限（乘客不能点手机，jaccount不能点学号和真实姓名
+//        if (UserManager.getInstance().getUser() != null
+//                && UserManager.getInstance().getRole().equals("user")){
+//            phone_bar.setEnabled(false);
+//        } else if (UserManager.getInstance().getUser() != null
+//                && UserManager.getInstance().getRole().equals("jaccountuser")){
+//            realname_bar.setEnabled(false);
+//            studentnum_bar.setEnabled(false);
+//        }
+
+        if (UserManager.getInstance().getUser() != null){
+            if (UserManager.getInstance().getRole().equals("user")) {
+                phone_bar.setEnabled(true);
+                realname_bar.setEnabled(true);
+                studentnum_bar.setEnabled(true);
+            } else if (UserManager.getInstance().getRole().equals("admin")) {
+                ToastUtils.showShort("管理员请在后台修改个人数据哦~");
+            } else if (UserManager.getInstance().getRole().equals("driver")) {
+                ToastUtils.showShort("司机请在后台修改个人数据哦~");
+            }
         }
     }
 
     public void initUser(){
+        UserManager.getInstance().refresh();
         User user = UserManager.getInstance().getUser();
         username.setText(user.getUsername());
         isteacher.setText(user.getTeacher()?"教工":"非教工");
@@ -180,16 +200,20 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
             .subscribe(new Observer<HttpResponse>() {
                 @Override
                 public void onSubscribe(Disposable d) {
+                    Log.i("personinfo", "onsubscribe");
                 }
 
                 @Override
                 public void onNext(HttpResponse response) {
                    ToastUtils.showShort("个人信息已更新~");
+                    Log.i("personinfo", "onnext");
+                    UserManager.getInstance().refresh();
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
+                    Log.i("personinfo", "onerror");
                 }
 
                 @Override

@@ -33,7 +33,7 @@ public class MarqueeViewAdapter extends XMarqueeViewAdapter<String> {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.showShort("position" + position);
+//                ToastUtils.showShort("position" + position);
             }
         });
     }
