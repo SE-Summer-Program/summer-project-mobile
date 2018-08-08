@@ -164,6 +164,7 @@ public class AppointNaviFragment extends BaseFragment {
                     }, year,month,day).show();
                     break;
 
+                    //navi 到 单程
                 case R.id.appoint_searchbtn:
                     if (departure_index == arrive_index){
                         ToastUtils.showShort("起点和终点不能相同~");
@@ -187,6 +188,7 @@ public class AppointNaviFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
+            // 单程 回 navi
             case 1:
                 if (resultCode == RESULT_OK){
                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));

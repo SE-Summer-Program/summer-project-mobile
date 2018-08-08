@@ -372,6 +372,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private void pressReserveButton(String departure_time, String arrive_time, String departure_date, AppointInfo info_reserve){
         /* 单程 */
+        // 单程 到 order
         if (isSingleWayFlag) {
             Intent orderIntent = new Intent(context, OrderActivity.class);
             orderIntent.putExtra("departure_place", info_reserve.getDeparture_place());
@@ -387,6 +388,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
 
         /* 往返去程 */
+        // 第一页 到 第二页
         else if (! isSecondPageFlag){
             Intent appointDoubleIntent = new Intent(context, AppointDoubleActivity.class);
 
@@ -402,11 +404,11 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             appointDoubleIntent.putExtra("double_departure_date", double_date_str);
             appointDoubleIntent.putExtra("target_page", 1);
 
-            context.startActivity(appointDoubleIntent);
-
+            ((AppointDoubleActivity)context).startActivityForResult(appointDoubleIntent, 1);
         }
 
         /* 往返返程 */
+        // 第二页 到 order
         else{
             String single_starttime = appointInfo.getDate() + " " + appointInfo.getDeparture_time();
             String single_endtime =  appointInfo.getDate() + " " + appointInfo.getArrive_time();
@@ -441,7 +443,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             orderDoubleIntent.putExtra("double_shift_type", info_reserve.getLine_type());
 
             orderDoubleIntent.putExtra("appoint_type", 1);
-            context.startActivity(orderDoubleIntent);
+//            context.startActivity(orderDoubleIntent);
+            ((AppointDoubleActivity)context).startActivityForResult(orderDoubleIntent, 2);
         }
     }
 }

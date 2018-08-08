@@ -78,6 +78,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void initPassData(){
+        // 单程 到 order
         Intent intent = getIntent();
         departure_place_str = intent.getStringExtra("departure_place");
         arrive_place_str = intent.getStringExtra("arrive_place");
@@ -89,6 +90,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
         int appoint_type = intent.getIntExtra("appoint_type",0);
 
+        // 第二页 到 order
         if (appoint_type == DOUBLE_WAY){
             double_departure_place_str = intent.getStringExtra("double_departure_place");
             double_arrive_place_str = intent.getStringExtra("double_arrive_place");
@@ -108,8 +110,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // order 回 单程
                 if (isSingleWayFlag)
                     finish();
+                // order 回 第二页
                 else{
                     Intent appointDoubleIntent = new Intent(OrderActivity.this, AppointDoubleActivity.class);
 
@@ -125,7 +129,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                     appointDoubleIntent.putExtra("double_departure_date", double_date_str);
                     appointDoubleIntent.putExtra("target_page", 1);
 
-                    startActivity(appointDoubleIntent);
+//                    startActivity(appointDoubleIntent);
+                    setResult(RESULT_OK, appointDoubleIntent);
+                    finish();
                 }
                // finish();
             }
@@ -308,8 +314,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onBackPressed() {
+        // order 到 单程
         if (isSingleWayFlag)
             finish();
+        // order 到 第二页
         else{
             Intent appointDoubleIntent = new Intent(OrderActivity.this, AppointDoubleActivity.class);
 
@@ -325,7 +333,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             appointDoubleIntent.putExtra("double_departure_date", double_date_str);
             appointDoubleIntent.putExtra("target_page", 1);
 
-            startActivity(appointDoubleIntent);
+//            startActivity(appointDoubleIntent);
+            setResult(RESULT_OK, appointDoubleIntent);
+            finish();
         }
 
        // finish();

@@ -84,6 +84,7 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
     private void initPassData() {
         Intent intent = getIntent();
         int page_num = intent.getIntExtra("target_page", 0);
+        //navi 到 第一页
         if (page_num == FIRST_PAGE) {
             departure_place_str = intent.getStringExtra("departure_place");
             arrive_place_str = intent.getStringExtra("arrive_place");
@@ -95,6 +96,7 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
             line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
             if(line_name.equals("error")) ToastUtils.showShort("地址翻译出现错误！");
         }
+        // 第一页 到 第二页
         else if (page_num == SECOND_PAGE){
             info_single.setDeparture_place(intent.getStringExtra("single_departure_place"));
             info_single.setArrive_place(intent.getStringExtra("single_arrive_place"));
@@ -129,16 +131,18 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 第一页 回 navi
                 if (!isSecondPageFlag) {
-                    String dateText = (String) date.getText();
-                    Intent intent = new Intent(AppointDoubleActivity.this, AppointNaviActivity.class);
-                    intent.putExtra("departure_place", departure_place_str);
-                    intent.putExtra("arrive_place", arrive_place_str);
-                    intent.putExtra("singleway_date", dateText);
-                   // startActivity(intent);
-                    setResult(RESULT_OK, intent);
+//                    String dateText = (String) date.getText();
+//                    Intent intent = new Intent(AppointDoubleActivity.this, AppointNaviActivity.class);
+//                    intent.putExtra("departure_place", departure_place_str);
+//                    intent.putExtra("arrive_place", arrive_place_str);
+//                    intent.putExtra("singleway_date", dateText);
+//                   // startActivity(intent);
+//                    setResult(RESULT_OK, intent);
                     finish();
                 }
+                // 第二页 回 第一页
                 else{
                     Intent appointIntent = new Intent(AppointDoubleActivity.this, AppointDoubleActivity.class);
                     appointIntent.putExtra("departure_place", info_single.getDeparture_place());
@@ -146,7 +150,9 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
                     appointIntent.putExtra("singleway_date", info_single.getDate());
                     appointIntent.putExtra("doubleway_date", date.getText());
                     appointIntent.putExtra("target_page", 0);
-                    startActivity(appointIntent);
+//                    startActivity(appointIntent);
+                    setResult(RESULT_OK, appointIntent);
+                    finish();
                 }
             }
         });
@@ -316,18 +322,20 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
+        //第一页 回 navi
         if (! isSecondPageFlag){
-            String data1 = departure_place_str;
-            String data2 = arrive_place_str;
-            String data3 = (String) date.getText();
-            Intent intent = new Intent(AppointDoubleActivity.this, AppointNaviActivity.class);
-            intent.putExtra("departure_place", data1);
-            intent.putExtra("arrive_place", data2);
-            intent.putExtra("singleway_date", data3);
-          //  startActivity(intent);
-            setResult(RESULT_OK, intent);
+//            String data1 = departure_place_str;
+//            String data2 = arrive_place_str;
+//            String data3 = (String) date.getText();
+//            Intent intent = new Intent(AppointDoubleActivity.this, AppointNaviActivity.class);
+//            intent.putExtra("departure_place", data1);
+//            intent.putExtra("arrive_place", data2);
+//            intent.putExtra("singleway_date", data3);
+//          //  startActivity(intent);
+//            setResult(RESULT_OK, intent);
             finish();
         }
+        // 第二页 回 第一页
         else{
             Intent appointIntent = new Intent(AppointDoubleActivity.this, AppointDoubleActivity.class);
             appointIntent.putExtra("departure_place", info_single.getDeparture_place());
@@ -335,7 +343,9 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
             appointIntent.putExtra("singleway_date", info_single.getDate());
             appointIntent.putExtra("doubleway_date", date.getText());
             appointIntent.putExtra("target_page", 0);
-            startActivity(appointIntent);
+//            startActivity(appointIntent);
+            setResult(RESULT_OK, appointIntent);
+            finish();
         }
     }
 
@@ -409,5 +419,47 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
         year = cal.get(Calendar.YEAR);       //获取年月日时分秒
         month = cal.get(Calendar.MONTH);   //获取到的月份是从0开始计数
         day = cal.get(Calendar.DAY_OF_MONTH);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){
+            //第二页 回 第一页
+            case 1:
+                if (resultCode == RESULT_OK){
+
+                    departure_place_str = data.getStringExtra("departure_place");
+                    arrive_place_str = data.getStringExtra("arrive_place");
+                    single_date_str = data.getStringExtra("singleway_date");
+                    double_date_str = data.getStringExtra("doubleway_date");
+                    date_str = single_date_str;
+                    isSecondPageFlag = false;
+
+//                    line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
+//                    if(line_name.equals("error")) ToastUtils.showShort("地址翻译出现错误！");
+                }
+            // order 到 第二页
+            case 2:
+                info_single.setDeparture_place(data.getStringExtra("single_departure_place"));
+                info_single.setArrive_place(data.getStringExtra("single_arrive_place"));
+                info_single.setDeparture_time(data.getStringExtra("single_departure_time"));
+                // ToastUtils.showShort(intent.getStringExtra("single_departure_time"));
+                info_single.setArrive_time(data.getStringExtra("single_arrive_time"));
+                info_single.setDate(data.getStringExtra("single_departure_date"));
+                info_single.setShiftid(data.getStringExtra("single_shiftid"));
+                info_single.setLine_type(data.getStringExtra("single_shift_type"));
+
+                departure_place_str = data.getStringExtra("single_arrive_place");
+                arrive_place_str = data.getStringExtra("single_departure_place");
+                double_date_str = data.getStringExtra("double_departure_date");
+                date_str = double_date_str;
+                isSecondPageFlag = true;
+
+//                line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
+//                if(line_name.equals("error")) ToastUtils.showShort("地址翻译出现错误！");
+                break;
+            default:
+                break;
+        }
     }
 }
