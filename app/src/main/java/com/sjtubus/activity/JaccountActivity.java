@@ -18,6 +18,7 @@ import com.sjtubus.user.UserManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 
@@ -26,7 +27,7 @@ import okhttp3.HttpUrl;
  */
 
 public class JaccountActivity extends BaseActivity {
-
+    @BindView(R.id.webview_auth)
     private WebView auth_webview;
 
     private String redirect_url;
@@ -50,7 +51,6 @@ public class JaccountActivity extends BaseActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebview() {
-        auth_webview = findViewById(R.id.webview_auth);
         auth_webview.getSettings().setJavaScriptEnabled(true);
         auth_webview.getSettings().setUserAgentString(((App) App.getInstance()).getUserAgent());
         CookieManager cookieManager = CookieManager.getInstance();

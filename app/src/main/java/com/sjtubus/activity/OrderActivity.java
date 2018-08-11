@@ -292,7 +292,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                     .build();
 
                                 submitAppoint(requestBody);
-
+                                  //TODO:这段注释掉的要是没用就删了
 //                                try {
 //                                    Thread.sleep(1000);
 //                                } catch (InterruptedException e) {

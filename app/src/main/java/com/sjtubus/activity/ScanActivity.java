@@ -12,15 +12,22 @@ import com.journeyapps.barcodescanner.CaptureManager;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 import com.sjtubus.R;
 
-public class ScanActivity extends BaseActivity implements DecoratedBarcodeView.TorchListener,View.OnClickListener{
+import butterknife.BindView;
+import butterknife.OnClick;
+
+public class ScanActivity extends BaseActivity implements DecoratedBarcodeView.TorchListener{
 
     private CaptureManager captureManager;
     private boolean isLightOn = false;
 
-    private Button swichLight;
-    private Button hint1Show;
-    private Button hint2Show;
-    private DecoratedBarcodeView mDBV;
+    @BindView(R.id.btn_switch)
+    Button swichLight;
+    @BindView(R.id.btn_hint1)
+    Button hint1Show;
+    @BindView(R.id.btn_hint2)
+    Button hint2Show;
+    @BindView(R.id.dbv_custom)
+    DecoratedBarcodeView mDBV;
 
     @Override
     protected void onPause() {
@@ -54,7 +61,6 @@ public class ScanActivity extends BaseActivity implements DecoratedBarcodeView.T
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initView();
         mDBV.setTorchListener(this);
 
         // 如果没有闪光灯功能，就去掉相关按钮
@@ -68,15 +74,11 @@ public class ScanActivity extends BaseActivity implements DecoratedBarcodeView.T
         captureManager.decode();
     }
 
-    public void initView(){
-        swichLight = findViewById(R.id.btn_switch);
-        swichLight.setOnClickListener(this);
-        hint1Show = findViewById(R.id.btn_hint1);
-        hint2Show = findViewById(R.id.btn_hint2);
-        mDBV = findViewById(R.id.dbv_custom);
+    public int getContentViewId(){
+        return R.layout.activity_scan;
     }
 
-    // torch 手电筒
+    // torch
     @Override
     public void onTorchOn() {
         Toast.makeText(this,"torch on",Toast.LENGTH_LONG).show();
@@ -95,20 +97,11 @@ public class ScanActivity extends BaseActivity implements DecoratedBarcodeView.T
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
-    public void onClick(View v){
-        switch(v.getId()){
-            case R.id.btn_switch:
-                if(isLightOn){
-                    mDBV.setTorchOff();
-                }else{
-                    mDBV.setTorchOn();
-                }
-                break;
+    @OnClick(R.id.btn_switch) void setTorch() {
+        if(isLightOn){
+            mDBV.setTorchOff();
+        }else{
+            mDBV.setTorchOn();
         }
-    }
-
-
-    public int getContentViewId(){
-        return R.layout.activity_scan;
     }
 }

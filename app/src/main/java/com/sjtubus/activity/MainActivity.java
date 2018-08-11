@@ -42,6 +42,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -54,13 +55,32 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
-    private DrawerLayout drawerLayout;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.billboard)
+    XMarqueeView billboard;
+    @BindView(R.id.banner)
+    Banner banner;
+    @BindView(R.id.reserve_btn)
+    Button reserve_btn;
+    @BindView(R.id.scan_btn)
+    Button scan_btn;
+    @BindView(R.id.position_btn)
+    Button position_btn;
+    @BindView(R.id.schedule_btn)
+    Button schedule_btn;
+    @BindView(R.id.map_btn)
+    Button map_btn;
+    @BindView(R.id.navigate_btn)
+    Button navigate_btn;
+
+    //Views in navigate menu
     private TextView username;
     private TextView userinfo;
     private TextView login_tips;
     private TextView login_txt;
     private TextView register_txt;
-    private XMarqueeView billboard;
+
 
     //private View decorView;
 
@@ -71,7 +91,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        Banner banner = findViewById(R.id.banner);
         initView();
         loadImages();
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
@@ -86,16 +105,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     public void initView(){
+        //Basic settings of ToolBar
         Toolbar mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.mipmap.person);
 
-        Button reserve_btn = findViewById(R.id.reserve_btn);
-        Button scan_btn = findViewById(R.id.scan_btn);
-        Button position_btn = findViewById(R.id.position_btn);
-        Button schedule_btn = findViewById(R.id.schedule_btn);
-        Button map_btn = findViewById(R.id.map_btn);
-        Button navigate_btn = findViewById(R.id.navigate_btn);
+        setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         reserve_btn.setOnClickListener(this);
         scan_btn.setOnClickListener(this);
@@ -104,12 +123,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
 
-        setSupportActionBar(mToolbar);
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -119,18 +132,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         login_tips = nav_header_layout.findViewById(R.id.login_tips);
         login_txt = nav_header_layout.findViewById(R.id.login_txt);
         register_txt = nav_header_layout.findViewById(R.id.register_txt);
-        //设置下划线
+        //Set underline
         login_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
         register_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
 
-        //设置滚动轮播
-        billboard = findViewById(R.id.billboard);
+        //Set marquee billboard
         messages.add("2018.8.19即明日,校园巴士停运一天!");
         messages.add("好消息！校车时速已达到100km/S!");
         messages.add("恭喜学号为2333的同学喜提校车一辆!");
         MarqueeViewAdapter billboard_adapter = new MarqueeViewAdapter(messages, this);
-        //刷新公告
-        //billboard_adapter.setData(messages);
+        //Refresh billboard
         billboard.setAdapter(billboard_adapter);
     }
     public void loadImages(){
@@ -153,12 +164,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             username.setText(user.getUsername());
             username.setVisibility(View.VISIBLE);
             String role = user.getTeacher()?"教工":"普通用户";
-            if(UserManager.getInstance().getRole().equals("driver")){
-                role = "司机";
-            }else if(UserManager.getInstance().getRole().equals("admin")){
-                role = "管理员";
-            }else if(UserManager.getInstance().getRole().equals("jaccountuser")){
-                role = "Jaccount认证用户";
+            switch (UserManager.getInstance().getRole()){
+                case "driver":
+                    role = "司机";
+                    break;
+                case "admin":
+                    role = "管理员";
+                    break;
+                case "jaccountuser":
+                    role = "Jaccount认证用户";
+                    break;
+                default:
+                    break;
             }
             String userinfo_str = "身份:"+role+"   "+"信用积分:"+user.getCredit();
             userinfo.setText(userinfo_str);
@@ -322,6 +339,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         billboard.stopFlipping();
     }
 
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     /**
      * 判断是否存在虚拟按键
      * @ return
@@ -351,15 +375,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         return hasNavigationBar;
     }
 
-
     @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
-
-    @Override
-    // 通过 onActivityResult的方法获取 扫描回来的 值
+    // Get the information of QRcode from this method
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(intentResult != null) {
@@ -376,7 +393,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                         })
                         .show();
             } else {
-                // ScanResult 为 获取到的字符串
+                // ScanResult is the decoded string
                 String scanResult = intentResult.getContents();
                 String[] info = scanResult.split(";");
                 if(info.length < 3){
@@ -388,7 +405,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                         .add("shift_id",info[0])
                         .add("departure_date",info[1])
                         .build();
-                //登录
+                //Login
                 RetrofitClient.getBusApi()
                         .verifyUser(requestBody)
                         .subscribeOn(Schedulers.io())
@@ -413,7 +430,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                                         })
                                         .show();
                             }
-
                             @Override
                             public void onError(Throwable e) {
                                 e.printStackTrace();
@@ -422,7 +438,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                             @Override
                             public void onComplete() {
                                 Log.d(TAG, "onComplete: ");
-                                //mProgressBar.setVisibility(View.GONE);
                             }
                         });
             }

@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -38,10 +39,12 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
     private RecordInfo recordInfo;
     private List<RecordInfo> recordInfos;
     private RecordAdapter recordAdapter;
-
-    private SwipeRefreshLayout swipeRefresh;
-
-    private TextView record_total;
+    @BindView(R.id.refresh_record)
+    SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.record_total)
+    TextView record_total;
+    @BindView(R.id.recycle_record)
+    RecyclerView recyclerView;
 
     private String[] filter_list = {"仅显示近一周", "仅显示近一月", "仅显示近三个月", "自定义"};
     private String[] sort_list = {"按预定时间由近到远", "按班次时间由近到远", "自定义"};
@@ -71,10 +74,8 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        record_total = (TextView) findViewById(R.id.record_total);
-
-        TextView record_filter = (TextView) findViewById(R.id.record_filter);
-        TextView record_sort = (TextView) findViewById(R.id.record_sort);
+        TextView record_filter = findViewById(R.id.record_filter);
+        TextView record_sort = findViewById(R.id.record_sort);
         record_filter.setOnClickListener(this);
         record_sort.setOnClickListener(this);
         CheckBox validcheckbox = findViewById(R.id.record_valid);
@@ -89,7 +90,6 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recycle_record);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager); //设置布局管理器
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -104,25 +104,19 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
                 return false;
             }
-
             @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            }
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {}
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
             }
         });
 
-        swipeRefresh = findViewById(R.id.refresh_record);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refreshRecord();
             }
         });
-
         refreshRecord();
     }
 
