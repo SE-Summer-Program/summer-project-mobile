@@ -73,7 +73,7 @@ public class MapActivity extends BaseActivity {
 
     //百度地图相关
     @BindView(R.id.mapview)
-    private MapView mMapView;
+    MapView mMapView;
     private BaiduMap mBaiduMap;
     private Float zoomLevel = 16.0f;
     private LatLng initPosition = new LatLng(31.03201,121.443287);
@@ -99,7 +99,7 @@ public class MapActivity extends BaseActivity {
     //时刻表相关
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
     @BindView(R.id.scroll_down_layout)
-    private ScrollLayout mScrollLayout;
+    ScrollLayout mScrollLayout;
 
     private HashMap<String,Marker> busmap = new HashMap<>();
     //巴士运行相关

@@ -10,8 +10,9 @@
         android:id="@+id/time_marker"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:marker="@color/primary_red"
-        app:markerSize="20dp"
+        app:marker="@mipmap/icon_shift_128"
+        app:markerSize="30dp"
+        app:linePadding="5dp"
         app:lineSize="3dp"
         app:line="@color/primary_red"/>
 

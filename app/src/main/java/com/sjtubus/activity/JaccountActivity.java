@@ -28,7 +28,7 @@ import okhttp3.HttpUrl;
 
 public class JaccountActivity extends BaseActivity {
     @BindView(R.id.webview_auth)
-    private WebView auth_webview;
+    WebView auth_webview;
 
     private String redirect_url;
     private String auth_url;

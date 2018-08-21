@@ -73,9 +73,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     //获取验证码成功
                     changeBtnGetCode();
                 }
-//                else if (event == SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES) {
-//                    //返回支持发送验证码的国家列表
-//                }
             } else {
                 runOnUiThread(new Runnable() {
                     @Override
