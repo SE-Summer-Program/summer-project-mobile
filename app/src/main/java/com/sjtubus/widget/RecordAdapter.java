@@ -198,7 +198,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                                 .show();
                     }
                     Log.i(TAG, "onNext: ");
-
+                    
                 }
 
                 @Override

@@ -204,11 +204,16 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                     }, year,month,day).show();
                     break;
 
+                    // navi 到 第一页
                 case R.id.appoint_searchbtn:
 
                     if (departure_index == arrive_index){
                         ToastUtils.showShort("起点和终点不能相同！");
                         break;
+                    } else if (departure_index == 1 && arrive_index == 2){
+                        ToastUtils.showShort("还没有徐汇校区到七宝校区的班车~");
+                    } else if (departure_index == 2 && arrive_index == 1){
+                        ToastUtils.showShort("还没有七宝校区到徐汇校区的班车~");
                     }
                     Intent appointDoubleIntent = new Intent(getActivity(), AppointDoubleActivity.class);
 
@@ -217,8 +222,8 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                     appointDoubleIntent.putExtra("singleway_date", (String) singleway_date.getText());
                     appointDoubleIntent.putExtra("doubleway_date", (String) doubleway_date.getText());
                     appointDoubleIntent.putExtra("target_page", 0);
-                    startActivityForResult(appointDoubleIntent, 1);
-                  //  startActivity(appointDoubleIntent);
+//                    startActivityForResult(appointDoubleIntent, 1);
+                    startActivity(appointDoubleIntent);
                     break;
             }
         }
@@ -228,6 +233,7 @@ public class AppointNaviDoubleFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){
             case 1:
+                // 单程 回 navi
                 if (resultCode == RESULT_OK){
                     //Log.d("appointfragment", data.getStringExtra("singleway_date"));
                     ToastUtils.showShort(data.getStringExtra("singleway_date"));

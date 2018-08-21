@@ -97,6 +97,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 单程 回 navi
                 String data3 = (String) date.getText();
                 Intent intent = new Intent(AppointActivity.this, AppointNaviActivity.class);
                 intent.putExtra("departure_place", departure_place_str);
