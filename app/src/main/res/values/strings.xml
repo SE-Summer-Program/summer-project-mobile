@@ -86,4 +86,5 @@
     <string name="vac_clockwise">寒暑假-顺时针</string>
     <string name="remind_info">预约提醒</string>
     <string name="cancel_info">取消预约</string>
+    <string name="search_hint">想去哪？</string>
 </resources>
