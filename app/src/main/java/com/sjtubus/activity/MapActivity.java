@@ -129,7 +129,7 @@ public class MapActivity extends BaseActivity {
     }
 
     private void getPermission(){
-        //h获得定位权限
+        //获得定位权限
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
