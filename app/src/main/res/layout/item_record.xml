@@ -22,7 +22,6 @@
             android:layout_width="0sp"
             android:layout_weight="5"
             android:layout_height="wrap_content"
-            android:text="预定时间： 2018-07-18"
             android:background="@drawable/bubble"
             android:textColor="@color/primary_white"
             android:padding="@dimen/basicPaddingSize"

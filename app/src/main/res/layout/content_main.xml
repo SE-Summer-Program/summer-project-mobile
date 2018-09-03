@@ -76,6 +76,26 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"/>
+            <Button
+                android:id="@+id/position_btn"
+                android:background="#ffffff"
+                android:paddingTop="@dimen/icon_padding"
+                android:drawableTop="@mipmap/icon_position_128"
+                android:text="@string/position_btn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/message_btn"
+                android:background="#ffffff"
+                android:paddingTop="@dimen/icon_padding"
+                android:drawableTop="@mipmap/icon_position_128"
+                android:text="@string/message_btn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"/>
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +106,7 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/map_btn"
+                android:id="@+id/navigate_btn"
                 android:background="#ffffff"
                 android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@mipmap/icon_navigate_128"
@@ -96,7 +116,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/navigate_btn"
+                android:id="@+id/map_btn"
                 android:background="#ffffff"
                 android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@mipmap/icon_map_128"
@@ -105,12 +125,22 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"/>
+            <!--<Button-->
+                <!--android:id="@+id/position_btn"-->
+                <!--android:background="#ffffff"-->
+                <!--android:paddingTop="@dimen/icon_padding"-->
+                <!--android:drawableTop="@mipmap/icon_position_128"-->
+                <!--android:text="@string/position_btn"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_marginTop="1dp"-->
+                <!--android:layout_weight="1"/>-->
             <Button
-                android:id="@+id/position_btn"
+                android:id="@+id/idea_btn"
                 android:background="#ffffff"
                 android:paddingTop="@dimen/icon_padding"
                 android:drawableTop="@mipmap/icon_position_128"
-                android:text="@string/position_btn"
+                android:text="@string/idea_btn"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="1dp"

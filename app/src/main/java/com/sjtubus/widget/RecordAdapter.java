@@ -185,8 +185,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 public void onNext(HttpResponse response) {
                     if(response.getError()==0){
                         new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
-                                .setTitleText("取消成功!")
-                                .setContentText(response.getMsg())
+                                .setTitleText("取消预约成功!")
                                 .setConfirmText("确定")
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
