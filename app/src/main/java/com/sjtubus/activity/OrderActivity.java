@@ -1,9 +1,12 @@
 package com.sjtubus.activity;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,13 +18,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.CalendarReminder;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
+import com.sjtubus.utils.ToastUtils;
+
+import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
@@ -45,16 +54,16 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     private String double_shiftid_str;
     private String double_shift_type_str;
 
-    private ImageView remind_icon, need_icon;
-    private LinearLayout remind_time, remind_phone, remind_mail;
+    private ImageView need_icon;
+    private LinearLayout remind_time;
     private LinearLayout need_front, need_back, need_window, need_other;
 
     private EditText comment1, comment2, comment3, comment4;
     private ImageView comment1_clear, comment2_clear, comment3_clear, comment4_clear;
-
-    private boolean isRemindExtend, isNeedExtend;
-    private String[] remind_list = {"提前10分钟","提前30分钟","提前1小时","提前2小时","不提醒"};
-    private String[] phone_location_list ={"大陆地区", "港澳台地区", "国外地区"};
+    private boolean isNeedRemind = false,isNeedExtend = false;
+    private int remind_minutes = 10, remindlist_select = 0;
+    private int[] remindtime_list = {10,30,60,120};
+    private String[] remind_list = {"提前10分钟","提前30分钟","提前1小时","提前2小时"};
     private boolean[] checked_array = {false, false, false, false};
     private String[] check_msg = {"前排座位", "后排座位", "靠窗座位", "其他特殊要求"};
 
@@ -69,7 +78,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         initToolbar();
         initRemindView();
         initNeedView();
-        initExtendFlag();
+        initExtend();
     }
 
     @Override
@@ -192,24 +201,37 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         submit_btn.setOnClickListener(this);
     }
 
+    private void getCalendarPermission(){
+        //获得读写日历权限
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED
+                ) {
+            Toast.makeText(getApplicationContext(),"没有读写系统日历权限,请手动开启权限",Toast.LENGTH_SHORT).show();
+            // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义）
+            ActivityCompat.requestPermissions(OrderActivity.this,new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, 100);
+        }
+    }
+
     private void initRemindView() {
-        TextView remind_bar = findViewById(R.id.order_setremind);
-        remind_icon = findViewById(R.id.order_setremind_icon);
         TextView time_set = findViewById(R.id.order_setremindtime);
-        TextView phone_location = findViewById(R.id.order_phonelocation);
-        EditText phone_edit = findViewById(R.id.order_phoneedit);
-        EditText mail_edit = findViewById(R.id.order_mailedit);
-
+        CheckBox ifSetRemind = findViewById(R.id.order_setremind);
+        ifSetRemind.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    getCalendarPermission();
+                    isNeedRemind = true;
+                    setViewsVisible(remind_time);
+                }else {
+                    isNeedRemind = false;
+                    setViewsGone(remind_time);
+                }
+            }
+        });
         remind_time = findViewById(R.id.order_remind_time);
-        remind_phone = findViewById(R.id.order_remind_phone);
-        remind_mail = findViewById(R.id.order_remind_mail);
-
-        remind_bar.setOnClickListener(this);
-        remind_icon.setOnClickListener(this);
         time_set.setOnClickListener(this);
-        phone_location.setOnClickListener(this);
-        phone_edit.setOnClickListener(this);
-        mail_edit.setOnClickListener(this);
     }
 
     private void initNeedView(){
@@ -233,35 +255,18 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         setCheckChangeListener(checkBox4, 3);
     }
 
-    private void initExtendFlag(){
+    private void initExtend(){
         remind_time.setVisibility(View.GONE);
-        remind_phone.setVisibility(View.GONE);
-        remind_mail.setVisibility(View.GONE);
-        isRemindExtend = false;
 
         need_front.setVisibility(View.GONE);
         need_back.setVisibility(View.GONE);
         need_window.setVisibility(View.GONE);
         need_other.setVisibility(View.GONE);
-        isNeedExtend = false;
     }
 
     @Override
     public void onClick(View v){
         switch (v.getId()){
-            case R.id.order_setremind:
-            case R.id.order_setremind_icon:
-                if (isRemindExtend){
-                    setViewsGone(remind_time, remind_phone, remind_mail);
-                    isRemindExtend = false;
-                    remind_icon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.more_48));
-                }
-                else{
-                    setViewsVisible(remind_time, remind_phone, remind_mail);
-                    isRemindExtend = true;
-                    remind_icon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.less_48));
-                }
-                break;
             case R.id.order_setneed:
             case R.id.order_setneed_icon:
                 if (isNeedExtend){
@@ -277,11 +282,18 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.order_setremindtime:
                 final TextView settime =  v.findViewById(v.getId());
-                setAlertDialog("设置提醒时间", remind_list, settime, "");
-                break;
-            case R.id.order_phonelocation:
-                final TextView location =  v.findViewById(v.getId());
-                setAlertDialog("选择手机区域", phone_location_list, location, " :");
+                new AlertDialog.Builder(OrderActivity.this)
+                    .setTitle("设置提醒时间")
+                    .setSingleChoiceItems(remind_list, remindlist_select, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        String text = remind_list[which];
+                        remind_minutes = remindtime_list[which];
+                        remindlist_select = which;
+                        settime.setText(text);
+                    }
+                }).setNegativeButton("取消", null).create().show();
                 break;
             case R.id.order_confirm:
                 new AlertDialog.Builder(this)
@@ -298,12 +310,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                     .build();
 
                                 submitAppoint(requestBody);
-
-//                                try {
-//                                    Thread.sleep(1000);
-//                                } catch (InterruptedException e) {
-//                                    e.printStackTrace();
-//                                }
                             }
                         })
                         .setNegativeButton("取消", null)
@@ -324,7 +330,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             appointDoubleIntent.putExtra("single_departure_place", departure_place_str);
             appointDoubleIntent.putExtra("single_arrive_place", arrive_place_str);
             appointDoubleIntent.putExtra("single_departure_time", departure_time_str);
-            //ToastUtils.showShort(StringCalendarUtils.HHmmssToHHmm(departure_time));
             appointDoubleIntent.putExtra("single_arrive_time", arrive_time_str);
             appointDoubleIntent.putExtra("single_departure_date", date_str);
             appointDoubleIntent.putExtra("single_shiftid", shiftid_str);
@@ -358,6 +363,19 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void onNext(HttpResponse response) {
                     if(response.getError()==0){
+                        Date departure_time = StringCalendarUtils.StringToTime(date_str+" "+departure_time_str);
+                        long begintime = departure_time.getTime();
+                        Log.i("DEPART_TIME",departure_time.getDay()+":"+departure_time.getHours()+":"+departure_time.getMinutes());
+                        String description = "您预约的于" + date_str + " " + departure_time_str + "从" + departure_place_str
+                                + "开往" + arrive_place_str + "的" + shiftid_str + "号校区巴士即将于"+remind_list[remindlist_select]+"后发车，请记得按时前去乘坐哦~";
+                        CalendarReminder.addCalendarEventRemind(App.getInstance(), "校车发车提醒", description, begintime, begintime, remind_minutes, new CalendarReminder.onCalendarRemindListener(){
+                            public void onFailed(CalendarReminder.onCalendarRemindListener.Status error_code){
+                                ToastUtils.showShort("预约提醒设置失败~");
+                            }
+                            public void onSuccess(){
+                                ToastUtils.showShort("预约提醒设置成功~");
+                            }
+                        });
                         //显示预约成功
                         String message = "";
                         if (isSingleWayFlag || (! isSingleWayFlag && !isOrderFinished)) {
@@ -368,7 +386,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                     + "开往" + double_arrive_place_str + "的" + double_shiftid_str + "号校区巴士】，请记得按时前去乘坐哦~";
                         }
 
-//                        Log.i(TAG, message);
                         new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("预约成功~")
                                 .setContentText(message)
@@ -380,7 +397,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                             OrderActivity.this.startActivity(new Intent(OrderActivity.this, MainActivity.class));
                                         } else if (! isOrderFinished){
                                             isOrderFinished = true;
-
                                             RequestBody anotherRequestBody = new FormBody.Builder()
                                                 .add("line_name", ShiftUtils.getLineByDepartureAndArrive(double_departure_place_str,double_arrive_place_str))
                                                 .add("shift_id",double_shiftid_str)
@@ -397,7 +413,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                 })
                                 .show();
                     }else{
-//                        Log.i(TAG, "fail");
                         new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("预约失败!")
                                 .setContentText("没有剩余座位或网络出错!")
@@ -413,7 +428,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void onComplete() {
                     Log.i(TAG, "onComplete ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
@@ -429,28 +443,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
-    private void setAlertDialog(String title, final String[] list, final TextView textView, final String more){
-        AlertDialog.Builder builder = new AlertDialog.Builder(OrderActivity.this);
-        builder.setTitle(title);
-        builder.setSingleChoiceItems(list, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                String text = list[which] + more;
-                textView.setText(text);
-            }
-        });
-        builder.setNegativeButton("取消", null);
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
     private void setCheckChangeListener(CheckBox checkBox, final int pos){
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 checked_array[pos] = isChecked;
-//                ToastUtils.showShort(check_msg[pos] + checked_array[pos]);
             }
         });
     }

@@ -20,7 +20,7 @@ public class ShiftTimeLineViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setData(String time,String comment){
-        shiftTime.setText("发车时间:"+time);
+        shiftTime.setText(time+" 发车");
         if(shiftComment!=null) shiftComment.setText(comment);
     }
 

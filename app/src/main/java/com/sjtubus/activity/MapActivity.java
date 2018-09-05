@@ -3,6 +3,7 @@ package com.sjtubus.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -61,6 +62,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -71,7 +73,8 @@ import static android.content.ContentValues.TAG;
 public class MapActivity extends BaseActivity {
 
     //百度地图相关
-    private MapView mMapView;
+    @BindView(R.id.mapview)
+    MapView mMapView;
     private BaiduMap mBaiduMap;
     private Float zoomLevel = 16.0f;
     private LatLng initPosition = new LatLng(31.03201,121.443287);
@@ -96,7 +99,8 @@ public class MapActivity extends BaseActivity {
 
     //时刻表相关
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
-    private ScrollLayout mScrollLayout;
+    @BindView(R.id.scroll_down_layout)
+    ScrollLayout mScrollLayout;
 
     private HashMap<String,Marker> busmap = new HashMap<>();
     //巴士运行相关
@@ -110,7 +114,10 @@ public class MapActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.setStatusBarColor(this, getResources().getColor(R.color.primary_red));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+        //App.setStatusBarColor(this, getResources().getColor(R.color.primary_red));
         getPermission();
         initView();
         initLocation();
@@ -122,7 +129,7 @@ public class MapActivity extends BaseActivity {
     }
 
     private void getPermission(){
-        //h获得定位权限
+        //获得定位权限
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -136,14 +143,11 @@ public class MapActivity extends BaseActivity {
 
     private void initView(){
         //获取地图控件引用
-        mMapView = findViewById(R.id.mapview);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setCompassEnable(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为卫星显示
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(zoomLevel));// 设置地图初始化缩放比例
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(initPosition));// 设置地图初始中心
-
-        mScrollLayout = findViewById(R.id.scroll_down_layout);
 
         /*设置 setting*/
         mScrollLayout.setMinOffset(0);
@@ -195,7 +199,6 @@ public class MapActivity extends BaseActivity {
         //如果设置为0，则代表单次定位，即仅定位一次，默认为0
         //如果设置非0，需设置1000ms以上才有效
         option.setOpenGps(true);
-        //可选，设置是否使用gps，默认false
         //使用高精度和仅用设备两种定位模式的，参数必须设置为true
         option.setLocationNotify(true);
         //可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false

@@ -256,20 +256,16 @@
                 android:layout_height="25dp"
                 android:src="@mipmap/icon_clock_128"
                 android:layout_gravity="center"/>
-            <TextView
+            <CheckBox
                 android:id="@+id/order_setremind"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:layout_width="0dp"
+                android:layout_weight="3.5"
+                android:layout_height="match_parent"
+                android:text="@string/set_remind"
                 android:textSize="18sp"
                 android:layout_gravity="center"
-                android:text="@string/set_remind"/>
-            <ImageView
-                android:id="@+id/order_setremind_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/more_48"
-                android:layout_gravity="center"/>
+                android:gravity="left"
+                android:textColor="@color/dark_gray"/>
         </LinearLayout>
 
         <LinearLayout
@@ -306,77 +302,77 @@
                 android:textSize="12sp"/>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/order_remind_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/shallow_white"
-            android:layout_marginBottom="2dp"
-            android:padding="@dimen/smallPadding">
-            <TextView
-                android:id="@+id/order_phonelocation"
-                android:layout_width="0dp"
-                android:layout_weight="2.5"
-                android:layout_height="match_parent"
-                android:textSize="@dimen/smallText"
-                android:text="@string/phone_title"
-                android:layout_gravity="right"
-                android:gravity="center|end"
-                android:drawableLeft="@drawable/more_8">
-            </TextView>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:layout_height="match_parent"/>
-            <com.sjtubus.widget.ClearEditText
-                android:id="@+id/order_phoneedit"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"
-                android:maxLength="11"
-                android:hint="@string/hint_phone"
-                android:focusable="true"/>
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/order_remind_phone"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:background="@color/shallow_white"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:padding="@dimen/smallPadding">-->
+            <!--<TextView-->
+                <!--android:id="@+id/order_phonelocation"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="2.5"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textSize="@dimen/smallText"-->
+                <!--android:text="@string/phone_title"-->
+                <!--android:layout_gravity="right"-->
+                <!--android:gravity="center|end"-->
+                <!--android:drawableLeft="@drawable/more_8">-->
+            <!--</TextView>-->
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="0.5"-->
+                <!--android:layout_height="match_parent"/>-->
+            <!--<com.sjtubus.widget.ClearEditText-->
+                <!--android:id="@+id/order_phoneedit"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="6"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textSize="14sp"-->
+                <!--android:layout_gravity="bottom"-->
+                <!--android:gravity="bottom"-->
+                <!--android:maxLength="11"-->
+                <!--android:hint="@string/hint_phone"-->
+                <!--android:focusable="true"/>-->
+        <!--</LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/order_remind_mail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/shallow_white"
-            android:layout_marginBottom="2dp"
-            android:padding="@dimen/smallPadding">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="2.5"
-                android:layout_height="match_parent"
-                android:text="@string/mail_title"
-                android:textSize="14sp"
-                android:layout_gravity="center"
-                android:gravity="center|right">
-            </TextView>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="0.5"
-                android:gravity="center"
-                android:layout_height="match_parent"
-                android:textSize="14sp"/>
-            <com.sjtubus.widget.ClearEditText
-                android:id="@+id/order_mailedit"
-                android:layout_width="0dp"
-                android:layout_weight="6"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"
-                android:maxLength="20"
-                android:hint="@string/hint_mail"
-                android:focusable="true"/>
-        </LinearLayout>
+        <!--<LinearLayout-->
+            <!--android:id="@+id/order_remind_mail"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:background="@color/shallow_white"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:padding="@dimen/smallPadding">-->
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="2.5"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="@string/mail_title"-->
+                <!--android:textSize="14sp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center|right">-->
+            <!--</TextView>-->
+            <!--<TextView-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="0.5"-->
+                <!--android:gravity="center"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textSize="14sp"/>-->
+            <!--<com.sjtubus.widget.ClearEditText-->
+                <!--android:id="@+id/order_mailedit"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="6"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:textSize="14sp"-->
+                <!--android:layout_gravity="bottom"-->
+                <!--android:gravity="bottom"-->
+                <!--android:maxLength="20"-->
+                <!--android:hint="@string/hint_mail"-->
+                <!--android:focusable="true"/>-->
+        <!--</LinearLayout>-->
     </LinearLayout>
 
     <!--设置特殊需求-->

@@ -22,6 +22,7 @@ import com.sjtubus.utils.ZxingUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -32,16 +33,27 @@ import okhttp3.RequestBody;
 import static android.content.ContentValues.TAG;
 
 public class PersonInfoActivity extends BaseActivity implements View.OnClickListener{
-    private TextView username;
-    private TextView isteacher;
-    private TextView phone;
-    private TextView realname;
-    private TextView credit;
-    private TextView studentnum;
-    private ImageView qrcode;
-    private LinearLayout phone_bar;
-    private LinearLayout realname_bar;
-    private LinearLayout studentnum_bar;
+
+    @BindView(R.id.person_username)
+    TextView username;
+    @BindView(R.id.person_isteacher)
+    TextView isteacher;
+    @BindView(R.id.person_phone)
+    TextView phone;
+    @BindView(R.id.person_realname)
+    TextView realname;
+    @BindView(R.id.person_credit)
+    TextView credit;
+    @BindView(R.id.person_studentnum)
+    TextView studentnum;
+    @BindView(R.id.user_qrcode)
+    ImageView qrcode;
+    @BindView(R.id.person_phone_bar)
+    LinearLayout phone_bar;
+    @BindView(R.id.person_realname_bar)
+    LinearLayout realname_bar;
+    @BindView(R.id.person_studentnum_bar)
+    LinearLayout studentnum_bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -51,23 +63,14 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
     }
 
     public void initView(){
-        username = findViewById(R.id.person_username);
-        isteacher = findViewById(R.id.person_isteacher);
-        phone = findViewById(R.id.person_phone);
-        credit = findViewById(R.id.person_credit);
-        realname = findViewById(R.id.person_realname);
-        studentnum = findViewById(R.id.person_studentnum);
         Button logout_btn = findViewById(R.id.btn_logout);
-        qrcode = findViewById(R.id.user_qrcode);
         logout_btn.setOnClickListener(this);
 
 //        phone_bar = findViewById(R.id.person_phone_bar);
-        realname_bar = findViewById(R.id.person_realname_bar);
-        studentnum_bar = findViewById(R.id.person_studentnum_bar);
 //        phone_bar.setOnClickListener(this);
+//        phone_bar.setEnabled(false);
         realname_bar.setOnClickListener(this);
         studentnum_bar.setOnClickListener(this);
-        //phone_bar.setEnabled(false);
         realname_bar.setEnabled(false);
         studentnum_bar.setEnabled(false);
 
@@ -141,7 +144,6 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
                 @Override
                 public void onComplete() {
                     Log.d(TAG, "onComplete: ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
@@ -218,7 +220,6 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
                 @Override
                 public void onComplete() {
                     Log.d(TAG, "onComplete: ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
@@ -227,26 +228,26 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         final EditText editText = new EditText(this);
         editText.setMinLines(2);
         new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setIcon(R.mipmap.update)
-                .setView(editText)
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        String text = editText.getText().toString().trim();
-                        if (isPhoneUpdate){
-                            Pattern pattern= Pattern.compile("[1][358]\\d{9}");
-                            Matcher matcher = pattern.matcher(text);
-                            //发送短信，传入国家号和电话---使用SMSSDK核心类之前一定要在MyApplication中初始化，否侧不能使用
-                            if(!matcher.matches()){
-                                ToastUtils.showShort("手机号码格式不正确~");
-                                return;
-                            }
+            .setTitle(title)
+            .setIcon(R.mipmap.update)
+            .setView(editText)
+            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface arg0, int arg1) {
+                    String text = editText.getText().toString().trim();
+                    if (isPhoneUpdate){
+                        Pattern pattern= Pattern.compile("[1][358]\\d{9}");
+                        Matcher matcher = pattern.matcher(text);
+                        //发送短信，传入国家号和电话---使用SMSSDK核心类之前一定要在MyApplication中初始化，否侧不能使用
+                        if(!matcher.matches()){
+                            ToastUtils.showShort("手机号码格式不正确~");
+                            return;
                         }
-                        textView.setText(text);
-                        completeInfos();
                     }
-                })
-                .setNegativeButton("取消", null)
-                .show();
+                    textView.setText(text);
+                    completeInfos();
+                }
+            })
+            .setNegativeButton("取消", null)
+            .show();
     }
 }

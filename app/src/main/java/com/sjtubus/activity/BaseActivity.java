@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.baidu.mapapi.SDKInitializer;
 import com.sjtubus.App;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
@@ -19,9 +21,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(getContentViewId());
         App.translucentStatusBar(this,true);
+        mUnBinder = ButterKnife.bind(this);
     }
 
     private CompositeDisposable compositeDisposable;
+
+    private Unbinder mUnBinder;
 
     abstract protected int getContentViewId();
 
@@ -48,5 +53,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (this.compositeDisposable != null) {
             this.compositeDisposable.clear();
         }
+        mUnBinder.unbind();
     }
 }

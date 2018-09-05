@@ -38,6 +38,19 @@ public class StringCalendarUtils {
         return date;
     }
 
+    /* 由 2018-07-17 06:40 格式的字符串获取 date */
+    public static Date StringToTime(String timestr){
+        Date date= new Date();
+        @SuppressLint("SimpleDateFormat")
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            date = dateFormat.parse(timestr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
     /* calendar转化成 2018-07-18 的格式 */
     public static String CalendarToString(Calendar calendar){
         @SuppressLint("SimpleDateFormat")

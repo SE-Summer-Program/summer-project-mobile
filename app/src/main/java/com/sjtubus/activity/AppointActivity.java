@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -38,9 +39,23 @@ import static android.content.ContentValues.TAG;
 
 public class AppointActivity extends BaseActivity implements View.OnClickListener {
 
-    private RecyclerView recyclerView;
-    private AppointAdapter appointAdapter;
-    private SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.appoint_recycle)
+    RecyclerView recyclerView;
+    AppointAdapter appointAdapter;
+    @BindView(R.id.refresh_appoint)
+    SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.appoint_left)
+    TextView left_appoint;
+    @BindView(R.id.appoint_yesterday)
+    TextView yesterday_btn;
+    @BindView(R.id.appoint_nextday)
+    TextView nextday_btn;
+    @BindView(R.id.appoint_date)
+    TextView date;
+    @BindView(R.id.appoint_calendar)
+    ImageView calendar_btn;
+    @BindView(R.id.appoint_next)
+    ImageView next_btn;
 
     /* datestr不要乱用，是传进来的值，可能会被改变的 */
     private String departure_place_str;
@@ -49,13 +64,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private int year,month,day;
     private String line_name;
     private String line_type;
-
-    private TextView left_appoint;
-    private TextView yesterday_btn;
-    private TextView nextday_btn;
-    private TextView date;
-    private ImageView calendar_btn;
-    private ImageView next_btn;
 
     private boolean isTodayFlag = false;
 
@@ -102,13 +110,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
-        yesterday_btn = findViewById(R.id.appoint_yesterday);
-        nextday_btn = findViewById(R.id.appoint_nextday);
-        date = findViewById(R.id.appoint_date);
-        calendar_btn = findViewById(R.id.appoint_calendar);
-        next_btn = findViewById(R.id.appoint_next);
-        left_appoint = findViewById(R.id.appoint_left);
-
         yesterday_btn.setOnClickListener(this);
         nextday_btn.setOnClickListener(this);
         date.setOnClickListener(this);
@@ -123,7 +124,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             isTodayFlag = true;
         }
 
-        recyclerView = findViewById(R.id.appoint_recycle);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         appointAdapter = new AppointAdapter(this);
         recyclerView.setAdapter(appointAdapter);
@@ -136,7 +136,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
-        swipeRefresh = findViewById(R.id.refresh_appoint);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -232,14 +231,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     public void onBackPressed() {
-        // 单程 回 navi
-        String data1 = departure_place_str;
-        String data2 = arrive_place_str;
-        String data3 = (String) date.getText();
         Intent intent = new Intent(AppointActivity.this, AppointNaviActivity.class);
-        intent.putExtra("departure_place", data1);
-        intent.putExtra("arrive_place", data2);
-        intent.putExtra("singleway_date", data3);
+        intent.putExtra("departure_place", departure_place_str);
+        intent.putExtra("arrive_place", arrive_place_str);
+        intent.putExtra("singleway_date", (String) date.getText());
         setResult(RESULT_OK, intent);
         finish();
     }

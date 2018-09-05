@@ -42,6 +42,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -54,15 +55,34 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener,NavigationView.OnNavigationItemSelectedListener{
 
-    private DrawerLayout drawerLayout;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.billboard)
+    XMarqueeView billboard;
+    @BindView(R.id.banner)
+    Banner banner;
+    @BindView(R.id.reserve_btn)
+    Button reserve_btn;
+    @BindView(R.id.scan_btn)
+    Button scan_btn;
+    @BindView(R.id.position_btn)
+    Button position_btn;
+    @BindView(R.id.schedule_btn)
+    Button schedule_btn;
+    @BindView(R.id.map_btn)
+    Button map_btn;
+    @BindView(R.id.navigate_btn)
+    Button navigate_btn;
+
+    //Views in navigate menu
     private TextView username;
     private TextView userinfo;
     private TextView login_tips;
     private TextView login_txt;
     private TextView register_txt;
-    private XMarqueeView billboard;
+    //private XMarqueeView billboard;
 
-    Button reserve_btn, scan_btn, position_btn, schedule_btn, map_btn, navigate_btn;
+    //Button reserve_btn, scan_btn, position_btn, schedule_btn, map_btn, navigate_btn;
 
     private List<String> images = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
@@ -71,7 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        Banner banner = findViewById(R.id.banner);
+        //Banner banner = findViewById(R.id.banner);
         initView();
         loadImages();
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
@@ -86,10 +106,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     public void initView(){
+        //Basic settings of ToolBar
         Toolbar mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.mipmap.person);
 
+        setSupportActionBar(mToolbar);
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         reserve_btn = findViewById(R.id.reserve_btn); //预约班车
         scan_btn = findViewById(R.id.scan_btn); //管理员扫描
         position_btn = findViewById(R.id.position_btn); //司机定位
@@ -104,11 +130,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
 
-        setSupportActionBar(mToolbar);
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -124,7 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         register_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
 
         //设置滚动轮播
-        billboard = findViewById(R.id.billboard);
+       // billboard = findViewById(R.id.billboard);
         messages.add("2018.8.19即明日,校园巴士停运一天!");
         messages.add("好消息！校车时速已达到100km/S!");
         messages.add("恭喜学号为2333的同学喜提校车一辆!");
@@ -133,7 +154,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         //billboard_adapter.setData(messages);
         billboard.setAdapter(billboard_adapter);
 
-        checkRole();
+       // checkRole();
     }
 
     public void loadImages(){
@@ -143,24 +164,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         images.add("http://chuantu.biz/t6/337/1530513420x-1566688664.jpg");
     }
 
-    public void checkRole(){
-        User user = UserManager.getInstance().getUser();
-        String role = UserManager.getInstance().getRole();
-        boolean isLogin = UserManager.getInstance().isLogin();
-        if (!isLogin){
-            scan_btn.setVisibility(View.GONE);
-            position_btn.setVisibility(View.GONE);
-        } else if (user != null && (role.equals("user") || role.equals("jaccountuser"))){
-            scan_btn.setVisibility(View.GONE);
-            position_btn.setVisibility(View.GONE);
-        } else if (role.equals("admin")){
-            reserve_btn.setVisibility(View.GONE);
-            position_btn.setVisibility(View.GONE);
-        } else if (role.equals("driver")){
-            reserve_btn.setVisibility(View.GONE);
-            scan_btn.setVisibility(View.GONE);
-        }
-    }
+//    public void checkRole(){
+//        User user = UserManager.getInstance().getUser();
+//        String role = UserManager.getInstance().getRole();
+//        boolean isLogin = UserManager.getInstance().isLogin();
+//        if (!isLogin){
+//            scan_btn.setVisibility(View.GONE);
+//            position_btn.setVisibility(View.GONE);
+//        } else if (user != null && (role.equals("user") || role.equals("jaccountuser"))){
+//            scan_btn.setVisibility(View.GONE);
+//            position_btn.setVisibility(View.GONE);
+//        } else if (role.equals("admin")){
+//            reserve_btn.setVisibility(View.GONE);
+//            position_btn.setVisibility(View.GONE);
+//        } else if (role.equals("driver")){
+//            reserve_btn.setVisibility(View.GONE);
+//            scan_btn.setVisibility(View.GONE);
+//        }
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserStatChange(UserChangeEvent event) {
@@ -175,12 +196,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             username.setText(user.getUsername());
             username.setVisibility(View.VISIBLE);
             String role = user.getTeacher()?"教工":"普通用户";
-            if(UserManager.getInstance().getRole().equals("driver")){
-                role = "司机";
-            }else if(UserManager.getInstance().getRole().equals("admin")){
-                role = "管理员";
-            }else if(UserManager.getInstance().getRole().equals("jaccountuser")){
-                role = "Jaccount认证用户";
+            switch (UserManager.getInstance().getRole()){
+                case "driver":
+                    role = "司机";
+                    break;
+                case "admin":
+                    role = "管理员";
+                    break;
+                case "jaccountuser":
+                    role = "Jaccount认证用户";
+                    break;
+                default:
+                    break;
             }
             String userinfo_str = "身份:"+role+"   "+"信用积分:"+user.getCredit();
             userinfo.setText(userinfo_str);
@@ -243,22 +270,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 Intent scheduleIntent = new Intent(MainActivity.this, LineActivity.class);
                 startActivity(scheduleIntent);
                 break;
+                //保留疑问
             case R.id.navigate_btn:
                 Intent mapIntent = new Intent(MainActivity.this,MapActivity.class);
                 startActivity(mapIntent);
                 break;
+            //保留疑问
             case R.id.map_btn:
                 Intent navigateIntent = new Intent(MainActivity.this,RouteActivity.class);
                 startActivity(navigateIntent);
                 break;
-            case R.id.message_btn:
-                Intent messageIntent = new Intent(MainActivity.this, MessageActivity.class);
-                startActivity(messageIntent);
-                break;
-            case R.id.idea_btn:
-                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
-                agent.startDefaultThreadActivity();
-                break;
+//            case R.id.message_btn:
+//                Intent messageIntent = new Intent(MainActivity.this, MessageActivity.class);
+//                startActivity(messageIntent);
+//                break;
+//            case R.id.idea_btn:
+//                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
+//                agent.startDefaultThreadActivity();
+//                break;
             case R.id.login_txt:
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
@@ -356,6 +385,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         billboard.stopFlipping();
     }
 
+
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     /**
      * 判断是否存在虚拟按键
      * @ return
@@ -383,13 +419,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             e.printStackTrace();
         }
         return hasNavigationBar;
-    }
-
-
-    @Override
-    public void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
     }
 
     @Override
@@ -447,7 +476,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                                         })
                                         .show();
                             }
-
                             @Override
                             public void onError(Throwable e) {
                                 e.printStackTrace();
@@ -456,7 +484,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                             @Override
                             public void onComplete() {
                                 Log.d(TAG, "onComplete: ");
-                                //mProgressBar.setVisibility(View.GONE);
                             }
                         });
             }

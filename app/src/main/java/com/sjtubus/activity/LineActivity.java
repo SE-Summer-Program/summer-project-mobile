@@ -1,7 +1,6 @@
 package com.sjtubus.activity;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.sjtubus.R;
@@ -21,8 +19,7 @@ import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.LineAdapter;
 
-import java.util.Calendar;
-
+import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -32,19 +29,19 @@ import static android.content.ContentValues.TAG;
 import static android.content.DialogInterface.BUTTON_NEGATIVE;
 import static android.content.DialogInterface.BUTTON_POSITIVE;
 
-//import com.sjtubus.utils.SwipeRefreshView;
-
 public class LineActivity extends BaseActivity implements LineAdapter.OnItemClickListener{
 
+    @BindView(R.id.toolbar_line)
     Toolbar mToolbar;
+    @BindView(R.id.recycle_schedule)
     RecyclerView recyclerView;
-    LinearLayoutManager layoutManager;
-    LineAdapter adapter;
+    @BindView(R.id.refresh_schedule)
     SwipeRefreshLayout swipeRefresh;
-    Calendar calendar;
-    MyDialogListener dialogListener = new MyDialogListener();
-
+    @BindView(R.id.line_total)
     TextView line_total;
+
+    private LineAdapter adapter;
+    private MyDialogListener dialogListener = new MyDialogListener();
 
     private String[] type_list = {"在校期-工作日", "在校期-双休日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
@@ -64,8 +61,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     }
 
     public void initViews(){
-        mToolbar = findViewById(R.id.toolbar_line);
-        //setSupportActionBar(mToolbar);
         mToolbar.setNavigationIcon(R.mipmap.menu);
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,12 +69,9 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
             }
         });
 
-        line_total = findViewById(R.id.line_total);
-
-        recyclerView = findViewById(R.id.recycle_schedule);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager); //设置布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL); //设置为垂直布局，默认
+        recyclerView.setLayoutManager(layoutManager); //设置布局管理器
        // recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL)); //分割线
         adapter = new LineAdapter(this);
         adapter.setItemClickListener(this);
@@ -99,12 +91,10 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
 
             }
         });
-        //String type = ShiftUtils.getTypeOfToday();
         String type = "NormalWorkday";
         initSelected(type);
         setAndShowSchedule(type);
 
-        swipeRefresh = findViewById(R.id.refresh_schedule);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -154,7 +144,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 @Override
                 public void onComplete() {
                     Log.d(TAG, "onComplete: ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
@@ -170,15 +159,14 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     }
 
     public void putDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder((LineActivity.this));
-        builder.setTitle("选择时间段");
-        builder.setIcon(R.mipmap.type);
-        builder.setSingleChoiceItems(type_list, select, dialogListener);
-        builder.setCancelable(false);
-        builder.setPositiveButton("确定",dialogListener);
-        builder.setNegativeButton("取消",dialogListener);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        new AlertDialog.Builder((LineActivity.this))
+                .setTitle("选择时间段")
+                .setIcon(R.mipmap.type)
+                .setSingleChoiceItems(type_list, select, dialogListener)
+                .setCancelable(false)
+                .setPositiveButton("确定",dialogListener)
+                .setNegativeButton("取消",dialogListener)
+                .create().show();
     }
 
     public void refreshSchedule(String type){
@@ -196,16 +184,13 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 public void onNext(LineInfoResponse response) {
                     Log.d(TAG, "onNext: ");
                     adapter.setDataList(response.getLineInfos());
-
                     swipeRefresh.setRefreshing(false);
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     e.printStackTrace();
-
                     swipeRefresh.setRefreshing(false);
-
                     ToastUtils.showShort("网络请求失败！请检查你的网络！");
                 }
 
@@ -230,20 +215,6 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                 temp_select = which;
             }
         }
-    }
-
-
-    public void showDatePickDlg(){
-        calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(LineActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                //date = calendar.getTime();
-                //这个时候calendar有没有被改变??
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.show();
-
     }
 
 

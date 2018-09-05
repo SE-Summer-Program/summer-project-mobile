@@ -14,6 +14,7 @@ import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.MessageAdapter;
 
+import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -23,17 +24,24 @@ import static android.content.ContentValues.TAG;
 
 public class MessageActivity extends BaseActivity {
 
-    private ProgressBar mProgressBar;
+    @BindView(R.id.message_progress)
+    ProgressBar mProgressBar;
+    @BindView(R.id.message_list)
+    RecyclerView messageView;
     private MessageAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         initView();
     }
 
+    @Override
+    public int getContentViewId(){
+        return R.layout.activity_message;
+    }
+
     public void initView(){
-        RecyclerView messageView = findViewById(R.id.message_list);
-        mProgressBar = findViewById(R.id.message_progress);
         mAdapter = new MessageAdapter(this);
         mProgressBar.setVisibility(View.VISIBLE);
 
@@ -76,11 +84,6 @@ public class MessageActivity extends BaseActivity {
                     mProgressBar.setVisibility(View.GONE);
                 }
             });
-    }
-
-    @Override
-    public int getContentViewId(){
-        return R.layout.activity_message;
     }
 
 }

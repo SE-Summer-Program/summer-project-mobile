@@ -84,7 +84,7 @@
     <string name="order_remark">备注 :</string>
     <string name="remark">备注</string>
     <string name="remindtime_title">提醒时间 :</string>
-    <string name="remindtime_default">提前30分钟</string>
+    <string name="remindtime_default">提前10分钟</string>
     <string name="phone_title">大陆手机 :</string>
     <string name="mail_title">邮箱地址 :</string>
     <string name="front_seat">前排座位</string>
@@ -109,4 +109,5 @@
     <string name="fliter">筛选</string>
     <string name="sort">排序</string>
     <string name="vaild_record">有效预约</string>
+    <string name="search_hint">想去哪？</string>
 </resources>

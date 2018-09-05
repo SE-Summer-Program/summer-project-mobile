@@ -3,11 +3,9 @@ package com.sjtubus.network;
 import com.sjtubus.App;
 import com.sjtubus.network.cookie.BusCookieJar;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.CookieJar;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -32,8 +30,8 @@ public class BusOkHttpClient {
             client = new OkHttpClient.Builder()
                     //.cache(cache)
                     .cookieJar(cookieJar)
-                    .connectTimeout(5, TimeUnit.SECONDS)
-                    .readTimeout(5,TimeUnit.SECONDS)
+                    .connectTimeout(3, TimeUnit.SECONDS)
+                    .readTimeout(3,TimeUnit.SECONDS)
                     .addInterceptor(userAgentInterceptor)
                     .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                     .build();
