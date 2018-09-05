@@ -80,9 +80,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private TextView login_tips;
     private TextView login_txt;
     private TextView register_txt;
+    //private XMarqueeView billboard;
 
-
-    //private View decorView;
+    //Button reserve_btn, scan_btn, position_btn, schedule_btn, map_btn, navigate_btn;
 
     private List<String> images = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
@@ -91,6 +91,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
+        //Banner banner = findViewById(R.id.banner);
         initView();
         loadImages();
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
@@ -115,6 +116,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        reserve_btn = findViewById(R.id.reserve_btn); //预约班车
+        scan_btn = findViewById(R.id.scan_btn); //管理员扫描
+        position_btn = findViewById(R.id.position_btn); //司机定位
+        schedule_btn = findViewById(R.id.schedule_btn); //班次信息
+        map_btn = findViewById(R.id.map_btn); //路线查询
+        navigate_btn = findViewById(R.id.navigate_btn); //实时位置
 
         reserve_btn.setOnClickListener(this);
         scan_btn.setOnClickListener(this);
@@ -123,6 +130,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -132,24 +140,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         login_tips = nav_header_layout.findViewById(R.id.login_tips);
         login_txt = nav_header_layout.findViewById(R.id.login_txt);
         register_txt = nav_header_layout.findViewById(R.id.register_txt);
-        //Set underline
+        //设置下划线
         login_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
         register_txt.getPaint().setFlags(Paint. UNDERLINE_TEXT_FLAG );
 
-        //Set marquee billboard
+        //设置滚动轮播
+       // billboard = findViewById(R.id.billboard);
         messages.add("2018.8.19即明日,校园巴士停运一天!");
         messages.add("好消息！校车时速已达到100km/S!");
         messages.add("恭喜学号为2333的同学喜提校车一辆!");
         MarqueeViewAdapter billboard_adapter = new MarqueeViewAdapter(messages, this);
-        //Refresh billboard
+        //刷新公告
+        //billboard_adapter.setData(messages);
         billboard.setAdapter(billboard_adapter);
+
+       // checkRole();
     }
+
     public void loadImages(){
         //目前的图片是用的网上的传图网站
         images.add("http://chuantu.biz/t6/337/1530513364x-1566688664.jpg");
         images.add("http://chuantu.biz/t6/337/1530513397x-1566688664.jpg");
         images.add("http://chuantu.biz/t6/337/1530513420x-1566688664.jpg");
     }
+
+//    public void checkRole(){
+//        User user = UserManager.getInstance().getUser();
+//        String role = UserManager.getInstance().getRole();
+//        boolean isLogin = UserManager.getInstance().isLogin();
+//        if (!isLogin){
+//            scan_btn.setVisibility(View.GONE);
+//            position_btn.setVisibility(View.GONE);
+//        } else if (user != null && (role.equals("user") || role.equals("jaccountuser"))){
+//            scan_btn.setVisibility(View.GONE);
+//            position_btn.setVisibility(View.GONE);
+//        } else if (role.equals("admin")){
+//            reserve_btn.setVisibility(View.GONE);
+//            position_btn.setVisibility(View.GONE);
+//        } else if (role.equals("driver")){
+//            reserve_btn.setVisibility(View.GONE);
+//            scan_btn.setVisibility(View.GONE);
+//        }
+//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserStatChange(UserChangeEvent event) {
@@ -238,14 +270,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 Intent scheduleIntent = new Intent(MainActivity.this, LineActivity.class);
                 startActivity(scheduleIntent);
                 break;
-            case R.id.map_btn:
+                //保留疑问
+            case R.id.navigate_btn:
                 Intent mapIntent = new Intent(MainActivity.this,MapActivity.class);
                 startActivity(mapIntent);
                 break;
-            case R.id.navigate_btn:
+            //保留疑问
+            case R.id.map_btn:
                 Intent navigateIntent = new Intent(MainActivity.this,RouteActivity.class);
                 startActivity(navigateIntent);
                 break;
+//            case R.id.message_btn:
+//                Intent messageIntent = new Intent(MainActivity.this, MessageActivity.class);
+//                startActivity(messageIntent);
+//                break;
+//            case R.id.idea_btn:
+//                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
+//                agent.startDefaultThreadActivity();
+//                break;
             case R.id.login_txt:
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(loginIntent);
@@ -289,6 +331,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(recordIntent);
                 break;
             case R.id.navigation_item_collect:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 Intent collectIntent = new Intent(MainActivity.this, CollectActivity.class);
                 startActivity(collectIntent);
                 break;
@@ -376,7 +422,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     @Override
-    // Get the information of QRcode from this method
+    // 通过 onActivityResult的方法获取 扫描回来的 值
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(intentResult != null) {
@@ -393,7 +439,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                         })
                         .show();
             } else {
-                // ScanResult is the decoded string
+                // ScanResult 为 获取到的字符串
                 String scanResult = intentResult.getContents();
                 String[] info = scanResult.split(";");
                 if(info.length < 3){
@@ -405,7 +451,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                         .add("shift_id",info[0])
                         .add("departure_date",info[1])
                         .build();
-                //Login
+                //登录
                 RetrofitClient.getBusApi()
                         .verifyUser(requestBody)
                         .subscribeOn(Schedulers.io())

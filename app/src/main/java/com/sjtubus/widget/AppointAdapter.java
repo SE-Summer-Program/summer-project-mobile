@@ -12,25 +12,34 @@ import android.view.ViewGroup;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
+import com.sjtubus.activity.CollectActivity;
+import com.sjtubus.activity.MainActivity;
 import com.sjtubus.activity.OrderActivity;
 import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.ShiftInfo;
+import com.sjtubus.model.User;
+import com.sjtubus.model.response.CollectionResponse;
+import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.RecordInfoResponse;
 import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
@@ -46,6 +55,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private boolean isSecondPageFlag;
     private String double_date_str;
     private AppointInfo appointInfo = new AppointInfo();
+
+    private static String TAG = "appointadapter";
 
     /* 单程构造函数 */
     public AppointAdapter(Context context){
@@ -149,32 +160,34 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         }
     };
 
-    private static String TAG = "appointadapter";
-
     private View.OnClickListener ChildListener = new View.OnClickListener() {
         @Override
         public void onClick(View v){
+            AppointInfo info = appointInfoList.get((int)v.getTag()-1);
+            String departure_time = info.getDeparture_time();
+            String arrive_time = info.getArrive_time();
+            String departure_date = info.getDate();
+            String shiftid = info.getShiftid();
+
             switch (v.getId()){
                 case R.id.appointitem_reservebtn:
-                    AppointInfo info_reserve = appointInfoList.get((int)v.getTag()-1);
-                    Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
-                    String departure_time = info_reserve.getDeparture_time();
-                    String arrive_time = info_reserve.getArrive_time();
-                    String departure_date = info_reserve.getDate();
+//                    AppointInfo info_reserve = appointInfoList.get((int)v.getTag()-1);
+//                    Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
 
                     hasConflictSchedule = false;
-                    Log.i(TAG, departure_time + " " + arrive_time+ " " + departure_date);
-                    retrofitRecord(departure_time, arrive_time, departure_date, info_reserve);
-
+//                    Log.i(TAG, departure_time + " " + arrive_time+ " " + departure_date);
+                    retrofitRecord(departure_time, arrive_time, departure_date, info);
                     break;
 
                 case R.id.appointitem_collectbtn:
-                    ToastUtils.showShort("班次收藏功能还不能使用哦~");
+//                    ToastUtils.showShort("班次收藏功能还不能使用哦~");
+//                    AppointInfo info_collection = appointInfoList.get((int)v.getTag()-1);
+
+                    retrofitCollection(shiftid);
                     break;
 
                 case R.id.appointitem_infobtn:
-                    AppointInfo info_schedule = appointInfoList.get((int)v.getTag()-1);
-                    String shiftid = info_schedule.getShiftid();
+//                    AppointInfo info_schedule = appointInfoList.get((int)v.getTag()-1);
                     retrofitShiftInfo(shiftid);
                     break;
             }
@@ -277,8 +290,6 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                             String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
                             String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
 
-                            Log.i(TAG, "record_starttime" + record_starttime);
-                            Log.i(TAG, "record_endtime" + record_endtime);
                             //ToastUtils.showShort(record_starttime + " " + record_endtime);
                             //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
                             if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
@@ -358,6 +369,109 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     public void onComplete() {
                         Log.d(TAG, "onComplete: ");
                         //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void retrofitCollection(final String shiftid){
+        String username = UserManager.getInstance().getUser().getUsername();
+
+        RetrofitClient.getBusApi()
+                .getCollection(username)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CollectionResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(CollectionResponse response) {
+                        List<String> shifts = response.getShifts();
+                        Log.i(TAG, shifts.size()+"");
+
+                        if (shifts != null && shifts.size() != 0) {
+                            for (String shift : shifts) {
+                                if (shift.equals(shiftid)) {
+                                    new SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE)
+                                            .setTitleText("您已收藏过该班次啦~")
+                                            .setConfirmText("确定")
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sDialog) {
+
+                                                }
+                                            })
+                                            .show();
+                                    return;
+                                }
+                            }
+                        }
+
+                        Log.i(TAG, "addcollection");
+                        addCollection(shiftid);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                    }
+                });
+    }
+
+    private void addCollection(final String shiftid){
+        User user = UserManager.getInstance().getUser();
+        Log.i(TAG, shiftid + " " + user.getUserId());
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userid", user.getUserId())
+                .add("username", user.getUsername())
+                .add("shiftid", shiftid)
+                .build();
+
+        RetrofitClient.getBusApi()
+                .addCollection(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HttpResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(HttpResponse response) {
+                        Log.i(TAG, "addcollection success");
+                        String message = "您已成功收藏班次" + shiftid + "~";
+                        new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("收藏成功~")
+                                .setContentText(message)
+                                .setConfirmText("确定")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+
+                                    }
+                                })
+                                .show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i(TAG, "addcollection fail");
+                        e.printStackTrace();
+                        ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
                     }
                 });
     }

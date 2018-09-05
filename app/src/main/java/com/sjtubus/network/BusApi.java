@@ -1,6 +1,7 @@
 package com.sjtubus.network;
 
 import com.sjtubus.model.response.AppointResponse;
+import com.sjtubus.model.response.CollectionResponse;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.model.response.LocationResponse;
@@ -89,4 +90,13 @@ public interface BusApi {
 
     @GET("location")
     Observable<LocationResponse> getLocation();
+
+    @POST("collection/addcollect")
+    Observable<HttpResponse> addCollection(@Body RequestBody collectinfo);
+
+    @GET("collection/infos")
+    Observable<CollectionResponse> getCollection(@Query("username") String username);
+
+    @POST("collection/deletecollect")
+    Observable<HttpResponse> deleteCollection(@Body RequestBody collectinfo);
 }
