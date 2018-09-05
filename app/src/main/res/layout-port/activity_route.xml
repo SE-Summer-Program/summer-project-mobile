@@ -15,7 +15,7 @@
         android:visibility="visible"/>
 
     <com.yinglan.scrolllayout.ScrollLayout
-        android:id="@+id/scroll_down_layout"
+        android:id="@+id/chooseRoute_Layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#000000">
@@ -134,7 +134,7 @@
             android:id="@+id/chooseRoute_btn"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/icon_choose"
+            android:src="@drawable/icon_switch"
             app:backgroundTint="#90cef4"/>
     </RelativeLayout>
 
