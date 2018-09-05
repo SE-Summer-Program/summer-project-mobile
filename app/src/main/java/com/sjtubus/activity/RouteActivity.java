@@ -142,7 +142,7 @@ public class RouteActivity extends BaseActivity {
             }
         });
 
-        mScrollLayout = findViewById(R.id.scroll_down_layout);
+        mScrollLayout = findViewById(R.id.chooseRoute_Layout);
         /*设置 setting*/
         mScrollLayout.setMinOffset(0);
         mScrollLayout.setMaxOffset(-100);
