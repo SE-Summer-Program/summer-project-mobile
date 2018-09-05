@@ -91,12 +91,12 @@ public interface BusApi {
     @GET("location")
     Observable<LocationResponse> getLocation();
 
-    @POST("collection/addcollect")
+    @POST("collection/addCollect")
     Observable<HttpResponse> addCollection(@Body RequestBody collectinfo);
 
     @GET("collection/infos")
     Observable<CollectionResponse> getCollection(@Query("username") String username);
 
-    @POST("collection/deletecollect")
+    @POST("collection/deleteCollect")
     Observable<HttpResponse> deleteCollection(@Body RequestBody collectinfo);
 }
