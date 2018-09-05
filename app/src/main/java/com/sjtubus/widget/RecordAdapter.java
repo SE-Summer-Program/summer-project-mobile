@@ -148,6 +148,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
                                 RequestBody requestBody = new FormBody.Builder()
                                         .add("username", username)
+                                        .add("user_role",UserManager.getInstance().getRole())
                                         .add("shiftid", shiftid)
                                         .add("appoint_date", appoint_date)
                                         .build();
