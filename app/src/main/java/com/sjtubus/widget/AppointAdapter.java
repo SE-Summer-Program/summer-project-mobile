@@ -255,9 +255,10 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private void retrofitRecord(final String departure_time, final String arrive_time, final String departure_date, final AppointInfo info_reserve){
         //获取当前用户的username
         String username = UserManager.getInstance().getUser().getUsername();
+        String user_role = UserManager.getInstance().getRole();
 
         RetrofitClient.getBusApi()
-            .getRecordInfos(username)
+            .getRecordInfos(username, user_role)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<RecordInfoResponse>() {
