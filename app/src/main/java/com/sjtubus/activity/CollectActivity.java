@@ -13,14 +13,11 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.model.Collection;
-import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.response.CollectionResponse;
-import com.sjtubus.model.response.RecordInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.CollectAdapter;
-import com.sjtubus.widget.RecordAdapter;
 
 import org.w3c.dom.Text;
 
@@ -64,7 +61,7 @@ public class CollectActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
-        collect_total = (TextView) findViewById(R.id.record_total);
+        collect_total = (TextView) findViewById(R.id.collect_total);
 
         RecyclerView recyclerView = findViewById(R.id.recycle_collect);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -131,7 +128,9 @@ public class CollectActivity extends BaseActivity implements View.OnClickListene
 
                 @Override
                 public void onNext(CollectionResponse response) {
-                    collectAdapter.setDataList(response.getCollections());
+                    if (response.getCollections()!=null && response.getCollections().size()!=0){
+                        collectAdapter.setDataList(response.getCollections());
+                    }
 
                     int total_amount = response.getCollections()==null?0:response.getCollections().size();
                     String collect_info = "共计 " + total_amount + " 条班次收藏";

@@ -56,6 +56,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private String double_date_str;
     private AppointInfo appointInfo = new AppointInfo();
 
+    private static String TAG = "appointadapter";
+
     /* 单程构造函数 */
     public AppointAdapter(Context context){
         this.context = context;
@@ -157,8 +159,6 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             }
         }
     };
-
-    private static String TAG = "appointadapter";
 
     private View.OnClickListener ChildListener = new View.OnClickListener() {
         @Override
@@ -290,8 +290,6 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                             String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
                             String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
 
-                            Log.i(TAG, "record_starttime" + record_starttime);
-                            Log.i(TAG, "record_endtime" + record_endtime);
                             //ToastUtils.showShort(record_starttime + " " + record_endtime);
                             //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
                             if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
@@ -377,6 +375,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private void retrofitCollection(final String shiftid){
         String username = UserManager.getInstance().getUser().getUsername();
+
         RetrofitClient.getBusApi()
                 .getCollection(username)
                 .subscribeOn(Schedulers.io())
@@ -390,23 +389,27 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     @Override
                     public void onNext(CollectionResponse response) {
                         List<String> shifts = response.getShifts();
+                        Log.i(TAG, shifts.size()+"");
 
-                        for (String shift : shifts){
-                            if (shift.equals(shiftid)){
-                                new SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE)
-                                        .setTitleText("您已收藏过该班次啦~")
-                                        .setConfirmText("确定")
-                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sDialog) {
+                        if (shifts != null && shifts.size() != 0) {
+                            for (String shift : shifts) {
+                                if (shift.equals(shiftid)) {
+                                    new SweetAlertDialog(context, SweetAlertDialog.NORMAL_TYPE)
+                                            .setTitleText("您已收藏过该班次啦~")
+                                            .setConfirmText("确定")
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sDialog) {
 
-                                            }
-                                        })
-                                        .show();
-                                return;
+                                                }
+                                            })
+                                            .show();
+                                    return;
+                                }
                             }
                         }
 
+                        Log.i(TAG, "addcollection");
                         addCollection(shiftid);
                     }
 
@@ -423,8 +426,9 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 });
     }
 
-    public void addCollection(final String shiftid){
+    private void addCollection(final String shiftid){
         User user = UserManager.getInstance().getUser();
+        Log.i(TAG, shiftid + " " + user.getUserId());
         RequestBody requestBody = new FormBody.Builder()
                 .add("userid", user.getUserId())
                 .add("username", user.getUsername())
@@ -443,7 +447,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
                     @Override
                     public void onNext(HttpResponse response) {
-                        String message = "您已成功收藏班次" + shiftid;
+                        Log.i(TAG, "addcollection success");
+                        String message = "您已成功收藏班次" + shiftid + "~";
                         new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("收藏成功~")
                                 .setContentText(message)
@@ -459,6 +464,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.i(TAG, "addcollection fail");
                         e.printStackTrace();
                         ToastUtils.showShort("网络请求失败！请检查你的网络！");
                     }

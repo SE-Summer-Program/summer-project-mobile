@@ -184,7 +184,7 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                          * 统一日期格式为 yyyy-MM-dd
                          */
                         year = year_choose;
-                        month = month_choose+1;
+                        month = month_choose;
                         day = dayOfMonth_choose;
                         retrieveData();
                     }

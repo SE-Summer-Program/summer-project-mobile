@@ -302,6 +302,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 startActivity(recordIntent);
                 break;
             case R.id.navigation_item_collect:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
                 Intent collectIntent = new Intent(MainActivity.this, CollectActivity.class);
                 startActivity(collectIntent);
                 break;

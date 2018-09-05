@@ -13,6 +13,8 @@ public class ShiftInfo {
     private String lineNameCn;
     @SerializedName("departureTime")
     private String departureTime;
+    @SerializedName("arriveTime")
+    private String arriveTime;
 
     @SerializedName("busPlateNum")
     private String busPlateNum;
@@ -58,6 +60,10 @@ public class ShiftInfo {
     public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
+
+    public String getArriveTime() { return arriveTime; }
+
+    public void setArriveTime(String arriveTime) { this.arriveTime = arriveTime; }
 
     public String getBusPlateNum() {
         return busPlateNum;

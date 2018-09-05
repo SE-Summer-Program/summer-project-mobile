@@ -30,8 +30,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/primary_gray"
         android:textSize="@dimen/middleText"
-        android:gravity="center"
-        android:text="共有x个收藏"/>
+        android:gravity="center"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh_collect"

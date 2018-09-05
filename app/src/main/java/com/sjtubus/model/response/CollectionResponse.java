@@ -11,8 +11,6 @@ public class CollectionResponse extends HttpResponse {
     @SerializedName("collections")
     private List<Collection> collections;
 
-    private List<String> shifts;
-
     public List<Collection> getCollections() {
         return collections;
     }
@@ -22,9 +20,11 @@ public class CollectionResponse extends HttpResponse {
     }
 
     public List<String> getShifts() {
-        shifts = new ArrayList<>();
-        for (int i = 0; i < collections.size(); i++){
-            shifts.add(collections.get(i).getShiftid());
+        List<String> shifts = new ArrayList<>();
+        if (collections != null && collections.size()!=0) {
+            for (int i = 0; i < collections.size(); i++) {
+                shifts.add(collections.get(i).getShiftid());
+            }
         }
         return shifts;
     }

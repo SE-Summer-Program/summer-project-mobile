@@ -1,7 +1,9 @@
 package com.sjtubus.widget;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,23 +11,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.CollectActivity;
+import com.sjtubus.activity.MainActivity;
+import com.sjtubus.activity.OrderActivity;
+import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.Collection;
+import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.ShiftInfo;
 import com.sjtubus.model.User;
 import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.model.response.RecordInfoResponse;
 import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.MyDateUtils;
+import com.sjtubus.utils.ShiftUtils;
+import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.utils.ZxingUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import io.reactivex.Observer;
@@ -43,7 +56,6 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
     private List<Collection> collections;
     private CollectActivity context;
     private CollectAdapter.OnItemClickListener mItemClickListener;
-
     private CompositeDisposable compositeDisposable;
 
     private String TAG = "collectadapter";
@@ -84,7 +96,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
     @NonNull
     @Override
     public CollectAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_record, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_collect, parent, false);
         final CollectAdapter.ViewHolder holder = new CollectAdapter.ViewHolder(view);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +123,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
 
                 @Override
                 public void onNext(ShiftInfoResponse response) {
+                    Log.i(TAG, "onbindviewholder - getshiftinfos");
                     ShiftInfo shiftInfo = response.getShiftInfo();
                     String linename = shiftInfo.getLineNameCn();
                     String detail = "发车时间：" + shiftInfo.getDepartureTime()
@@ -155,7 +168,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
 
     @Override
     public int getItemCount(){
-        return collections.size();
+        return collections==null ? 0 : collections.size();
     }
 
     public static interface OnItemClickListener {
@@ -183,7 +196,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                                             .add("username", user.getUsername())
                                             .add("shiftid", shiftid)
                                             .build();
-                                    retrieveData(requestBody);
+                                    deleteCollection(requestBody);
                                 }
                             })
                             .setNegativeButton("取消", null)
@@ -192,9 +205,66 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                     break;
 
                 case R.id.collect_fast:
-                    String shiftid = collections.get((int)v.getTag()).getShiftid();
+                    Calendar calendar = Calendar.getInstance();
+                    int year = calendar.get(Calendar.YEAR);       //获取年月日时分秒
+                    int month = calendar.get(Calendar.MONTH);   //获取到的月份是从0开始计数
+                    int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+                    final String shiftid = collections.get((int)v.getTag()).getShiftid();
 
+                    new DatePickerDialog(Objects.requireNonNull(context), new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year_choose, int month_choose, int dayOfMonth_choose) {
+
+                            /* 这里改过 */
+                            String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
+                            String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
+                            final String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
+
+                            if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
+                                ToastUtils.showShort("不能预约已经发出的班次~");
+                                return;
+                            } else if (! MyDateUtils.isWithinOneWeek(dateStr)){
+                                ToastUtils.showShort("仅可预约一周以内的班次~");
+                                return;
+                            }
+
+                            RetrofitClient.getBusApi()
+                                    .getShiftInfos(shiftid)
+                                    .subscribeOn(Schedulers.io())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Observer<ShiftInfoResponse>() {
+                                        @Override
+                                        public void onSubscribe(Disposable d) {
+                                            addDisposable(d);
+                                        }
+
+                                        @Override
+                                        public void onNext(ShiftInfoResponse response) {
+                                            ShiftInfo shiftInfo = response.getShiftInfo();
+                                            final String linename = shiftInfo.getLineName();
+                                            final String linenameCn = shiftInfo.getLineNameCn();
+                                            final String departure_time = shiftInfo.getDepartureTime();
+                                            final String arrive_time = shiftInfo.getArriveTime();
+
+                                           retrofitRecord(departure_time, arrive_time, dateStr, shiftid, linename, linenameCn);
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            e.printStackTrace();
+                                            ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                                        }
+
+                                        @Override
+                                        public void onComplete() {
+                                            Log.d(TAG, "onComplete: ");
+                                            //mProgressBar.setVisibility(View.GONE);
+                                        }
+                                    });
+                        }
+                    }, year,month,day).show();
 
                     break;
                 default:
@@ -203,7 +273,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
         }
     };
 
-    private void retrieveData(RequestBody requestBody){
+    private void deleteCollection(RequestBody requestBody){
         RetrofitClient.getBusApi()
                 .deleteCollection(requestBody)
                 .subscribeOn(Schedulers.io())
@@ -230,7 +300,6 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                                     .show();
                         }
                         Log.i(TAG, "onNext: ");
-
                     }
 
                     @Override
@@ -242,6 +311,145 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "onComplete: ");
+                        //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void retrofitRecord(final String departure_time, final String arrive_time, final String departure_date,
+                                final String shiftid, final String linename, final String linenameCn){
+        //获取当前用户的username
+        String username = UserManager.getInstance().getUser().getUsername();
+
+        RetrofitClient.getBusApi()
+                .getRecordInfos(username)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RecordInfoResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        /*
+                         * 因为飘红删去了
+                         */
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(RecordInfoResponse response) {
+                        boolean hasConflictSchedule = false;
+
+                        String appoint_starttime = departure_date + " " + departure_time;
+                        String appoint_endtime = departure_date + " " + arrive_time;
+
+                        Log.i(TAG, "appoint_starttime" + appoint_starttime);
+                        Log.i(TAG, "appoint_endtime" + appoint_endtime);
+                        List<RecordInfo> recordInfos = response.getRecordInfos();
+                        //输出为空
+                        if(recordInfos != null) {
+                            for (RecordInfo recordInfo : recordInfos) {
+                                String record_starttime = recordInfo.getDepartureDate() + " " + recordInfo.getDepartureTime();
+                                String record_endtime = recordInfo.getDepartureDate() + " " + recordInfo.getArriveTime();
+
+                                //ToastUtils.showShort(record_starttime + " " + record_endtime);
+                                //记录上出发时间比预约的结束时间晚，或者结束时间比预约的出发时间早，就没问题
+                                if (StringCalendarUtils.isBeforeTimeOfSecondPara(appoint_endtime, record_starttime))
+                                    hasConflictSchedule = false;
+                                else if (StringCalendarUtils.isBeforeTimeOfSecondPara(record_endtime, appoint_starttime))
+                                    hasConflictSchedule = false;
+                                else {
+                                    hasConflictSchedule = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (hasConflictSchedule){
+                            ToastUtils.showShort("不能预约行程冲突的班次哦~");
+                            return;
+                        }
+
+                        new AlertDialog.Builder(context)
+                                .setMessage("确认快速预约" + departure_date + "发出的" + shiftid + "列班车吗？")
+                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        submitAppoint(linename, linenameCn, shiftid, departure_date, departure_time);
+                                    }
+                                })
+                                .setNegativeButton("取消", null)
+                                .show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                        //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    private void submitAppoint(String linename, final String linenameCn, final String shiftid, final String datestr, final String departure_time){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("line_name", linename)
+                .add("shift_id", shiftid)
+                .add("appoint_date", datestr)
+                .add("submit_time", StringCalendarUtils.getCurrentTime())
+                .add("username",UserManager.getInstance().getUser().getUsername())
+                .build();
+
+        RetrofitClient.getBusApi()
+                .appoint(requestBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HttpResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.i(TAG, "onsubscribe");
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(HttpResponse response) {
+                        if(response.getError()==0){
+                            //显示预约成功
+                            String message = "您已成功预约【" + datestr + " " + departure_time + linenameCn +
+                                    "的" + shiftid + "号校区巴士】，请记得按时前去乘坐哦~";
+
+                            new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                    .setTitleText("预约成功~")
+                                    .setContentText(message)
+                                    .setConfirmText("确定")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog) {
+                                            context.startActivity(new Intent(context, MainActivity.class));
+                                        }
+                                    })
+                                    .show();
+                        }else{
+//                        Log.i(TAG, "fail");
+                            new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("预约失败!")
+                                    .setContentText("没有剩余座位或网络出错!")
+                                    .show();
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i(TAG, "onerror");
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.i(TAG, "onComplete ");
                         //mProgressBar.setVisibility(View.GONE);
                     }
                 });

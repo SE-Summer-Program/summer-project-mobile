@@ -369,7 +369,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                         }
 
 //                        Log.i(TAG, message);
-                        new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.NORMAL_TYPE)
+                        new SweetAlertDialog(OrderActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                 .setTitleText("预约成功~")
                                 .setContentText(message)
                                 .setConfirmText("确定")
