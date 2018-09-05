@@ -86,13 +86,14 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
 
         if (UserManager.getInstance().getUser() != null){
             if (UserManager.getInstance().getRole().equals("user")) {
-                //phone_bar.setEnabled(true);
                 realname_bar.setEnabled(true);
                 studentnum_bar.setEnabled(true);
             } else if (UserManager.getInstance().getRole().equals("admin")) {
                 ToastUtils.showShort("管理员请在后台修改个人数据哦~");
             } else if (UserManager.getInstance().getRole().equals("driver")) {
                 ToastUtils.showShort("司机请在后台修改个人数据哦~");
+            } else if (UserManager.getInstance().getRole().equals("jaccountuser")) {
+                ToastUtils.showShort("Jaccount认证用户无法修改个人数据哦~");
             }
         }
     }

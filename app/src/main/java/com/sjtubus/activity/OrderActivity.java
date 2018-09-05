@@ -307,6 +307,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                     .add("appoint_date",date_str)
                                     .add("submit_time", StringCalendarUtils.getCurrentTime())
                                     .add("username",UserManager.getInstance().getUser().getUsername())
+                                    .add("user_role",UserManager.getInstance().getRole())
                                     .build();
 
                                 submitAppoint(requestBody);
@@ -403,6 +404,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                                 .add("appoint_date",double_date_str)
                                                 .add("submit_time", StringCalendarUtils.getCurrentTime())
                                                 .add("username",UserManager.getInstance().getUser().getUsername())
+                                                .add("user_role",UserManager.getInstance().getRole())
                                                 .build();
                                             submitAppoint(anotherRequestBody);
 

@@ -148,6 +148,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
     public void refreshRecord(){
         //获取当前用户的username
         String username = UserManager.getInstance().getUser().getUsername();
+        String user_role = UserManager.getInstance().getRole();
         //获取当前的时间
         String currenttime = StringCalendarUtils.getCurrentTime();
 
@@ -155,7 +156,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
          * 改动了函数的参数，删去了currenttime
          */
         RetrofitClient.getBusApi()
-            .getRecordInfos(username)
+            .getRecordInfos(username,user_role)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(new Observer<RecordInfoResponse>() {

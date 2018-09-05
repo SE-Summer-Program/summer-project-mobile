@@ -73,8 +73,8 @@ import static android.content.ContentValues.TAG;
 public class MapActivity extends BaseActivity {
 
     //百度地图相关
-    @BindView(R.id.mapview)
-    MapView mMapView;
+
+    private MapView mMapView;
     private BaiduMap mBaiduMap;
     private Float zoomLevel = 16.0f;
     private LatLng initPosition = new LatLng(31.03201,121.443287);
@@ -143,6 +143,7 @@ public class MapActivity extends BaseActivity {
 
     private void initView(){
         //获取地图控件引用
+        mMapView = findViewById(R.id.mapview);
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setCompassEnable(true);
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);//设置为卫星显示

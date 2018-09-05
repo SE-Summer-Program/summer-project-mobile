@@ -82,8 +82,8 @@ public class UserManager {
                 @Override
                 public void onNext(ProfileResponse response) {
                     if(response.getError()==0){
-                        if(response.getRole().equals("user")) {
-                            login(response.getUser(),"user");
+                        if(response.getRole().equals("user")||response.getRole().equals("jaccountuser")) {
+                            login(response.getUser(),response.getRole());
                         }else if(response.getRole().equals("driver")){
                             User user = new User();
                             Driver driver = response.getDriver();

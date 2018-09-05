@@ -124,7 +124,6 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
                 @Override
                 public void onComplete() {
                     Log.d(TAG, "onComplete: ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
@@ -144,7 +143,6 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
                 public void onNext(StationSingleResponse response) {
                     Log.d(TAG, "onNext: ");
                     if (line_name.equals("LoopLineAntiClockwise") && type.equals("NormalWorkday")) {
-                        ToastUtils.showShort("hhh: "+response.getStation().getAntiClockTotal().get(0));
                         mAdapter.setDataListOfLoopLine(response.getStation().getAntiClockTotal());
                     }
                     else if (line_name.equals("LoopLineAntiClockwise") && type.equals("HolidayWorkday"))
@@ -166,7 +164,6 @@ public class ShiftFragment extends BaseFragment implements View.OnClickListener{
                 @Override
                 public void onComplete() {
                     Log.d(TAG, "onComplete: ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
