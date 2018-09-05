@@ -312,9 +312,10 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                                 final String shiftid, final String linename, final String linenameCn){
         //获取当前用户的username
         String username = UserManager.getInstance().getUser().getUsername();
+        String user_role = UserManager.getInstance().getRole();
 
         RetrofitClient.getBusApi()
-                .getRecordInfos(username,UserManager.getInstance().getRole())
+                .getRecordInfos(username, user_role)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<RecordInfoResponse>() {
