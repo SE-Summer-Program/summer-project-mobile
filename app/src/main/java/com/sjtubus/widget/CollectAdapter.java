@@ -12,14 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.CollectActivity;
 import com.sjtubus.activity.MainActivity;
-import com.sjtubus.activity.OrderActivity;
-import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.Collection;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.ShiftInfo;
@@ -30,12 +27,9 @@ import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.MyDateUtils;
-import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
-import com.sjtubus.utils.ZxingUtils;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -48,8 +42,6 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
-
-import static android.content.ContentValues.TAG;
 
 public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHolder>{
 

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,7 +16,6 @@ import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ToastUtils;
-import com.sjtubus.utils.ZxingUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,8 +44,6 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
     TextView credit;
     @BindView(R.id.person_studentnum)
     TextView studentnum;
-    @BindView(R.id.user_qrcode)
-    ImageView qrcode;
     @BindView(R.id.person_phone_bar)
     LinearLayout phone_bar;
     @BindView(R.id.person_realname_bar)
@@ -107,7 +103,6 @@ public class PersonInfoActivity extends BaseActivity implements View.OnClickList
         credit.setText(String.valueOf(user.getCredit()));
         realname.setText(user.getRealname());
         studentnum.setText(user.getStudentNumber());
-        qrcode.setImageBitmap(ZxingUtils.createQRImage(user.getUsername(),250,250));
     }
 
     @Override

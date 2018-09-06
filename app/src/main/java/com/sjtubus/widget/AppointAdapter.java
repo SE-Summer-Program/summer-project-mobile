@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
-import com.sjtubus.activity.CollectActivity;
-import com.sjtubus.activity.MainActivity;
 import com.sjtubus.activity.OrderActivity;
 import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.RecordInfo;
@@ -27,7 +25,6 @@ import com.sjtubus.model.response.RecordInfoResponse;
 import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
-import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
@@ -474,6 +471,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
                                         sDialog.cancel();
+                                        //sDialog.dismiss();
                                     }
                                 })
                                 .show();

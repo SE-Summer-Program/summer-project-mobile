@@ -2,6 +2,7 @@ package com.sjtubus.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -34,7 +35,6 @@ import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
 import com.baidu.mapapi.search.route.TransitRouteResult;
 import com.baidu.mapapi.search.route.WalkingRouteResult;
-import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.Route;
 import com.sjtubus.model.Station;
@@ -80,7 +80,9 @@ public class RouteActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        App.setStatusBarColor(this, getResources().getColor(R.color.primary_red));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
         initPermission();
         initView();
         initLocation();
@@ -121,7 +123,7 @@ public class RouteActivity extends BaseActivity {
             }
         });
 
-        mScrollLayout = findViewById(R.id.scroll_down_layout);
+        mScrollLayout = findViewById(R.id.chooseRoute_Layout);
         /*设置 setting*/
         mScrollLayout.setMinOffset(0);
         mScrollLayout.setMaxOffset(-100);

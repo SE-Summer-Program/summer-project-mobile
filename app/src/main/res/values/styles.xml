@@ -73,7 +73,7 @@
     </style>
 
     <style name="routeButton">
-        <item name="android:textColor">@color/primary_white</item>
+        <item name="android:textColor">@color/primary_red</item>
         <item name="android:gravity">center_vertical|start</item>
         <item name="android:padding">10dp</item>
         <item name="android:layout_marginLeft">20dp</item>
