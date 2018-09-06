@@ -142,15 +142,17 @@ public class StringCalendarUtils {
             int m = month + 1;
             monthstr = "0" + m;
         }
-        else
-            monthstr = "" + month;
+        else {
+            int m = month + 1;
+            monthstr = "" + m;
+        }
         return monthstr;
     }
 
     /* 让日期保持为两位的字符串 */
     public static String getDoubleDigitDay(int day){
         String daystr;
-        if (day + 1 < 10){
+        if (day < 10){
             daystr = "0" + day;
         }
         else

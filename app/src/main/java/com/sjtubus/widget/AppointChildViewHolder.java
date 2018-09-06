@@ -25,6 +25,7 @@ public class AppointChildViewHolder extends BaseViewHolder{
         Button info_btn = view.findViewById(R.id.appointitem_infobtn);
         reserve_btn.setTag(pos);
         reserve_btn.setOnClickListener(listener);
+        reserve_btn.setText("预约");
         collect_btn.setTag(pos);
         collect_btn.setOnClickListener(listener);
         info_btn.setTag(pos);

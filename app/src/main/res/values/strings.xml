@@ -109,7 +109,18 @@
     <string name="fliter">筛选</string>
     <string name="sort">排序</string>
     <string name="vaild_record">有效预约</string>
+
+    <!--实时位置细节-->
     <string name="search_hint">想去哪？</string>
+
+    <!--设置细节-->
+    <string name="user_data">账号资料</string>
+    <string name="user_change">账号切换</string>
+    <string name="appoint_setting">预约设置</string>
+    <string name="term_setting">学期设置</string>
+    <string name="about_us">关于我们</string>
+    <string name="help">帮助</string>
+
     <string name="import_rideinfo">录入发车信息</string>
     <string name="teacher_num">教工人数</string>
     <string name="seat_num">车辆座位数</string>

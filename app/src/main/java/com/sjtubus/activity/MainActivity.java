@@ -73,6 +73,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     Button map_btn;
     @BindView(R.id.navigate_btn)
     Button navigate_btn;
+    @BindView(R.id.message_btn)
+    Button message_btn;
+    @BindView(R.id.record_btn)
+    Button record_btn;
 
     //Views in navigate menu
     private TextView username;
@@ -94,6 +98,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         initView();
         loadImages();
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
+
+        checkRole();
 
         //获取顶层视图
         //decorView = getWindow().getDecorView();
@@ -121,6 +127,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         schedule_btn = findViewById(R.id.schedule_btn); //班次信息
         map_btn = findViewById(R.id.map_btn); //路线查询
         navigate_btn = findViewById(R.id.navigate_btn); //实时位置
+        record_btn = findViewById(R.id.record_btn);
+        message_btn = findViewById(R.id.message_btn);
 
         reserve_btn.setOnClickListener(this);
         scan_btn.setOnClickListener(this);
@@ -128,6 +136,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         schedule_btn.setOnClickListener(this);
         map_btn.setOnClickListener(this);
         navigate_btn.setOnClickListener(this);
+        record_btn.setOnClickListener(this);
+        message_btn.setOnClickListener(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -151,6 +161,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         MarqueeViewAdapter billboard_adapter = new MarqueeViewAdapter(messages, this);
         //刷新公告
         billboard.setAdapter(billboard_adapter);
+
+        checkRole();
     }
 
     public void loadImages(){
@@ -159,10 +171,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         images.add("http://106.14.181.49:8080/images/brand_image3.jpg");
     }
 
+    public void checkRole(){
+        User user = UserManager.getInstance().getUser();
+        String role = UserManager.getInstance().getRole();
+//        boolean isLogin = UserManager.getInstance().isLogin();
+
+        if (UserManager.getInstance().getUser() != null){
+            switch (role) {
+                case "admin":
+                    record_btn.setVisibility(View.GONE);
+                    position_btn.setVisibility(View.GONE);
+                    scan_btn.setVisibility(View.VISIBLE);
+                    break;
+                case "driver":
+                    record_btn.setVisibility(View.GONE);
+                    scan_btn.setVisibility(View.GONE);
+                    position_btn.setVisibility(View.VISIBLE);
+                    break;
+                default:
+                    scan_btn.setVisibility(View.GONE);
+                    position_btn.setVisibility(View.GONE);
+                    record_btn.setVisibility(View.VISIBLE);
+                    break;
+            }
+        } else {
+            scan_btn.setVisibility(View.GONE);
+            position_btn.setVisibility(View.GONE);
+            record_btn.setVisibility(View.VISIBLE);
+        }
+
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserStatChange(UserChangeEvent event) {
         Log.d("SJTUBUS", "User changed!");
         updateUser();
+        checkRole();
     }
 
     public void updateUser(){
@@ -203,6 +247,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
 
     @Override
     public void onClick(View v){
+        checkRole();
         switch (v.getId()){
             case R.id.reserve_btn:
                 if(UserManager.getInstance().getUser() == null){
@@ -253,10 +298,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 Intent navigateIntent = new Intent(MainActivity.this,RouteActivity.class);
                 startActivity(navigateIntent);
                 break;
-//            case R.id.message_btn:
-//                Intent messageIntent = new Intent(MainActivity.this, MessageActivity.class);
-//                startActivity(messageIntent);
-//                break;
+            case R.id.message_btn:
+                Intent messageIntent = new Intent(MainActivity.this, MessageActivity.class);
+                startActivity(messageIntent);
+                break;
+            case R.id.record_btn:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
+                Intent recordIntent = new Intent(MainActivity.this,RecordActivity.class);
+                startActivity(recordIntent);
+                break;
 //            case R.id.idea_btn:
 //                FeedbackAgent agent = new FeedbackAgent(App.getInstance());
 //                agent.startDefaultThreadActivity();
@@ -286,6 +339,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        checkRole();
         switch (menuItem.getItemId()){
             case R.id.navigation_item_person:
                 if(UserManager.getInstance().getUser() == null){

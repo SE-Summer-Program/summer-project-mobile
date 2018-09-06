@@ -16,7 +16,7 @@ public class RecordInfo {
     private RecordInfo bean;
 
     @SerializedName("lineName")
-    private String lineName;
+    private String lineName; //中文的
 
     @SerializedName("departureDate")
     private String departureDate;

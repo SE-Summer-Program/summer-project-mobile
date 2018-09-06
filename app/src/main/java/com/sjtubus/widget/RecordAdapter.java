@@ -1,8 +1,12 @@
 package com.sjtubus.widget;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,17 +15,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.sjtubus.App;
 import com.sjtubus.R;
+import com.sjtubus.activity.MainActivity;
+import com.sjtubus.activity.OrderActivity;
 import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.CalendarReminder;
+import com.sjtubus.utils.ShiftUtils;
+import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.utils.ZxingUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -34,6 +46,8 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
 import static android.content.ContentValues.TAG;
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
 
@@ -41,6 +55,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
     private RecordActivity context;
     private RecordAdapter.OnItemClickListener mItemClickListener;
     private CompositeDisposable compositeDisposable;
+
+    private int remind_minutes = 10, remindlist_select = 0, temp_select;
+    private int[] remindtime_list = {10,30,60,120};
+    private String[] remind_list = {"提前10分钟","提前30分钟","提前1小时","提前2小时"};
+    private String[] remind_list_short = {"10分钟","30分钟","1小时","2小时"};
 
     public void setItemClickListener(RecordAdapter.OnItemClickListener itemClickListener) {
         this.mItemClickListener = itemClickListener;
@@ -62,6 +81,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView departuremsg;
         TextView shiftid;
         TextView status;
+        Button remindbtn;
         Button cancelbtn;
         ImageView qrcode;
 
@@ -72,6 +92,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             departuremsg = view.findViewById(R.id.record_departuremsg);
             shiftid = view.findViewById(R.id.record_shiftid);
             status = view.findViewById(R.id.record_status);
+            remindbtn = view.findViewById(R.id.record_remindbtn);
             cancelbtn = view.findViewById(R.id.record_cancelbtn);
             qrcode = view.findViewById(R.id.record_qrcode);
 
@@ -109,7 +130,9 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 + UserManager.getInstance().getUser().getUsername();
         holder.qrcode.setImageBitmap(ZxingUtils.createQRImage(info,300,300));
 
+        holder.remindbtn.setOnClickListener(ChildListener);
         holder.cancelbtn.setOnClickListener(ChildListener);
+        holder.remindbtn.setTag(position);
         holder.cancelbtn.setTag(position);
     }
 
@@ -126,6 +149,62 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         @Override
         public void onClick(final View v){
             switch (v.getId()){
+                case R.id.record_remindbtn:
+
+                    getCalendarPermission();
+//                    ToastUtils.showShort("预约提醒功能还不能使用哦~");
+
+                    final RecordInfo info_remind = recordInfos.get((int)v.getTag());
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle("设置预约提醒")
+                            .setIcon(R.mipmap.remind_128)
+                            .setSingleChoiceItems(remind_list, 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                   temp_select = which;
+                                }
+                            })
+//                            .setCancelable(false)
+                            .setPositiveButton("确定",new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    String shiftid_str = info_remind.getShiftid();
+                                    String appoint_date_str = info_remind.getDepartureDate();
+                                    String departure_time_str = info_remind.getDepartureTime();
+                                    String line_name_str = info_remind.getLineName();
+
+                                    remindlist_select = temp_select;
+                                    remind_minutes = remindtime_list[remindlist_select];
+
+                                    Date departure_time = StringCalendarUtils.StringToTime(appoint_date_str +" "+ departure_time_str);
+                                    long begintime = departure_time.getTime();
+//                                    Log.i("DEPART_TIME",departure_time.getDay()+":"+departure_time.getHours()+":"+departure_time.getMinutes());
+                                    String description = "您预约的于" + appoint_date_str + " " + departure_time_str + "从" + line_name_str
+                                            + "的" + shiftid_str + "号校区巴士即将于"+remind_list_short[remindlist_select]+"后发车，请记得按时前去乘坐哦~";
+
+                                    CalendarReminder.addCalendarEventRemind(App.getInstance(), "校车发车提醒", description, begintime, begintime, remind_minutes, new CalendarReminder.onCalendarRemindListener() {
+                                        public void onFailed(CalendarReminder.onCalendarRemindListener.Status error_code) {
+                                            ToastUtils.showShort("预约提醒设置失败~");
+                                        }
+                                        public void onSuccess() {
+                                            ToastUtils.showShort("预约提醒设置成功~");
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            temp_select = 0;
+                                        }
+                                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    break;
                 case R.id.record_cancelbtn:
                     final RecordInfo info_cancel = recordInfos.get((int)v.getTag());
 
@@ -138,6 +217,21 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                                 String username = UserManager.getInstance().getUser().getUsername();
                                 String shiftid = info_cancel.getShiftid();
                                 String appoint_date = info_cancel.getDepartureDate();
+                                String departure_time = info_cancel.getDepartureTime();
+
+                                if (StringCalendarUtils.isBeforeCurrentTime(appoint_date + " " + departure_time)){
+                                    new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                            .setTitleText("取消预约失败")
+                                            .setContentText("该班次已经发出，不能取消预约了哦~")
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sDialog) {
+                                                    sDialog.cancel();
+                                                }
+                                            })
+                                            .show();
+                                    return;
+                                }
 
                                 RequestBody requestBody = new FormBody.Builder()
                                         .add("username", username)
@@ -155,6 +249,19 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             }
         }
     };
+
+    private void getCalendarPermission(){
+        //获得读写日历权限
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED
+                ) {
+            Toast.makeText(context,"没有读写系统日历权限,请手动开启权限",Toast.LENGTH_SHORT).show();
+            // 申请一个（或多个）权限，并提供用于回调返回的获取码（用户定义）
+            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR}, 100);
+        }
+    }
 
     public void addDisposable(Disposable s) {
         if (this.compositeDisposable == null) {
@@ -196,6 +303,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
                 @Override
                 public void onError(Throwable e) {
+                    Log.i("record", "onError: record ");
                     e.printStackTrace();
                     ToastUtils.showShort("网络请求失败！请检查你的网络！");
                 }

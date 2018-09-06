@@ -213,7 +213,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                             String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
                             final String dateStr = year_choose+"-"+monthStr+"-"+dayStr;
 
-                            if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
+                            if (StringCalendarUtils.isBeforeCurrentDate(dateStr)) {
                                 ToastUtils.showShort("不能预约已经发出的班次~");
                                 return;
                             } else if (! MyDateUtils.isWithinOneWeek(dateStr)){
@@ -239,8 +239,13 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                                             final String departure_time = shiftInfo.getDepartureTime();
                                             final String arrive_time = shiftInfo.getArriveTime();
 
-                                           retrofitRecord(departure_time, arrive_time, dateStr, shiftid, linename, linenameCn);
 
+                                            if (StringCalendarUtils.isBeforeCurrentTime(dateStr + " " + departure_time)){
+                                                ToastUtils.showShort("不能预约已经发出的班次~");
+                                                return;
+                                            }
+
+                                            retrofitRecord(departure_time, arrive_time, dateStr, shiftid, linename, linenameCn);
                                         }
 
                                         @Override
@@ -395,6 +400,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                 .add("appoint_date", datestr)
                 .add("submit_time", StringCalendarUtils.getCurrentTime())
                 .add("username",UserManager.getInstance().getUser().getUsername())
+                .add("user_role",UserManager.getInstance().getRole())
                 .build();
 
         RetrofitClient.getBusApi()

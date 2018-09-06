@@ -426,7 +426,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 }
                 @Override
                 public void onError(Throwable e) {
-                    Log.i(TAG, "onerror");
+                    Log.i("order", "onerror");
                     e.printStackTrace();
                 }
 
@@ -442,6 +442,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             layout.setVisibility(View.VISIBLE);
         }
     }
+
     private void setViewsGone(LinearLayout... linearLayouts){
         for (LinearLayout layout : linearLayouts){
             layout.setVisibility(View.GONE);

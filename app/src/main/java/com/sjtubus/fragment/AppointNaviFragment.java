@@ -192,7 +192,7 @@ public class AppointNaviFragment extends BaseFragment {
             case 1:
                 if (resultCode == RESULT_OK){
                    //Log.d("appointfragment", data.getStringExtra("singleway_date"));
-                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
+//                    ToastUtils.showShort(data.getStringExtra("singleway_date"));
                     departure_place.setText(data.getStringExtra("departure_place"));
                     arrive_place.setText(data.getStringExtra("arrive_place"));
                     singleway_date.setText(data.getStringExtra("singleway_date"));
