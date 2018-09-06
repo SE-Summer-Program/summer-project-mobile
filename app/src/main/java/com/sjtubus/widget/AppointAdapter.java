@@ -454,7 +454,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
-
+                                        sDialog.dismiss();
                                     }
                                 })
                                 .show();

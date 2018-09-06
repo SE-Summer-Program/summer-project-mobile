@@ -62,7 +62,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView departuremsg;
         TextView shiftid;
         TextView status;
-        Button remindbtn;
         Button cancelbtn;
         ImageView qrcode;
 
@@ -73,7 +72,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             departuremsg = view.findViewById(R.id.record_departuremsg);
             shiftid = view.findViewById(R.id.record_shiftid);
             status = view.findViewById(R.id.record_status);
-            remindbtn = view.findViewById(R.id.record_remindbtn);
             cancelbtn = view.findViewById(R.id.record_cancelbtn);
             qrcode = view.findViewById(R.id.record_qrcode);
 
@@ -111,9 +109,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 + UserManager.getInstance().getUser().getUsername();
         holder.qrcode.setImageBitmap(ZxingUtils.createQRImage(info,300,300));
 
-        holder.remindbtn.setOnClickListener(ChildListener);
         holder.cancelbtn.setOnClickListener(ChildListener);
-        holder.remindbtn.setTag(position);
         holder.cancelbtn.setTag(position);
     }
 
@@ -130,9 +126,6 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         @Override
         public void onClick(final View v){
             switch (v.getId()){
-                case R.id.record_remindbtn:
-                    ToastUtils.showShort("预约提醒功能还不能使用哦~");
-                    break;
                 case R.id.record_cancelbtn:
                     final RecordInfo info_cancel = recordInfos.get((int)v.getTag());
 

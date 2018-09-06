@@ -191,30 +191,6 @@
             android:textSize="@dimen/middlesmallText" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/shallow_white"
-        android:layout_marginBottom="2dp"
-        android:padding="@dimen/smallPadding">
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/icon_qr_128"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_gravity="center|top"
-            android:padding="10dp"
-            android:textSize="18sp"
-            android:text="@string/appoint_code"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/user_qrcode"
-            android:layout_gravity="center"
-            android:layout_width="250dp"
-            android:layout_height="250dp" />
-    </LinearLayout>
-
     <Button
         android:id="@+id/btn_logout"
         style="@style/bigButton"

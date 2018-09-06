@@ -2,7 +2,6 @@ package com.sjtubus.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -69,8 +68,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RecordActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
@@ -133,7 +131,6 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.record_sort:
                 setAlertDialog("选择排序方式", sort_list, false);
-//                ToastUtils.showShort(sort_select +"");
                 break;
             default:
                 break;
