@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
@@ -173,6 +175,20 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 case R.id.appointitem_reservebtn:
 //                    AppointInfo info_reserve = appointInfoList.get((int)v.getTag()-1);
 //                    Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
+                    Button reserve_btn = (Button)v.findViewById(R.id.appointitem_reservebtn);
+                    if (reserve_btn.getText().toString().equals("无座")){
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("预约失败")
+                                .setContentText("该班次已经没有座位了，不能预约了哦~")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.cancel();
+                                    }
+                                })
+                                .show();
+                        return;
+                    }
 
                     hasConflictSchedule = false;
 //                    Log.i(TAG, departure_time + " " + arrive_time+ " " + departure_date);
@@ -401,7 +417,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                                 @Override
                                                 public void onClick(SweetAlertDialog sDialog) {
-
+                                                    sDialog.cancel();
                                                 }
                                             })
                                             .show();
@@ -457,7 +473,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                     @Override
                                     public void onClick(SweetAlertDialog sDialog) {
-
+                                        sDialog.cancel();
                                     }
                                 })
                                 .show();

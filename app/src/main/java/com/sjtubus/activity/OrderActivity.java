@@ -64,6 +64,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
     private int remind_minutes = 10, remindlist_select = 0;
     private int[] remindtime_list = {10,30,60,120};
     private String[] remind_list = {"提前10分钟","提前30分钟","提前1小时","提前2小时"};
+    private String[] remind_list_short = {"10分钟","30分钟","1小时","2小时"};
     private boolean[] checked_array = {false, false, false, false};
     private String[] check_msg = {"前排座位", "后排座位", "靠窗座位", "其他特殊要求"};
 
@@ -368,15 +369,19 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                         long begintime = departure_time.getTime();
                         Log.i("DEPART_TIME",departure_time.getDay()+":"+departure_time.getHours()+":"+departure_time.getMinutes());
                         String description = "您预约的于" + date_str + " " + departure_time_str + "从" + departure_place_str
-                                + "开往" + arrive_place_str + "的" + shiftid_str + "号校区巴士即将于"+remind_list[remindlist_select]+"后发车，请记得按时前去乘坐哦~";
-                        CalendarReminder.addCalendarEventRemind(App.getInstance(), "校车发车提醒", description, begintime, begintime, remind_minutes, new CalendarReminder.onCalendarRemindListener(){
-                            public void onFailed(CalendarReminder.onCalendarRemindListener.Status error_code){
-                                ToastUtils.showShort("预约提醒设置失败~");
-                            }
-                            public void onSuccess(){
-                                ToastUtils.showShort("预约提醒设置成功~");
-                            }
-                        });
+                                + "开往" + arrive_place_str + "的" + shiftid_str + "号校区巴士即将于"+remind_list_short[remindlist_select]+"后发车，请记得按时前去乘坐哦~";
+
+                        if (isNeedRemind) {
+                            CalendarReminder.addCalendarEventRemind(App.getInstance(), "校车发车提醒", description, begintime, begintime, remind_minutes, new CalendarReminder.onCalendarRemindListener() {
+                                public void onFailed(CalendarReminder.onCalendarRemindListener.Status error_code) {
+                                    ToastUtils.showShort("预约提醒设置失败~");
+                                }
+
+                                public void onSuccess() {
+                                    ToastUtils.showShort("预约提醒设置成功~");
+                                }
+                            });
+                        }
                         //显示预约成功
                         String message = "";
                         if (isSingleWayFlag || (! isSingleWayFlag && !isOrderFinished)) {
@@ -423,7 +428,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 }
                 @Override
                 public void onError(Throwable e) {
-                    Log.i(TAG, "onerror");
+                    Log.i("order", "onerror");
                     e.printStackTrace();
                 }
 
@@ -439,6 +444,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             layout.setVisibility(View.VISIBLE);
         }
     }
+
     private void setViewsGone(LinearLayout... linearLayouts){
         for (LinearLayout layout : linearLayouts){
             layout.setVisibility(View.GONE);

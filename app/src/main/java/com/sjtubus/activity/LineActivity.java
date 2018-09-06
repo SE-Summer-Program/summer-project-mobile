@@ -43,7 +43,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     private LineAdapter adapter;
     private MyDialogListener dialogListener = new MyDialogListener();
 
-    private String[] type_list = {"在校期-工作日", "在校期-双休日", "寒暑假-工作日","寒暑假-双休日"};
+    private String[] type_list = {"在校期-工作日", "在校期-双休日/节假日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
     private int select;
 
@@ -132,7 +132,7 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
                     adapter.setDataList(response.getLineInfos());
 
                     int total_amount = response.getLineInfos().size();
-                    String line_info = type_list[select] + "共有 " + total_amount +  " 条线路正常运行";
+                    String line_info = type_list[select] + "有 " + total_amount +  " 条线路正常运行";
                     line_total.setText(line_info);
                 }
 

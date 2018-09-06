@@ -177,7 +177,7 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
 
         if (StringCalendarUtils.isToday((String) date.getText())){
             // yesterday_btn.setEnabled(false);
-            yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+            yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
             isTodayFlag = true;
         }
 
@@ -264,7 +264,7 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
                 //如果当前日期是今天，则前一天不可用
                 if (StringCalendarUtils.isToday((String) date.getText())){
                     // yesterday_btn.setEnabled(false);
-                    yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                    yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
                     isTodayFlag = true;
                 }
 
@@ -289,7 +289,7 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
                 date.setText(yesterday);
                 if (StringCalendarUtils.isToday((String) date.getText())){
                     //yesterday_btn.setEnabled(false);
-                    yesterday_btn.setTextColor(getResources().getColor(R.color.light_gray));
+                    yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
                     isTodayFlag = true;
                 }
                 retrieveData();
@@ -391,7 +391,13 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
                         if (infos.size() == 0){
                             left_appoint_info = "今日所有班次都已发出,去预约其他班次吧~";
                         } else {
-                            left_appoint_info = "当日剩余可预约班次: " + infos.size();
+                            int size = infos.size();
+                            for (AppointInfo shortInfo : infos){
+                                if (shortInfo.getRemain_seat() == 0){
+                                    size -= 1;
+                                }
+                            }
+                            left_appoint_info = "当日剩余可预约班次: " + size;
                         }
                         left_appoint.setText(left_appoint_info);
                         appointAdapter.setDataList(infos);

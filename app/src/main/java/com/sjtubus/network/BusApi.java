@@ -79,7 +79,7 @@ public interface BusApi {
     @POST("appointment/appoint")
     Observable<HttpResponse> appoint(@Body RequestBody appointinfo);
 
-    @POST("appointment/delete")
+    @POST("appointment/cancel")
     Observable<HttpResponse> deleteAppoint(@Body RequestBody info);
 
     @POST("appointment/verify")

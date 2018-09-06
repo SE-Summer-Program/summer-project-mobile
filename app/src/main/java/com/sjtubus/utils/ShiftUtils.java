@@ -12,8 +12,8 @@ public class ShiftUtils {
     private static String[] line_list = {"闵行到徐汇", "徐汇到闵行", "闵行到七宝", "七宝到闵行"};
     private static String[] line_list_E = {"MinHangToXuHui", "XuHuiToMinHang", "MinHangToQiBao", "QiBaoToMinHang"};
 
-    private static String[] type_list = {"在校期-工作日", "在校期-双休日", "寒暑假-工作日","寒暑假-双休日"};
-    private static String[] type_list_E = {"NormalWorkday","NormalWeekend","HolidayWorkday","HolidayWeekend"};
+    private static String[] type_list = {"在校期-工作日", "在校期-双休日/节假日", "寒暑假-工作日","寒暑假-双休日"};
+    private static String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
 
     private static HashMap<String,String> type_engTochi = new HashMap<>();
     private static HashMap<String,String> type_chiToeng = new HashMap<>();
@@ -23,11 +23,11 @@ public class ShiftUtils {
 
     static {
         type_engTochi.put("NormalWorkday","在校期-工作日");
-        type_engTochi.put("NormalWeekend","在校期-双休日");
+        type_engTochi.put("NormalWeekendAndLegalHoliday","在校期-双休日/节假日");
         type_engTochi.put("HolidayWorkday","寒暑假-工作日");
         type_engTochi.put("HolidayWeekend","寒暑假-双休日");
         type_chiToeng.put("在校期-工作日","NormalWorkday");
-        type_chiToeng.put("在校期-双休日、节假日","NormalWeekend");
+        type_chiToeng.put("在校期-双休日/节假日","NormalWeekendAndLegalHoliday");
         type_chiToeng.put("寒暑假-工作日","HolidayWorkday");
         type_chiToeng.put("寒暑假-双休日","HolidayWeekend");
     }

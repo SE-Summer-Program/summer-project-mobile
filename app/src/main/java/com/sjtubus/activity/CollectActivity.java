@@ -131,6 +131,7 @@ public class CollectActivity extends BaseActivity implements View.OnClickListene
                     if (response.getCollections()!=null && response.getCollections().size()!=0){
                         collectAdapter.setDataList(response.getCollections());
                     }
+                    swipeRefresh.setRefreshing(false);
 
                     int total_amount = response.getCollections()==null?0:response.getCollections().size();
                     String collect_info = "共计 " + total_amount + " 条班次收藏";

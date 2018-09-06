@@ -28,7 +28,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     private void initView(){
         Toolbar toolbar = findViewById(R.id.toolbar_setting);
-        ToastUtils.showShort("设置功能还不能使用哦~");
+//        ToastUtils.showShort("设置功能还不能使用哦~");
     }
 
     @Override
