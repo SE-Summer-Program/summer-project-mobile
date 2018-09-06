@@ -2,24 +2,21 @@ package com.sjtubus.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -61,7 +58,6 @@ import com.yinglan.scrolllayout.ScrollLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
@@ -69,12 +65,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-
-import butterknife.BindView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -130,7 +120,6 @@ public class MapActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        //App.setStatusBarColor(this, getResources().getColor(R.color.primary_red));
         getPermission();
         initView();
         initLocation();
@@ -598,7 +587,7 @@ public class MapActivity extends BaseActivity {
     private void doChooseStation(String stationName){
         //将目标站点设置为中心并且放大
         for(Station station : stations) {
-            if(station.getName() == stationName){
+            if(station.getName().equals(stationName)){
                 mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(18.0f));// 设置地图初始化缩放比例
                 LatLng p = new LatLng(station.getLatitude(),station.getLongitude());
                 mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(p));// 设置地图初始中心
@@ -616,7 +605,7 @@ public class MapActivity extends BaseActivity {
             marker.setIcon(bd_temp);
 
             //显示站点的时刻信息
-            if(marker.getTitle() == stationName){
+            if(marker.getTitle().equals(stationName)){
                 mMarkClickListener.onMarkerClick(marker);
             }
         }
@@ -751,9 +740,7 @@ public class MapActivity extends BaseActivity {
     };
 
     //数据应当从数据库读取
-    private List<Station> retrieveData(){
-        List<Station> result = new ArrayList<>();
-
+    private void retrieveData(){
         RetrofitClient.getBusApi()
                 .getLineStation("LoopLineClockwise")
                 .subscribeOn(Schedulers.io())
@@ -766,9 +753,7 @@ public class MapActivity extends BaseActivity {
 
                     @Override
                     public void onNext(StationResponse response) {
-
                         setStations(response.getStations());
-
                         initRoutePlan();
                         addMarker();
                         Log.d(TAG, "onNext: ");
@@ -783,9 +768,7 @@ public class MapActivity extends BaseActivity {
                     @Override
                     public void onComplete() {
                         Log.d(TAG, "onComplete: ");
-                        //mProgressBar.setVisibility(View.GONE);
                     }
                 });
-        return result;
     }
 }
