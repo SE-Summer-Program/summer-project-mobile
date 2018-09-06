@@ -9,10 +9,10 @@ import android.view.View;
 import com.sjtubus.R;
 import com.sjtubus.fragment.AppointNaviDoubleFragment;
 import com.sjtubus.fragment.AppointNaviFragment;
+import com.sjtubus.user.UserManager;
 import com.sjtubus.widget.AppointPagerAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cn.hugeterry.coordinatortablayout.CoordinatorTabLayout;
 
@@ -22,8 +22,6 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
     private ViewPager mViewPager;
     private ArrayList<Fragment> mFragment;
     private final String[] mTitles = {"单程", "往返"};
-
-    private List<String> images = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +54,12 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
 
     private void initFragments(){
         mFragment = new ArrayList<>();
-      //  for (String title : mTitles) {
-            mFragment.add(AppointNaviFragment.getInstance());
+        mFragment.add(AppointNaviFragment.getInstance());
+        //管理员和司机看不到往返那个fragment
+        if(!UserManager.getInstance().getRole().equals("admin")&&
+                !UserManager.getInstance().getRole().equals("driver")) {
             mFragment.add(AppointNaviDoubleFragment.getInstance());
-        //}
+        }
     }
 
     private void initViewPager(){

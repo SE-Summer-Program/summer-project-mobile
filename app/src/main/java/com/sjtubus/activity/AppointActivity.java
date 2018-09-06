@@ -73,7 +73,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
         initPassData();
         initToolbar();
         initView();
-        ToastUtils.showLong("点击车次即可进行预约哦~");
     }
 
     @Override

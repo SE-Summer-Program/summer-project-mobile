@@ -2,6 +2,7 @@ package com.sjtubus.widget;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
@@ -168,24 +170,18 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
             switch (v.getId()){
                 case R.id.appointitem_reservebtn:
-//                    AppointInfo info_reserve = appointInfoList.get((int)v.getTag()-1);
-//                    Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
-
                     hasConflictSchedule = false;
-//                    Log.i(TAG, departure_time + " " + arrive_time+ " " + departure_date);
+                    //Log.i(TAG, departure_time + " " + arrive_time+ " " + departure_date);
                     retrofitRecord(departure_time, arrive_time, departure_date, info);
                     break;
-
                 case R.id.appointitem_collectbtn:
-//                    ToastUtils.showShort("班次收藏功能还不能使用哦~");
-//                    AppointInfo info_collection = appointInfoList.get((int)v.getTag()-1);
-
                     retrofitCollection(shiftid);
                     break;
-
                 case R.id.appointitem_infobtn:
-//                    AppointInfo info_schedule = appointInfoList.get((int)v.getTag()-1);
                     retrofitShiftInfo(shiftid);
+                    break;
+                case R.id.import_rideinfo_btn:
+                    importRideInfo(info);
                     break;
             }
         }
@@ -558,5 +554,70 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 //            context.startActivity(orderDoubleIntent);
             ((AppointDoubleActivity)context).startActivityForResult(orderDoubleIntent, 2);
         }
+    }
+
+    private void importRideInfo(final AppointInfo info){
+        View view = LayoutInflater.from(context).inflate(R.layout.alertdialog_importinfo,null);//获得布局信息
+        final EditText bus_plate = view.findViewById(R.id.bus_plate);
+        final EditText seat_num = view.findViewById(R.id.seat_num);
+        final EditText teacher_num =  view.findViewById(R.id.teacher_num);
+        final EditText student_num = view.findViewById(R.id.student_num);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("录入发车信息");
+        builder.setView(view);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+                ToastUtils.showShort("正在录入信息..");
+                RequestBody requestBody = new FormBody.Builder()
+                        .add("ride_date", info.getDate())
+                        .add("shiftid", info.getShiftid())
+                        .add("bus_id", bus_plate.getText().toString())
+                        .add("line_type", info.getLine_type())
+                        .add("teacher_num", teacher_num.getText().toString())
+                        .add("student_num", student_num.getText().toString())
+                        .add("remain_num", String.valueOf(info.getRemain_seat()))
+                        .add("seat_num",seat_num.getText().toString())
+                        .build();
+
+                RetrofitClient.getBusApi()
+                        .importRideInfo(requestBody)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<HttpResponse>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                addDisposable(d);
+                            }
+                            @Override
+                            public void onNext(HttpResponse response) {
+                                Log.d(TAG, "onNext: ");
+                                if(response.getMsg().equals("success")){
+                                    ToastUtils.showShort("录入发车信息成功!");
+                                }else{
+                                    ToastUtils.showShort("录入发车信息失败!");
+                                }
+                            }
+                            @Override
+                            public void onError(Throwable e) {
+                                e.printStackTrace();
+                                ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                            }
+                            @Override
+                            public void onComplete() {
+                                Log.d(TAG, "onComplete: ");
+                                dialogInterface.dismiss();
+                            }
+                        });
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
     }
 }

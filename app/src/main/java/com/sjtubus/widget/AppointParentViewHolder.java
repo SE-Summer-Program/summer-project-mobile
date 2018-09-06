@@ -43,7 +43,6 @@ public class AppointParentViewHolder extends BaseViewHolder{
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)expand.getLayoutParams();
         expand.setLayoutParams(params);
 
-       // shiftid.setText(bean.getShiftid());
         departure_place.setText(bean.getDeparture_place());
         arrive_place.setText(bean.getArrive_place());
         departure_time.setText(StringCalendarUtils.HHmmssToHHmm(bean.getDeparture_time()));
@@ -60,10 +59,8 @@ public class AppointParentViewHolder extends BaseViewHolder{
 
         if (bean.isExpand()) {
             expand.setRotation(90);
-          //  parentDashedView.setVisibility(View.INVISIBLE);
         } else {
             expand.setRotation(0);
-          //  parentDashedView.setVisibility(View.VISIBLE);
         }
 
         //父布局OnClick监听
@@ -89,18 +86,16 @@ public class AppointParentViewHolder extends BaseViewHolder{
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void rotationExpandIcon(float from, float to) {
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);//属性动画
-            valueAnimator.setDuration(500);
-            valueAnimator.setInterpolator(new DecelerateInterpolator());
-            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(from, to);//属性动画
+        valueAnimator.setDuration(500);
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    expand.setRotation((Float) valueAnimator.getAnimatedValue());
-                }
-            });
-            valueAnimator.start();
-        //}
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                expand.setRotation((Float) valueAnimator.getAnimatedValue());
+            }
+        });
+        valueAnimator.start();
     }
 }

@@ -1,30 +1,20 @@
 package com.sjtubus.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.model.Collection;
 import com.sjtubus.model.response.CollectionResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.CollectAdapter;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -56,8 +46,7 @@ public class CollectActivity extends BaseActivity implements View.OnClickListene
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CollectActivity.this, MainActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 

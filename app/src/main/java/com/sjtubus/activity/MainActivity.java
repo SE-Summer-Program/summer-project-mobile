@@ -80,18 +80,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private TextView login_tips;
     private TextView login_txt;
     private TextView register_txt;
-    //private XMarqueeView billboard;
-
-    //Button reserve_btn, scan_btn, position_btn, schedule_btn, map_btn, navigate_btn;
 
     private List<String> images = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
+
+    //private XMarqueeView billboard;
+    //Button reserve_btn, scan_btn, position_btn, schedule_btn, map_btn, navigate_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
-        //Banner banner = findViewById(R.id.banner);
         initView();
         loadImages();
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
@@ -106,7 +105,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     }
 
     public void initView(){
-        //Basic settings of ToolBar
+        //设置ToolBar
         Toolbar mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitle("");
         mToolbar.setNavigationIcon(R.mipmap.person);
@@ -151,37 +150,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         messages.add("恭喜学号为2333的同学喜提校车一辆!");
         MarqueeViewAdapter billboard_adapter = new MarqueeViewAdapter(messages, this);
         //刷新公告
-        //billboard_adapter.setData(messages);
         billboard.setAdapter(billboard_adapter);
-
-       // checkRole();
     }
 
     public void loadImages(){
-        //目前的图片是用的网上的传图网站
-        images.add("http://chuantu.biz/t6/337/1530513364x-1566688664.jpg");
-        images.add("http://chuantu.biz/t6/337/1530513397x-1566688664.jpg");
-        images.add("http://chuantu.biz/t6/337/1530513420x-1566688664.jpg");
+        images.add("http://106.14.181.49:8080/images/brand_image1.jpg");
+        images.add("http://106.14.181.49:8080/images/brand_image2.jpg");
+        images.add("http://106.14.181.49:8080/images/brand_image3.jpg");
     }
-
-//    public void checkRole(){
-//        User user = UserManager.getInstance().getUser();
-//        String role = UserManager.getInstance().getRole();
-//        boolean isLogin = UserManager.getInstance().isLogin();
-//        if (!isLogin){
-//            scan_btn.setVisibility(View.GONE);
-//            position_btn.setVisibility(View.GONE);
-//        } else if (user != null && (role.equals("user") || role.equals("jaccountuser"))){
-//            scan_btn.setVisibility(View.GONE);
-//            position_btn.setVisibility(View.GONE);
-//        } else if (role.equals("admin")){
-//            reserve_btn.setVisibility(View.GONE);
-//            position_btn.setVisibility(View.GONE);
-//        } else if (role.equals("driver")){
-//            reserve_btn.setVisibility(View.GONE);
-//            scan_btn.setVisibility(View.GONE);
-//        }
-//    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUserStatChange(UserChangeEvent event) {
@@ -233,10 +209,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("请先登录~");
                     break;
                 }
-                if(!(UserManager.getInstance().getRole().equals("user")||UserManager.getInstance().getRole().equals("jaccountuser"))){
-                    ToastUtils.showShort("抱歉~预约请用乘客账号哦~");
-                    break;
-                }
                 Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
                 break;
@@ -249,10 +221,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     ToastUtils.showShort("抱歉~您没有管理员权限哦~");
                     break;
                 }
+                // 初始化扫描，进入扫码界面
                 new IntentIntegrator(this)
                         .setOrientationLocked(false)
-                        .setCaptureActivity(SimpleScanActivity.class) // 设置自定义的activity是CustomActivity
-                        .initiateScan(); // 初始化扫描
+                        .setCaptureActivity(SimpleScanActivity.class)
+                        .initiateScan();
                 break;
             case R.id.position_btn:
                 if(UserManager.getInstance().getUser() == null){

@@ -71,9 +71,6 @@ public class App extends Application {
         UserManager.init();
         MobSDK.init(this);
         initLeanCloud();
-        //setupLeakCanary();
-        //initBugly();
-        //initMta();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

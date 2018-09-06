@@ -51,7 +51,7 @@
 
     <string name="title_home">SJTU校园巴士</string>
     <string name="title_schedule">班次信息</string>
-    <string name="title_message">我的消息</string>
+    <string name="title_message">公告</string>
     <string name="message_none">无消息</string>
     <string name="jaccount">jaccount统一身份认证</string>
 
@@ -110,4 +110,9 @@
     <string name="sort">排序</string>
     <string name="vaild_record">有效预约</string>
     <string name="search_hint">想去哪？</string>
+    <string name="import_rideinfo">录入发车信息</string>
+    <string name="teacher_num">教工人数</string>
+    <string name="seat_num">车辆座位数</string>
+    <string name="student_num">非教工人数</string>
+    <string name="bus_plate">车牌号</string>
 </resources>

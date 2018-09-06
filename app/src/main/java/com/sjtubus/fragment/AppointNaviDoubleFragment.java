@@ -111,6 +111,7 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                     departure_place.setText(station_list[departure_index]);
                     arrive_place.setText(station_list[arrive_index]);
                     break;
+                //选择出发地
                 case R.id.appoint_departureplace:
                     final TextView depart_txt = v.findViewById(v.getId());
                     new AlertDialog.Builder(getActivity())
@@ -125,6 +126,7 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                                 }
                             }).create().show();
                     break;
+                //选择出发地
                 case R.id.appoint_arriveplace:
                     final TextView arrive_txt = v.findViewById(v.getId());
                     new AlertDialog.Builder(getActivity())
@@ -139,7 +141,6 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                                 }
                             }).create().show();
                     break;
-
                 case R.id.appoint_singlewaydate:
                     final TextView singledate = v.findViewById(v.getId());
 
@@ -204,9 +205,8 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                     }, year,month,day).show();
                     break;
 
-                    // navi 到 第一页
+                // 定向到第一页
                 case R.id.appoint_searchbtn:
-
                     if (departure_index == arrive_index){
                         ToastUtils.showShort("起点和终点不能相同！");
                         break;

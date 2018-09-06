@@ -21,7 +21,7 @@
 
         <android.support.v7.widget.Toolbar
             style="@style/toobar_base"
-            android:id="@+id/toolbar_schedule"
+            android:id="@+id/toolbar_message"
             app:titleTextColor="@color/primary_white"
             android:layout_width="match_parent">
 

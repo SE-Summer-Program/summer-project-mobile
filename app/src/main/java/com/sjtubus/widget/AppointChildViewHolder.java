@@ -6,6 +6,7 @@ import android.widget.Button;
 
 import com.sjtubus.R;
 import com.sjtubus.model.AppointInfo;
+import com.sjtubus.user.UserManager;
 
 public class AppointChildViewHolder extends BaseViewHolder{
 
@@ -28,6 +29,17 @@ public class AppointChildViewHolder extends BaseViewHolder{
         collect_btn.setOnClickListener(listener);
         info_btn.setTag(pos);
         info_btn.setOnClickListener(listener);
+
+        if(UserManager.getInstance().getRole().equals("admin")){
+            Button import_btn = view.findViewById(R.id.import_rideinfo_btn);
+            import_btn.setVisibility(View.VISIBLE);
+            import_btn.setTag(pos);
+            import_btn.setOnClickListener(listener);
+
+            reserve_btn.setVisibility(View.GONE);
+            collect_btn.setVisibility(View.GONE);
+            info_btn.setVisibility(View.GONE);
+        }
 
         if (bean.getRemain_seat() == 0){
             reserve_btn.setBackgroundColor(0xffbfbfbf);

@@ -14,8 +14,9 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <!--Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色-->
         <item name="android:statusBarColor">@android:color/transparent</item>
-
-        <!--<item name="android:windowTranslucentNavigation">false</item>-->
+        <!--设置应用启动图片，视觉优化启动效果-->
+        <item name="android:windowBackground">@drawable/launch_image</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <!-->线条<-->

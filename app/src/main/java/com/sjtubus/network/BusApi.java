@@ -77,7 +77,7 @@ public interface BusApi {
     Observable<RecordInfoResponse> getRecordInfos(@Query("username")String username,@Query("user_role")String user_role);
 
     @POST("appointment/appoint")
-    Observable<HttpResponse> appoint(@Body RequestBody appointinfo);
+    Observable<HttpResponse> appoint(@Body RequestBody appointInfo);
 
     @POST("appointment/cancel")
     Observable<HttpResponse> deleteAppoint(@Body RequestBody info);
@@ -92,11 +92,14 @@ public interface BusApi {
     Observable<LocationResponse> getLocation();
 
     @POST("collection/addCollect")
-    Observable<HttpResponse> addCollection(@Body RequestBody collectinfo);
+    Observable<HttpResponse> addCollection(@Body RequestBody collectInfo);
 
     @GET("collection/infos")
     Observable<CollectionResponse> getCollection(@Query("username") String username);
 
     @POST("collection/deleteCollect")
-    Observable<HttpResponse> deleteCollection(@Body RequestBody collectinfo);
+    Observable<HttpResponse> deleteCollection(@Body RequestBody collectInfo);
+
+    @POST("ridebusinfo/importinfo")
+    Observable<HttpResponse> importRideInfo(@Body RequestBody rideInfo);
 }

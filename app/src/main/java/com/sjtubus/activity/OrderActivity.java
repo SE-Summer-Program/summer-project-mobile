@@ -364,19 +364,22 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 @Override
                 public void onNext(HttpResponse response) {
                     if(response.getError()==0){
-                        Date departure_time = StringCalendarUtils.StringToTime(date_str+" "+departure_time_str);
-                        long begintime = departure_time.getTime();
-                        Log.i("DEPART_TIME",departure_time.getDay()+":"+departure_time.getHours()+":"+departure_time.getMinutes());
-                        String description = "您预约的于" + date_str + " " + departure_time_str + "从" + departure_place_str
-                                + "开往" + arrive_place_str + "的" + shiftid_str + "号校区巴士即将于"+remind_list[remindlist_select]+"后发车，请记得按时前去乘坐哦~";
-                        CalendarReminder.addCalendarEventRemind(App.getInstance(), "校车发车提醒", description, begintime, begintime, remind_minutes, new CalendarReminder.onCalendarRemindListener(){
-                            public void onFailed(CalendarReminder.onCalendarRemindListener.Status error_code){
-                                ToastUtils.showShort("预约提醒设置失败~");
-                            }
-                            public void onSuccess(){
-                                ToastUtils.showShort("预约提醒设置成功~");
-                            }
-                        });
+                        //如果需要预约，则向日历中添加时间
+                        if(isNeedRemind) {
+                            Date departure_time = StringCalendarUtils.StringToTime(date_str + " " + departure_time_str);
+                            long begintime = departure_time.getTime();
+                            String description = "您预约的于" + date_str + " " + departure_time_str + "从" + departure_place_str
+                                    + "开往" + arrive_place_str + "的" + shiftid_str + "号校区巴士即将于" + remind_list[remindlist_select].substring(2) + "后发车，请记得按时前去乘坐哦~";
+                            CalendarReminder.addCalendarEventRemind(App.getInstance(), "校车发车提醒", description, begintime, begintime, remind_minutes, new CalendarReminder.onCalendarRemindListener() {
+                                public void onFailed(CalendarReminder.onCalendarRemindListener.Status error_code) {
+                                    ToastUtils.showShort("预约提醒设置失败~");
+                                }
+
+                                public void onSuccess() {
+                                    ToastUtils.showShort("预约提醒设置成功~");
+                                }
+                            });
+                        }
                         //显示预约成功
                         String message = "";
                         if (isSingleWayFlag || (! isSingleWayFlag && !isOrderFinished)) {

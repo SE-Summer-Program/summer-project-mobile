@@ -3,6 +3,7 @@ package com.sjtubus.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -42,9 +43,18 @@ public class MessageActivity extends BaseActivity {
     }
 
     public void initView(){
+        Toolbar mToolbar = findViewById(R.id.toolbar_message);
+        mToolbar.setTitle("");
+        mToolbar.setNavigationIcon(R.drawable.back_32);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         mAdapter = new MessageAdapter(this);
         mProgressBar.setVisibility(View.VISIBLE);
-
         messageView.setLayoutManager(new LinearLayoutManager(this));
         messageView.setHasFixedSize(true);
         messageView.setAdapter(mAdapter);
