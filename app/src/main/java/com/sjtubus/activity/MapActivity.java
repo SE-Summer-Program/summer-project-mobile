@@ -2,10 +2,14 @@ package com.sjtubus.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -15,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.map.BaiduMap;
@@ -55,12 +61,18 @@ import com.yinglan.scrolllayout.ScrollLayout;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import butterknife.BindView;
 import io.reactivex.Observer;
@@ -73,7 +85,6 @@ import static android.content.ContentValues.TAG;
 public class MapActivity extends BaseActivity {
 
     //百度地图相关
-
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private Float zoomLevel = 16.0f;
@@ -99,8 +110,8 @@ public class MapActivity extends BaseActivity {
 
     //时刻表相关
     private MyMapStatusChangeListener mMapStatusChangeListener = null;
-    @BindView(R.id.scroll_down_layout)
-    ScrollLayout mScrollLayout;
+    private ScrollLayout layoutStationInfo;
+    private ScrollLayout chooseStation_layout;
 
     private HashMap<String,Marker> busmap = new HashMap<>();
     //巴士运行相关
@@ -111,6 +122,8 @@ public class MapActivity extends BaseActivity {
 
     private TimerTask task;
     private ScheduledExecutorService pool;
+    private FloatingActionButton chooseStation_btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,31 +163,91 @@ public class MapActivity extends BaseActivity {
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(zoomLevel));// 设置地图初始化缩放比例
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(initPosition));// 设置地图初始中心
 
+        //显示站点信息的布局相关
+        layoutStationInfo = findViewById(R.id.stationInfo_Layout);
         /*设置 setting*/
-        mScrollLayout.setMinOffset(0);
-        mScrollLayout.setMaxOffset((int) (this.getResources().getDisplayMetrics().heightPixels * 0.3));
-        mScrollLayout.setExitOffset(-100);
-        mScrollLayout.setIsSupportExit(true);
-        mScrollLayout.setAllowHorizontalScroll(true);
-        mScrollLayout.setOnScrollChangedListener(mOnScrollChangedListener);
-        mScrollLayout.setToExit();
-        mScrollLayout.getBackground().setAlpha(0);
+        layoutStationInfo.setMinOffset(0);
+        layoutStationInfo.setMaxOffset((int) (this.getResources().getDisplayMetrics().heightPixels * 0.3));
+        layoutStationInfo.setExitOffset(-100);
+        layoutStationInfo.setIsSupportExit(true);
+        layoutStationInfo.setAllowHorizontalScroll(true);
+        layoutStationInfo.setToExit();
+        layoutStationInfo.getBackground().setAlpha(0);
 
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                mScrollLayout.scrollToExit();
+                layoutStationInfo.scrollToExit();
             }
 
             @Override
             public boolean onMapPoiClick(MapPoi mapPoi) {
-                mScrollLayout.scrollToExit();
-                //mScrollLayout.scrollToOpen(); //FIXME ???为啥上面那行也行
+                layoutStationInfo.scrollToExit();
                 return false;
             }
         });
-        mMapStatusChangeListener = new MyMapStatusChangeListener(mScrollLayout);
+        mMapStatusChangeListener = new MyMapStatusChangeListener(layoutStationInfo);
         mBaiduMap.setOnMapStatusChangeListener(mMapStatusChangeListener);
+
+        //选择站点的布局相关
+        chooseStation_btn = findViewById(R.id.chooseStation_btn);
+        chooseStation_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutStationInfo.setToExit();
+                chooseStation_layout.setToClosed();
+            }
+        });
+        chooseStation_layout = findViewById(R.id.chooseStation_Layout);
+        /*设置 setting*/
+        chooseStation_layout.setMinOffset(0);
+        chooseStation_layout.setMaxOffset(-100);
+        chooseStation_layout.setExitOffset(-100);
+        chooseStation_layout.setIsSupportExit(true);
+        chooseStation_layout.setAllowHorizontalScroll(false);
+        chooseStation_layout.setOnScrollChangedListener(mOnScrollChangedListener);
+        chooseStation_layout.setToOpen();
+        chooseStation_layout.getBackground().setAlpha(0);
+
+        ChooseStationListener listener = new ChooseStationListener();
+        Button nearest_btn = findViewById(R.id.nearestStation);
+        nearest_btn.setOnClickListener(listener);
+        Button JJT_btn = findViewById(R.id.JJT);
+        JJT_btn.setOnClickListener(listener);
+        Button XYY_btn = findViewById(R.id.XYY);
+        XYY_btn.setOnClickListener(listener);
+        Button DSY_btn = findViewById(R.id.DSY);
+        DSY_btn.setOnClickListener(listener);
+        Button DZY_btn = findViewById(R.id.DZY);
+        DZY_btn.setOnClickListener(listener);
+        Button XTSG_btn = findViewById(R.id.XTSG);
+        XTSG_btn.setOnClickListener(listener);
+        Button XZBL_btn = findViewById(R.id.XZBL);
+        XZBL_btn.setOnClickListener(listener);
+        Button DXXY_btn = findViewById(R.id.DXXY);
+        DXXY_btn.setOnClickListener(listener);
+        Button KXM_btn = findViewById(R.id.KXM);
+        KXM_btn.setOnClickListener(listener);
+        Button JDXY_btn = findViewById(R.id.JDXY);
+        JDXY_btn.setOnClickListener(listener);
+        Button MM_btn = findViewById(R.id.MM);
+        MM_btn.setOnClickListener(listener);
+        Button CJXY_btn = findViewById(R.id.CJXY);
+        CJXY_btn.setOnClickListener(listener);
+        Button WXYXL_btn = findViewById(R.id.WXYXL);
+        WXYXL_btn.setOnClickListener(listener);
+        Button XSFWZX_btn = findViewById(R.id.XSFWZX);
+        XSFWZX_btn.setOnClickListener(listener);
+        Button XQXSGY_btn = findViewById(R.id.XQXSGY);
+        XQXSGY_btn.setOnClickListener(listener);
+        Button DSCYDL_btn = findViewById(R.id.DSCYDL);
+        DSCYDL_btn.setOnClickListener(listener);
+        Button HLSHZX_btn = findViewById(R.id.HLSHZX);
+        HLSHZX_btn.setOnClickListener(listener);
+        Button BYGTSG_btn = findViewById(R.id.BYGTSG);
+        BYGTSG_btn.setOnClickListener(listener);
+        Button CLXY_btn = findViewById(R.id.CLXY);
+        CLXY_btn.setOnClickListener(listener);
     }
 
     private void initLocation(){
@@ -267,6 +340,7 @@ public class MapActivity extends BaseActivity {
         for(Station station : stations){
             BitmapDescriptor bd_temp = bitmaps.get(station.getName() + "_smallZoom");
             MarkerOptions marker_temp = new MarkerOptions()
+                    .title(station.getName())
                     .position(new LatLng(station.getLatitude(),station.getLongitude()))
                     .icon(bd_temp).anchor(0.5f, 0.5f).zIndex(9);
             //添加marker
@@ -279,7 +353,7 @@ public class MapActivity extends BaseActivity {
 
             markers.add(marker);
         }
-        mMarkClickListener = new MyMarkerClickListener(mScrollLayout);
+        mMarkClickListener = new MyMarkerClickListener(layoutStationInfo);
         mBaiduMap.setOnMarkerClickListener(mMarkClickListener);
         mMapStatusChangeListener.setMarkers(markers);
         mMapStatusChangeListener.setBitmaps(bitmaps);
@@ -520,8 +594,137 @@ public class MapActivity extends BaseActivity {
         }
     }
 
+    //选择站点
+    private void doChooseStation(String stationName){
+        //将目标站点设置为中心并且放大
+        for(Station station : stations) {
+            if(station.getName() == stationName){
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(18.0f));// 设置地图初始化缩放比例
+                LatLng p = new LatLng(station.getLatitude(),station.getLongitude());
+                mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(p));// 设置地图初始中心
+                break;
+            }
+        }
+        //将所有站点改为显示站点名模式
+        Marker mMarker = null;
+        for(Marker marker : markers){
+            //从marker中获取info信息
+            Bundle bundle = marker.getExtraInfo();
+            Station station = (Station) bundle.getSerializable("info");
+
+            BitmapDescriptor bd_temp = bitmaps.get(station.getName() + "_bigZoom");
+            marker.setIcon(bd_temp);
+
+            //显示站点的时刻信息
+            if(marker.getTitle() == stationName){
+                mMarkClickListener.onMarkerClick(marker);
+            }
+        }
+    }
+
+    //监听选择站点菜单
+    private class ChooseStationListener implements View.OnClickListener{
+        @Override
+        public void onClick(View v){
+            switch (v.getId()){
+                case R.id.nearestStation:
+                    BDLocation myLocation = myListener.getLocation();
+                    Double minLength = 10000000.0d;
+                    String stationName = null;
+                    for(Station station : stations) {
+                        Double a = station.getLatitude() - myLocation.getLatitude();
+                        Double b = station.getLongitude() - myLocation.getLongitude();
+                        Double Length = a * a + b * b;
+                        if( Length < minLength){
+                            minLength = Length;
+                            stationName = station.getName();
+                        }
+                    }
+                    System.out.print(stationName);
+                    doChooseStation(stationName);
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.JJT:
+                    doChooseStation("菁菁堂");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.XYY:
+                    doChooseStation("校医院");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.DSY:
+                    doChooseStation("东上院");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.DZY:
+                    doChooseStation("东中院");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.XTSG:
+                    doChooseStation("新图书馆");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.XZBL:
+                    doChooseStation("行政B楼");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.DXXY:
+                    doChooseStation("电信学院");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.KXM:
+                    doChooseStation("凯旋门");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.JDXY:
+                    doChooseStation("机动学院");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.MM:
+                    doChooseStation("庙门");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.CJXY:
+                    doChooseStation("船建学院");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.WXYXL:
+                    doChooseStation("文选医学楼");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.XSFWZX:
+                    doChooseStation("学生服务中心");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.XQXSGY:
+                    doChooseStation("西区学生公寓");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.DSCYDL:
+                    doChooseStation("第四餐饮大楼");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.HLSHZX:
+                    doChooseStation("华联生活中心");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.BYGTSG:
+                    doChooseStation("包玉刚图书馆");
+                    chooseStation_layout.setToExit();
+                    break;
+                case R.id.CLXY:
+                    doChooseStation("材料学院");
+                    chooseStation_layout.setToExit();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    //实现滑动时的背景变化
     private ScrollLayout.OnScrollChangedListener mOnScrollChangedListener = new ScrollLayout.OnScrollChangedListener() {
-        //实现滑动时的背景变化
         @Override
         public void onScrollProgressChanged(float currentProgress) {
             if (currentProgress >= 0) {
@@ -531,12 +734,15 @@ public class MapActivity extends BaseActivity {
                 } else if (precent < 0) {
                     precent = 0;
                 }
-                mScrollLayout.getBackground().setAlpha(255 - (int) precent);
+                layoutStationInfo.getBackground().setAlpha(255 - (int) precent);
             }
         }
 
         @Override
         public void onScrollFinished(ScrollLayout.Status currentStatus) {
+            if(currentStatus.equals(ScrollLayout.Status.CLOSED))
+                chooseStation_btn.setVisibility(View.GONE);
+            else chooseStation_btn.setVisibility(View.VISIBLE);
         }
 
         @Override
