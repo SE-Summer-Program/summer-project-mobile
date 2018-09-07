@@ -100,6 +100,6 @@ public interface BusApi {
     @POST("collection/deleteCollect")
     Observable<HttpResponse> deleteCollection(@Body RequestBody collectInfo);
 
-    @POST("ridebusinfo/importinfo")
+    @POST("ridebusinfo/import")
     Observable<HttpResponse> importRideInfo(@Body RequestBody rideInfo);
 }

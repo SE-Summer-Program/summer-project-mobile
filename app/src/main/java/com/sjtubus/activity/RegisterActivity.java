@@ -270,7 +270,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             public void run() {
                                 String verify_text = index+"s后重新获取";
                                 verify_btn.setText(verify_text);
-                                verify_btn.setBackgroundColor(Color.parseColor("#949494"));
+                                verify_btn.setBackgroundResource(R.drawable.button_shape_gray);
+                                verify_btn.setTextColor(Color.GRAY);
                                 verify_btn.setClickable(false);
                             }
                         });

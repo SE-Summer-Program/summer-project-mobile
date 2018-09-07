@@ -1,18 +1,17 @@
 package com.sjtubus.widget;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointDoubleActivity;
@@ -188,7 +187,6 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                 .show();
                         return;
                     }
-
                     hasConflictSchedule = false;
                     //Log.i(TAG, departure_time + " " + arrive_time+ " " + departure_date);
                     retrofitRecord(departure_time, arrive_time, departure_date, info);
@@ -336,7 +334,6 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 @Override
                 public void onComplete() {
                     Log.d(TAG, "onComplete: ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
@@ -422,11 +419,9 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                                 }
                             }
                         }
-
                         Log.i(TAG, "addcollection");
                         addCollection(shiftid);
                     }
-
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
@@ -593,8 +588,8 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                 ToastUtils.showShort("正在录入信息..");
                 RequestBody requestBody = new FormBody.Builder()
                         .add("ride_date", info.getDate())
-                        .add("shiftid", info.getShiftid())
-                        .add("bus_id", bus_plate.getText().toString())
+                        .add("shift_id", info.getShiftid())
+                        .add("bus_plate", bus_plate.getText().toString())
                         .add("line_type", info.getLine_type())
                         .add("teacher_num", teacher_num.getText().toString())
                         .add("student_num", student_num.getText().toString())

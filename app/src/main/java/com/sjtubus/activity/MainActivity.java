@@ -10,6 +10,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -87,9 +88,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
 
     private List<String> images = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
-
-    //private XMarqueeView billboard;
-    //Button reserve_btn, scan_btn, position_btn, schedule_btn, map_btn, navigate_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -373,9 +371,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 FeedbackAgent agent = new FeedbackAgent(App.getInstance());
                 agent.startDefaultThreadActivity();
                 break;
-            case R.id.navigation_item_setting:
-                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
-                startActivity(settingIntent);
+            case R.id.navigation_item_aboutus:
+                new AlertDialog.Builder(this)
+                    .setIcon(R.mipmap.icon_aboutus_128)
+                    .setTitle("关于我们")
+                    .setMessage(R.string.about_us_content)
+                    .create().show();
+                break;
+            case R.id.navigation_item_help:
+                new AlertDialog.Builder(this)
+                        .setIcon(R.mipmap.icon_aboutus_128)
+                        .setTitle("用户指南")
+                        .setMessage(R.string.user_guide)
+                        .create().show();
                 break;
             default:
                 break;

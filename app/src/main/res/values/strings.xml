@@ -126,4 +126,11 @@
     <string name="seat_num">车辆座位数</string>
     <string name="student_num">非教工人数</string>
     <string name="bus_plate">车牌号</string>
+
+    <string name="about_us_content">
+        我们是来自上海交通大学电子信息与电气工程学院软件工程专业的SJTUBUS开发小组~
+        成员：姚子航、王鑫伟、励颖、王一林
+        联系我们：1162526220@qq.com
+    </string>
+    <string name="user_guide">用户指南</string>
 </resources>

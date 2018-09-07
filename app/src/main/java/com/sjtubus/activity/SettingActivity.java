@@ -2,15 +2,9 @@ package com.sjtubus.activity;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.view.View;
-import android.widget.TextView;
 
 import com.sjtubus.R;
-import com.sjtubus.utils.StringCalendarUtils;
-import com.sjtubus.utils.ToastUtils;
-
-import java.util.Arrays;
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener{
 

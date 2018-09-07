@@ -3,7 +3,6 @@ package com.sjtubus.widget;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -19,15 +18,12 @@ import android.widget.Toast;
 
 import com.sjtubus.App;
 import com.sjtubus.R;
-import com.sjtubus.activity.MainActivity;
-import com.sjtubus.activity.OrderActivity;
 import com.sjtubus.activity.RecordActivity;
 import com.sjtubus.model.RecordInfo;
 import com.sjtubus.model.response.HttpResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.CalendarReminder;
-import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.utils.ZxingUtils;
@@ -46,8 +42,6 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
 import static android.content.ContentValues.TAG;
-import static android.content.DialogInterface.BUTTON_NEGATIVE;
-import static android.content.DialogInterface.BUTTON_POSITIVE;
 
 public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder>{
 

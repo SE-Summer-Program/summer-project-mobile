@@ -26,24 +26,12 @@
             android:color="@color/avoscloud_timestamp_gray"
             android:title="@string/idea" />
         <item
-            android:id="@+id/navigation_item_setting"
-            android:icon="@mipmap/setting"
-            android:title="@string/setting" />
+            android:id="@+id/navigation_item_help"
+            android:icon="@mipmap/icon_help_128"
+            android:title="@string/help" />
+        <item
+            android:id="@+id/navigation_item_aboutus"
+            android:icon="@mipmap/icon_aboutus_128"
+            android:title="@string/about_us" />
     </group>
-    <!--<item-->
-        <!--android:id="@+id/navigation_subheader"-->
-        <!--android:title="@string/app_name">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/navigation_sub_item_1"-->
-                <!--android:checkable="true"-->
-                <!--android:icon="@drawable/ic_launcher_background"-->
-                <!--android:title="@string/app_name" />-->
-            <!--<item-->
-                <!--android:id="@+id/navigation_sub_item_2"-->
-                <!--android:checkable="true"-->
-                <!--android:icon="@drawable/ic_launcher_background"-->
-                <!--android:title="@string/app_name" />-->
-        <!--</menu>-->
-    <!--</item>-->
 </menu>
