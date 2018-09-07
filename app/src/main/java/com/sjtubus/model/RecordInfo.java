@@ -104,11 +104,16 @@ public class RecordInfo {
     public void setSubmitTime(String submitTime) { this.submitTime = submitTime; }
 
     public String getDepartureMsg() {
-        departureMsg = getDepartureDate() + " " + StringCalendarUtils.HHmmssToHHmm(getDepartureTime()) + "发车";
+        departureMsg = getDepartureDate() + " " + StringCalendarUtils.HHmmssToHHmm(getDepartureTime());
         return departureMsg;
     }
 
     public void setDepartureMsg(String departureMsg) {
         this.departureMsg = departureMsg;
     }
+
+    public String getDepartureTimeComplete(){
+        return getDepartureDate() + " " + getDepartureTime();
+    }
+
 }

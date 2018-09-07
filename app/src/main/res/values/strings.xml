@@ -108,7 +108,7 @@
     <string name="cancel_info">取消预约</string>
     <string name="fliter">筛选</string>
     <string name="sort">排序</string>
-    <string name="vaild_record">有效预约</string>
+    <string name="vaild_record">未出行</string>
 
     <!--实时位置细节-->
     <string name="search_hint">想去哪？</string>

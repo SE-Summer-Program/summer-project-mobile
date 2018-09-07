@@ -242,9 +242,9 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
     private void retrieveData() {
         Log.d("retrivedata", "start");
 
-        Calendar calendar = StringCalendarUtils.StringToCalendar((String) date.getText());
+        final Calendar calendar = StringCalendarUtils.StringToCalendar((String) date.getText());
         line_type = ShiftUtils.getTypeByCalendar(calendar);
-        String appoint_date = (String) date.getText();
+        final String appoint_date = (String) date.getText();
 
         RetrofitClient.getBusApi()
                 .getAppointment(line_name, line_type, appoint_date)
@@ -279,7 +279,10 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                     }
                     String left_appoint_info = "";
 
-                    if (infos.size() == 0){
+                    if ((line_name.equals("MinHangToQiBao") || line_name.equals("QiBaoToMinHang")) &&
+                            (StringCalendarUtils.isWeekend(StringCalendarUtils.StringToCalendar(appoint_date)))){
+                        left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车双休日停运哦~";
+                    } else if (infos.size() == 0){
                         left_appoint_info = "今日所有班次都已发出,去预约其他班次吧~";
                     } else {
                         int size = infos.size();

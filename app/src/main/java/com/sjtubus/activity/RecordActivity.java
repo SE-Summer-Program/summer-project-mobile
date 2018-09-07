@@ -23,6 +23,7 @@ import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.RecordAdapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +33,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
 
 public class RecordActivity extends BaseActivity implements View.OnClickListener, RecordAdapter.OnItemClickListener{
 
@@ -45,15 +48,15 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
     @BindView(R.id.recycle_record)
     RecyclerView recyclerView;
 
-    private String[] filter_list = {"仅显示近一周", "仅显示近一月", "仅显示近三个月", "自定义"};
-    private String[] sort_list = {"按预定时间由近到远", "按班次时间由近到远", "自定义"};
+    private String[] filter_list = {"仅显示近一周", "仅显示近一月", "仅显示近三个月"};
+    private String[] sort_list = {"按预定时间由近到远", "按班次时间由近到远"};
     private int filter_select = 0;
     private int sort_select = 0;
+    private int filter_amount = 0;
 
     private boolean sortBySubmitTime = false;
-    private boolean sortByDepartureTime = false;
-
-    private static String TAG = "RecordActivity";
+    private boolean sortByDepartureTime = true;
+    private boolean showNotTravelOnly = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +84,9 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         validcheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                /*
-                 * 待添加内容
-                 */
-                ToastUtils.showShort("有效预约");
+                showNotTravelOnly = isChecked;
+                filter_amount = 0;
+                refreshRecord();
             }
         });
 
@@ -112,9 +114,12 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                filter_amount = 0;
                 refreshRecord();
             }
         });
+
+        filter_amount = 0;
         refreshRecord();
     }
 
@@ -166,11 +171,24 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 public void onNext(RecordInfoResponse response) {
                     Log.i(TAG, "onNext: ");
                     if(response.getRecordInfos()!=null && response.getRecordInfos().size()!=0){
-                        List<RecordInfo> recordInfos = response.getRecordInfos();
+                        List<RecordInfo> recordInfosRaw = response.getRecordInfos();
+
+                        List<RecordInfo> recordInfos = new ArrayList<>();
+
+                        if (showNotTravelOnly){
+                            for (RecordInfo info : recordInfosRaw){
+                                if (StringCalendarUtils.isBeforeCurrentTime(info.getDepartureTimeComplete())) {
+                                    filter_amount++;
+                                    continue;
+                                }
+                                recordInfos.add(info);
+                            }
+                        } else {
+                            recordInfos = recordInfosRaw;
+                        }
 
                         /* 排序 */
                         if (sortBySubmitTime){
-                            Log.i(TAG, "hello sort");
                             Collections.sort(recordInfos, new Comparator<RecordInfo>() {
                                 @Override
                                 public int compare(RecordInfo o1, RecordInfo o2) {
@@ -179,7 +197,6 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                             });
                             sortBySubmitTime = false;
                         } else if (sortByDepartureTime){
-                            Log.i(TAG, "hello sort");
                             Collections.sort(recordInfos, new Comparator<RecordInfo>() {
                                 @Override
                                 public int compare(RecordInfo o1, RecordInfo o2) {
@@ -190,14 +207,11 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                             sortByDepartureTime = false;
                         }
 
-                        Log.i(TAG, "end");
-
                         recordAdapter.setDataList(recordInfos);
                     }
                     swipeRefresh.setRefreshing(false);
 
                     int total_amount = response.getRecordInfos()==null?0:response.getRecordInfos().size();
-                    int filter_amount = 0;
                     String record_info = "共计 " + total_amount + " 条预约记录，当前显示 " + (total_amount - filter_amount) + " 条";
                     record_total.setText(record_info);
                 }
@@ -212,7 +226,6 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 @Override
                 public void onComplete() {
                     Log.d(TAG, "onComplete: ");
-                    //mProgressBar.setVisibility(View.GONE);
                 }
             });
     }
@@ -235,16 +248,17 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             public void onClick(DialogInterface dialog, int which) {
                 if (isFliterFlag){
 //                    filter_select = which;
-                    ToastUtils.showShort(filter_list[which]);
+//                    ToastUtils.showShort(filter_list[filter_select]);
                 } else {
                     switch (sort_select){
                         case 0:
-                            Log.i(TAG, "selected.");
                             sortBySubmitTime = true;
+                            filter_amount = 0;
                             refreshRecord();
                             break;
                         case 1:
                             sortByDepartureTime = true;
+                            filter_amount = 0;
                             refreshRecord();
                             break;
                         case 2:

@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -20,6 +21,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
 
 public class CollectActivity extends BaseActivity implements View.OnClickListener, CollectAdapter.OnItemClickListener{
 
@@ -136,7 +139,7 @@ public class CollectActivity extends BaseActivity implements View.OnClickListene
 
                 @Override
                 public void onComplete() {
-//                        Log.d(TAG, "onComplete: ");
+                        Log.d(TAG, "onComplete: ");
                     //mProgressBar.setVisibility(View.GONE);
                 }
             });

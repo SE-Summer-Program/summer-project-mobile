@@ -440,16 +440,12 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
                     double_date_str = data.getStringExtra("doubleway_date");
                     date_str = single_date_str;
                     isSecondPageFlag = false;
-
-//                    line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
-//                    if(line_name.equals("error")) ToastUtils.showShort("地址翻译出现错误！");
                 }
             // order 到 第二页
             case 2:
                 info_single.setDeparture_place(data.getStringExtra("single_departure_place"));
                 info_single.setArrive_place(data.getStringExtra("single_arrive_place"));
                 info_single.setDeparture_time(data.getStringExtra("single_departure_time"));
-                // ToastUtils.showShort(intent.getStringExtra("single_departure_time"));
                 info_single.setArrive_time(data.getStringExtra("single_arrive_time"));
                 info_single.setDate(data.getStringExtra("single_departure_date"));
                 info_single.setShiftid(data.getStringExtra("single_shiftid"));
@@ -460,9 +456,6 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
                 double_date_str = data.getStringExtra("double_departure_date");
                 date_str = double_date_str;
                 isSecondPageFlag = true;
-
-//                line_name = ShiftUtils.getLineByDepartureAndArrive(departure_place_str, arrive_place_str);
-//                if(line_name.equals("error")) ToastUtils.showShort("地址翻译出现错误！");
                 break;
             default:
                 break;
