@@ -401,6 +401,7 @@ public class CollectAdapter extends RecyclerView.Adapter<CollectAdapter.ViewHold
                 .add("submit_time", StringCalendarUtils.getCurrentTime())
                 .add("username",UserManager.getInstance().getUser().getUsername())
                 .add("user_role",UserManager.getInstance().getRole())
+                .add("comment", "")
                 .build();
 
         RetrofitClient.getBusApi()

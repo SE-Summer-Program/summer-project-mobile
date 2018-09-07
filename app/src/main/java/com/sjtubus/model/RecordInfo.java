@@ -35,6 +35,8 @@ public class RecordInfo {
 
     private String departureMsg; //根据item_record的格式来的
 
+    private String comment;
+
     public String getId() {
         return id;
     }
@@ -102,6 +104,14 @@ public class RecordInfo {
     public String getSubmiTime() { return submitTime; }
 
     public void setSubmitTime(String submitTime) { this.submitTime = submitTime; }
+
+    public String getComment(){
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public String getDepartureMsg() {
         departureMsg = getDepartureDate() + " " + StringCalendarUtils.HHmmssToHHmm(getDepartureTime());

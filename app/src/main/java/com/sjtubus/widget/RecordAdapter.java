@@ -1,6 +1,7 @@
 package com.sjtubus.widget;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -81,6 +82,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         TextView status;
         TextView departuremsg;
         TextView shiftid;
+        TextView comment;
         Button remindbtn;
         Button cancelbtn;
         ImageView qrcode;
@@ -92,6 +94,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             departuremsg = view.findViewById(R.id.record_departuremsg);
             shiftid = view.findViewById(R.id.record_shiftid);
             status = view.findViewById(R.id.record_status);
+            comment = view.findViewById(R.id.record_comment);
             remindbtn = view.findViewById(R.id.record_remindbtn);
             cancelbtn = view.findViewById(R.id.record_cancelbtn);
             qrcode = view.findViewById(R.id.record_qrcode);
@@ -114,6 +117,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return holder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
         String confirm_time = recordInfos.get(position).getConfirmDate();
@@ -121,6 +125,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         String departure_msg = recordInfos.get(position).getDepartureMsg() + "发车";
         String shift_id = recordInfos.get(position).getShiftid();
         String submit_time = "预定时间： " + recordInfos.get(position).getSubmiTime();
+        String comment = recordInfos.get(position).getComment();
         holder.submittime.setText(confirm_time);
         holder.linename.setText(line_name);
         holder.departuremsg.setText(departure_msg);
@@ -129,6 +134,11 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         String info = shift_id + ";" + recordInfos.get(position).getDepartureDate() + ";"
                 + UserManager.getInstance().getUser().getUsername();
         holder.qrcode.setImageBitmap(ZxingUtils.createQRImage(info,300,300));
+
+        if (comment == null)
+            holder.comment.setVisibility(View.GONE);
+        else
+            holder.comment.setText("特殊需求： " + comment);
 
         if (StringCalendarUtils.isBeforeCurrentTime(recordInfos.get(position).getDepartureTimeComplete())){
             holder.status.setText("已出行");

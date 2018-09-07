@@ -22,6 +22,8 @@ public class AppointInfo implements Cloneable{
     private String arrive_place;
     private int appoint_status; //无座，预约
 
+    private String comment;
+
     /****************************************/
 
     public String getId() {
@@ -124,6 +126,14 @@ public class AppointInfo implements Cloneable{
 
     public void setAppoint_status(int appoint_status) {
         this.appoint_status = appoint_status;
+    }
+
+    public String getComment(){
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public void copy(AppointInfo appointInfo){

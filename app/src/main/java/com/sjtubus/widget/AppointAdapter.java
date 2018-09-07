@@ -42,6 +42,8 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
+import static android.content.ContentValues.TAG;
+
 public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private Context context;
@@ -56,8 +58,6 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private boolean isSecondPageFlag;
     private String double_date_str;
     private AppointInfo appointInfo = new AppointInfo();
-
-    private static String TAG = "appointadapter";
 
     /* 单程构造函数 */
     public AppointAdapter(Context context){
@@ -442,7 +442,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     private void addCollection(final String shiftid){
         User user = UserManager.getInstance().getUser();
-        Log.i(TAG, shiftid + " " + user.getUserId());
+
         RequestBody requestBody = new FormBody.Builder()
                 .add("userid", user.getUserId())
                 .add("username", user.getUsername())

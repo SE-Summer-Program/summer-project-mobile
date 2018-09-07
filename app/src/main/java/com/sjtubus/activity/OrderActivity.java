@@ -22,13 +22,16 @@ import android.widget.Toast;
 
 import com.sjtubus.App;
 import com.sjtubus.R;
+import com.sjtubus.model.ShiftInfo;
 import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.CalendarReminder;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
+import com.sjtubus.widget.ClearEditText;
 
 import java.util.Date;
 
@@ -39,6 +42,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
+
+import static android.content.ContentValues.TAG;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
@@ -56,16 +61,16 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
 
     private ImageView need_icon;
     private LinearLayout remind_time;
-    private LinearLayout need_front, need_back, need_window, need_other;
+    private LinearLayout need_front, need_back, need_window, need_road, need_other;
+    private boolean isNeedRemind = false, isNeedExtend = false;
+    private boolean[] checked_array = {false, false, false, false, false};
+    private String[] check_msg = {"前排座位", "后排座位", "靠窗座位", "靠过道座位","其他特殊要求"};
+    private String appoint_comment;
+    private ClearEditText editText;
 
-    private EditText comment1, comment2, comment3, comment4;
-    private ImageView comment1_clear, comment2_clear, comment3_clear, comment4_clear;
-    private boolean isNeedRemind = false,isNeedExtend = false;
     private int remind_minutes = 10, remindlist_select = 0;
     private int[] remindtime_list = {10,30,60,120};
     private String[] remind_list = {"提前10分钟","提前30分钟","提前1小时","提前2小时"};
-    private boolean[] checked_array = {false, false, false, false};
-    private String[] check_msg = {"前排座位", "后排座位", "靠窗座位", "其他特殊要求"};
 
     private int SINGLE_WAY = 0, DOUBLE_WAY = 1;
     private boolean isSingleWayFlag = true;
@@ -241,10 +246,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         CheckBox checkBox2 = findViewById(R.id.order_need_checkbox2);
         CheckBox checkBox3 = findViewById(R.id.order_need_checkbox3);
         CheckBox checkBox4 = findViewById(R.id.order_need_checkbox4);
+        CheckBox checkBox5 = findViewById(R.id.order_need_checkbox5);
         need_front = findViewById(R.id.order_need1);
         need_back = findViewById(R.id.order_need2);
         need_window = findViewById(R.id.order_need3);
-        need_other = findViewById(R.id.order_need4);
+        need_road = findViewById(R.id.order_need4);
+        need_other = findViewById(R.id.order_need5);
 
         need_bar.setOnClickListener(this);
         need_icon.setOnClickListener(this);
@@ -253,6 +260,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         setCheckChangeListener(checkBox2, 1);
         setCheckChangeListener(checkBox3, 2);
         setCheckChangeListener(checkBox4, 3);
+        setCheckChangeListener(checkBox5, 4);
+
+        editText = findViewById(R.id.order_edittext);
     }
 
     private void initExtend(){
@@ -261,21 +271,25 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         need_front.setVisibility(View.GONE);
         need_back.setVisibility(View.GONE);
         need_window.setVisibility(View.GONE);
+        need_road.setVisibility(View.GONE);
         need_other.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v){
         switch (v.getId()){
+            case R.id.order_comment:
+                retrofitShiftInfo(shiftid_str);
+                break;
             case R.id.order_setneed:
             case R.id.order_setneed_icon:
                 if (isNeedExtend){
-                    setViewsGone(need_front, need_back, need_window, need_other);
+                    setViewsGone(need_front, need_back, need_window, need_road, need_other);
                     isNeedExtend = false;
                     need_icon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.more_48));
                 }
                 else{
-                    setViewsVisible(need_front, need_back, need_window, need_other);
+                    setViewsVisible(need_front, need_back, need_window, need_road, need_other);
                     isNeedExtend = true;
                     need_icon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.less_48));
                 }
@@ -296,6 +310,16 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                 }).setNegativeButton("取消", null).create().show();
                 break;
             case R.id.order_confirm:
+                // 生成备注
+                appoint_comment = "";
+                for (int i = 0; i < 4 ;i++){
+                    if (checked_array[i])
+                        appoint_comment += check_msg[i] + " ";
+                }
+                appoint_comment += editText.getTextContent();
+
+//                ToastUtils.showShort(appoint_comment);
+
                 new AlertDialog.Builder(this)
                         .setMessage("确认提交预约申请吗？")
                         .setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -308,6 +332,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
                                     .add("submit_time", StringCalendarUtils.getCurrentTime())
                                     .add("username",UserManager.getInstance().getUser().getUsername())
                                     .add("user_role",UserManager.getInstance().getRole())
+                                    .add("comment", appoint_comment)
                                     .build();
 
                                 submitAppoint(requestBody);
@@ -437,6 +462,52 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
             });
     }
 
+    private void retrofitShiftInfo(final String shiftid){
+        //获取当前用户的username
+//        String username = UserManager.getInstance().getUser().getUsername();
+
+        RetrofitClient.getBusApi()
+                .getShiftInfos(shiftid)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ShiftInfoResponse>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        addDisposable(d);
+                    }
+
+                    @Override
+                    public void onNext(ShiftInfoResponse response) {
+                        ShiftInfo shiftInfo = response.getShiftInfo();
+                        String message = "班次序列号：" + shiftInfo.getShiftid()
+                                + "\n线路名称：" + shiftInfo.getLineNameCn()
+                                + "\n发车时间：" + shiftInfo.getDepartureTime()
+                                + "\n车牌号：" + shiftInfo.getBusPlateNum()
+                                + "\n核载人数：" + shiftInfo.getBusSeatNum()
+                                + "\n司机姓名：" + shiftInfo.getDriverName()
+                                + "\n司机联系方式：" + shiftInfo.getDriverPhone()
+                                + "\n备注：" + shiftInfo.getComment();
+                        new AlertDialog.Builder(OrderActivity.this)
+                                .setTitle("班次详细信息")
+                                .setMessage(message)
+                                .setPositiveButton("确定", null)
+                                .show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        ToastUtils.showShort("网络请求失败！请检查你的网络！");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "onComplete: ");
+                        //mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+    }
+
     private void setViewsVisible(LinearLayout... linearLayouts){
         for (LinearLayout layout : linearLayouts){
             layout.setVisibility(View.VISIBLE);
@@ -449,10 +520,18 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
-    private void setCheckChangeListener(CheckBox checkBox, final int pos){
+    private void setCheckChangeListener(final CheckBox checkBox, final int pos){
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if ((checked_array[0] && !checked_array[1] && pos == 1) ||
+                        (checked_array[1] && !checked_array[0] && pos == 0)){
+                    ToastUtils.showShort("别闹~一个人是没法同时坐前后排的哦");
+                }
+                if ((checked_array[2] && !checked_array[3] && pos == 3) ||
+                        (checked_array[3] && !checked_array[2] && pos == 2)){
+                    ToastUtils.showShort("别闹~一个人是没法同时靠窗和过道的哦");
+                }
                 checked_array[pos] = isChecked;
             }
         });

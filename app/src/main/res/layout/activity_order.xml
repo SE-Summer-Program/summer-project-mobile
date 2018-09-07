@@ -386,7 +386,8 @@
             android:orientation="horizontal"
             android:background="@color/shallow_white"
             android:layout_marginBottom="2dp"
-            android:padding="@dimen/smallPadding">
+            android:paddingVertical="@dimen/smallPadding"
+            android:paddingHorizontal="18dp">
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -415,7 +416,8 @@
             android:orientation="horizontal"
             android:background="@color/shallow_white"
             android:layout_marginBottom="2dp"
-            android:padding="@dimen/smallPadding">
+            android:paddingVertical="@dimen/smallPadding"
+            android:paddingHorizontal="22dp">
             <CheckBox
                 android:id="@+id/order_need_checkbox1"
                 android:layout_width="0dp"
@@ -428,19 +430,9 @@
                 android:textColor="@color/dark_gray"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.5"
+                android:layout_weight="5.5"
                 android:layout_height="match_parent"
-                android:text="@string/order_remark"
-                android:textSize="14sp"
-                android:layout_gravity="center"
-                android:gravity="center"/>
-            <com.sjtubus.widget.ClearEditText
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -450,7 +442,8 @@
             android:orientation="horizontal"
             android:background="@color/shallow_white"
             android:layout_marginBottom="2dp"
-            android:padding="@dimen/smallPadding">
+            android:paddingVertical="@dimen/smallPadding"
+            android:paddingHorizontal="22dp">
             <CheckBox
                 android:id="@+id/order_need_checkbox2"
                 android:layout_width="0dp"
@@ -463,19 +456,9 @@
                 android:textColor="@color/dark_gray"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.5"
+                android:layout_weight="5.5"
                 android:layout_height="match_parent"
-                android:text="@string/order_remark"
-                android:textSize="14sp"
-                android:layout_gravity="center"
-                android:gravity="center"/>
-            <com.sjtubus.widget.ClearEditText
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -485,7 +468,8 @@
             android:orientation="horizontal"
             android:background="@color/shallow_white"
             android:layout_marginBottom="2dp"
-            android:padding="@dimen/smallPadding">
+            android:paddingVertical="@dimen/smallPadding"
+            android:paddingHorizontal="22dp">
             <CheckBox
                 android:id="@+id/order_need_checkbox3"
                 android:layout_width="0dp"
@@ -498,19 +482,9 @@
                 android:textColor="@color/dark_gray"/>
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1.5"
+                android:layout_weight="5.5"
                 android:layout_height="match_parent"
-                android:text="@string/order_remark"
-                android:textSize="14sp"
-                android:layout_gravity="center"
-                android:gravity="center"/>
-            <com.sjtubus.widget.ClearEditText
-                android:layout_width="0dp"
-                android:layout_weight="4"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:layout_gravity="bottom"
-                android:gravity="bottom"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <LinearLayout
@@ -520,9 +494,36 @@
             android:orientation="horizontal"
             android:background="@color/shallow_white"
             android:layout_marginBottom="2dp"
-            android:padding="@dimen/smallPadding">
+            android:paddingVertical="@dimen/smallPadding"
+            android:paddingHorizontal="22dp">
             <CheckBox
                 android:id="@+id/order_need_checkbox4"
+                android:layout_width="0dp"
+                android:layout_weight="3.5"
+                android:layout_height="match_parent"
+                android:text="@string/road_seat"
+                android:textSize="14sp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/dark_gray"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="5.5"
+                android:layout_height="match_parent"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/order_need5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/shallow_white"
+            android:layout_marginBottom="2dp"
+            android:paddingVertical="@dimen/smallPadding"
+            android:paddingHorizontal="22dp">
+            <CheckBox
+                android:id="@+id/order_need_checkbox5"
                 android:layout_width="0dp"
                 android:layout_weight="4"
                 android:layout_height="match_parent"
@@ -536,7 +537,8 @@
                 android:layout_weight="0.5"
                 android:layout_height="match_parent"
                 android:textSize="14sp"/>
-            <EditText
+            <com.sjtubus.widget.ClearEditText
+                android:id="@+id/order_edittext"
                 android:layout_width="0dp"
                 android:layout_weight="4.5"
                 android:layout_height="match_parent"
