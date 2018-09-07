@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/shallow_gray">
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -196,8 +197,8 @@
         style="@style/bigButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="70dp"
         android:background="@color/primary_red"
         android:text="@string/logout"
         />
