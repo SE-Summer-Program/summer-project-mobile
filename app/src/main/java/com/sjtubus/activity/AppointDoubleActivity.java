@@ -390,7 +390,6 @@ public class AppointDoubleActivity extends BaseActivity implements View.OnClickL
 
                         String left_appoint_info = "";
                         String legalholiday = MyDateUtils.isLegalHoliday(appoint_date);
-
                         if (! legalholiday.equals("无")) {
                             left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车" + legalholiday + "停运哦~";
                         }

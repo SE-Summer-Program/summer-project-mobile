@@ -78,7 +78,14 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
         StringBuilder anticlockwise_text = new StringBuilder();
         int index = 1;
 
-        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+        if (! MyDateUtils.isLegalHoliday(StringCalendarUtils.CalendarToString(Calendar.getInstance())).equals("无")){
+            for (String time : station.getAntiClockLoop()) {
+                anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+            for (String time : station.getAntiClockNonLoop()){
+                anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+        } else if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
             for (String time : station.getAntiClockLoop()) {
                 anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
             }
@@ -123,7 +130,14 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     private void initClockwise(){
         StringBuilder clockwise_text = new StringBuilder();
 
-        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+        if (! MyDateUtils.isLegalHoliday(StringCalendarUtils.CalendarToString(Calendar.getInstance())).equals("无")) {
+            for (String time : station.getAntiClockLoop()) {
+                clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+            for (String time : station.getAntiClockNonLoop()) {
+                clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+        } else if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
             for (String time : station.getClockLoop()) {
                 clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
             }
@@ -162,7 +176,14 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
         StringBuilder anticlockwiseHoliday_text = new StringBuilder();
         int index = 1;
 
-        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+        if (! MyDateUtils.isLegalHoliday(StringCalendarUtils.CalendarToString(Calendar.getInstance())).equals("无")) {
+            for (String time : station.getAntiClockLoop()) {
+                anticlockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+            for (String time : station.getAntiClockNonLoop()) {
+                anticlockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+        } else if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
             for (String time : station.getVacAntiClockLoop()) {
                 anticlockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
             }
@@ -207,7 +228,14 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     private void initclockwiseHoliday(){
         StringBuilder clockwiseHoliday_text = new StringBuilder();
 
-        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+        if (! MyDateUtils.isLegalHoliday(StringCalendarUtils.CalendarToString(Calendar.getInstance())).equals("无")) {
+            for (String time : station.getAntiClockLoop()) {
+                clockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+            for (String time : station.getAntiClockNonLoop()) {
+                clockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+        } else if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
             for (String time : station.getVacClockLoop()) {
                 clockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
             }

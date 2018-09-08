@@ -109,6 +109,7 @@
         android:padding="@dimen/smallPadding"
         android:layout_marginHorizontal="20dp">
         <TextView
+            android:id="@+id/appoint_commenttitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/middlesmallText"

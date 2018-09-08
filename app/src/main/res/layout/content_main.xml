@@ -57,6 +57,16 @@
                 android:layout_marginTop="1dp"
                 android:layout_weight="1"/>
             <Button
+                android:id="@+id/write_btn"
+                android:background="#ffffff"
+                android:drawableTop="@mipmap/icon_write_128"
+                android:text="@string/write_btn"
+                android:paddingTop="@dimen/icon_padding"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:layout_weight="1"/>
+            <Button
                 android:id="@+id/schedule_btn"
                 android:background="#ffffff"
                 android:drawableTop="@mipmap/icon_schedule_128"

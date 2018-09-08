@@ -213,6 +213,20 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     retrofitShiftInfo(shiftid);
                     break;
                 case R.id.import_rideinfo_btn:
+                    if (! StringCalendarUtils.isBeforeCurrentTime(departure_date + departure_time)){
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("录入信息失败")
+                                .setContentText("该班次还未发出")
+                                .setConfirmText("确定")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.cancel();
+                                    }
+                                })
+                                .show();
+                        return;
+                    }
                     importRideInfo(info);
                     break;
             }

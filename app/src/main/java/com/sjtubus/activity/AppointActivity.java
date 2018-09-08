@@ -18,6 +18,7 @@ import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.AppointShortInfo;
 import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.LunarUtils;
 import com.sjtubus.utils.MyDateUtils;
 import com.sjtubus.utils.ShiftUtils;
@@ -118,10 +119,13 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
         date.setText(date_str);
 
-        if (StringCalendarUtils.isToday((String) date.getText())){
-           // yesterday_btn.setEnabled(false);
-            yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
-            isTodayFlag = true;
+        if (!UserManager.getInstance().getRole().equals("admin")&&
+                !UserManager.getInstance().getRole().equals("driver")) {
+            if (StringCalendarUtils.isToday((String) date.getText())) {
+                // yesterday_btn.setEnabled(false);
+                yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
+                isTodayFlag = true;
+            }
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -167,14 +171,17 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
                         String datestr = year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose;
 
-                        if (StringCalendarUtils.isBeforeCurrentDate(datestr)){
-                            ToastUtils.showShort("不能预约已经发出的班次~");
-                            return;
-                        } else if (!MyDateUtils.isWithinOneWeek(datestr)){
-                            ToastUtils.showShort("仅可预约一周以内的班次哦~");
+                        if (!UserManager.getInstance().getRole().equals("admin")&&
+                                !UserManager.getInstance().getRole().equals("driver")) {
+                            if (StringCalendarUtils.isBeforeCurrentDate(datestr)) {
+                                ToastUtils.showShort("不能预约已经发出的班次~");
+                                return;
+                            } else if (!MyDateUtils.isWithinOneWeek(datestr)) {
+                                ToastUtils.showShort("仅可预约一周以内的班次哦~");
 //                            return;
+                            }
                         }
-                        //textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
+
                         String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
                         String dayStr = StringCalendarUtils.getDoubleDigitDay(dayOfMonth_choose);
                         String dateStr = year_choose+"-"+monthStr+"-"+dayStr; //格式2018-07-19
@@ -189,36 +196,46 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                     }
                 }, year,month,day).show();
 
-                //如果当前日期是今天，则前一天不可用
-                if (StringCalendarUtils.isToday((String) date.getText())){
-                   // yesterday_btn.setEnabled(false);
-                    yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
-                    isTodayFlag = true;
+                if (!UserManager.getInstance().getRole().equals("admin")&&
+                        !UserManager.getInstance().getRole().equals("driver")) {
+                    //如果当前日期是今天，则前一天不可用
+                    if (StringCalendarUtils.isToday((String) date.getText())) {
+                        // yesterday_btn.setEnabled(false);
+                        yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
+                        isTodayFlag = true;
+                    }
                 }
 
                 break;
             case R.id.appoint_yesterday:
-                if (isTodayFlag){
-                    yesterday_btn.setEnabled(false);
-                    ToastUtils.showShort("不能预约更前面的班次了~");
-                    break;
+                if (!UserManager.getInstance().getRole().equals("admin")&&
+                        !UserManager.getInstance().getRole().equals("driver")) {
+                    if (isTodayFlag) {
+                        yesterday_btn.setEnabled(false);
+                        ToastUtils.showShort("不能预约更前面的班次了~");
+                        break;
+                    }
                 }
-                //modifyDate(-1);
                 String yesterday = MyDateUtils.getYesterdayStr((String) date.getText());
                 date.setText(yesterday);
-                if (StringCalendarUtils.isToday((String) date.getText())){
-                    //yesterday_btn.setEnabled(false);
-                    yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
-                    isTodayFlag = true;
+                if (!UserManager.getInstance().getRole().equals("admin")&&
+                        !UserManager.getInstance().getRole().equals("driver")) {
+                    if (StringCalendarUtils.isToday((String) date.getText())) {
+                        //yesterday_btn.setEnabled(false);
+                        yesterday_btn.setTextColor(getResources().getColor(R.color.dark_gray));
+                        isTodayFlag = true;
+                    }
                 }
                 retrieveData();
                 break;
             case R.id.appoint_nextday:
-                //modifyDate(1);
                 String tomorrow = MyDateUtils.getTomorrowStr((String) date.getText());
-                if (!MyDateUtils.isWithinOneWeek(tomorrow)){
-                    ToastUtils.showShort("仅可预约一周以内的班次哦~");
+                if (!UserManager.getInstance().getRole().equals("admin")&&
+                        !UserManager.getInstance().getRole().equals("driver")) {
+                    if (!MyDateUtils.isWithinOneWeek(tomorrow)) {
+                        ToastUtils.showShort("仅可预约一周以内的班次哦~");
 //                    break;
+                    }
                 }
                 date.setText(tomorrow);
                 yesterday_btn.setEnabled(true);
@@ -276,27 +293,33 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         i++;
                         infos.add(info);
                     }
-                    String left_appoint_info = "";
-                    String legalholiday = MyDateUtils.isLegalHoliday(appoint_date);
 
-                    if (! legalholiday.equals("无")) {
-                        left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车" + legalholiday + "停运哦~";
-                    }
+                    String left_appoint_info = "";
+                    if (!UserManager.getInstance().getRole().equals("admin")&&
+                            !UserManager.getInstance().getRole().equals("driver")) {
+                        String legalholiday = MyDateUtils.isLegalHoliday(appoint_date);
+                        if (!legalholiday.equals("无")) {
+                            left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车" + legalholiday + "停运哦~";
+                        }
 //                    else if ((line_name.equals("MinHangToQiBao") || line_name.equals("QiBaoToMinHang")) &&
 //                            (StringCalendarUtils.isWeekend(StringCalendarUtils.StringToCalendar(appoint_date)))){
 //                        left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车双休日停运哦~";
 //                    }
-                    else if (infos.size() == 0){
-                        left_appoint_info = "今日所有班次都已发出,去预约其他班次吧~";
-                    } else {
-                        int size = infos.size();
-                        for (AppointInfo shortInfo : infos){
-                            if (shortInfo.getRemain_seat() == 0){
-                                size -= 1;
+                        else if (infos.size() == 0) {
+                            left_appoint_info = "今日所有班次都已发出,去预约其他班次吧~";
+                        } else {
+                            int size = infos.size();
+                            for (AppointInfo shortInfo : infos) {
+                                if (shortInfo.getRemain_seat() == 0) {
+                                    size -= 1;
+                                }
                             }
+                            left_appoint_info = "当日剩余可预约班次: " + size;
                         }
-                        left_appoint_info = "当日剩余可预约班次: " + size;
+                    } else {
+                        left_appoint_info = "请选择班次录入发车信息";
                     }
+
                     left_appoint.setText(left_appoint_info);
                     appointAdapter.setDataList(infos);
                     swipeRefresh.setRefreshing(false);
