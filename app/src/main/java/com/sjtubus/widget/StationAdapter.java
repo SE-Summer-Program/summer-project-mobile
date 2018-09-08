@@ -35,7 +35,7 @@ public class StationAdapter extends RecyclerView.Adapter<StationTimeLineViewHold
 
     @Override
     public void onBindViewHolder(@NonNull StationTimeLineViewHolder holder, int position) {
-        holder.setData(stations.get(position).getName());
+        holder.setData(stations.get(position));
     }
 
     @Override

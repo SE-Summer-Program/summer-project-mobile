@@ -482,10 +482,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
         if(intentResult != null) {
             if(intentResult.getContents() == null) {
-                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("扫描失败!")
                         .setContentText("二维码内容为空!")
-                        .setCancelButton("确定",new SweetAlertDialog.OnSweetClickListener() {
+                        .setConfirmButton("确定",new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.cancel();

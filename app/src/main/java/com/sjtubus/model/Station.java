@@ -12,6 +12,8 @@ public class Station  implements Serializable{
     private Double longitude;//经度
     @SerializedName("latitude")
     private Double latitude;//纬度
+    @SerializedName("image_url")
+    private String image_url;//图片地址
     //V = Vactation
     //A = AntiClockwise
     //C = Clockwise
@@ -97,7 +99,6 @@ public class Station  implements Serializable{
     public List<String> getVacClockNonLoop() {
         return this.VacClockNonLoop;
     }
-
     public List<String> getAntiClockTotal(){
         List<String> list1 = this.AntiClockLoop;
         List<String> list2 = this.AntiClockNonLoop;
@@ -122,4 +123,11 @@ public class Station  implements Serializable{
         list1.addAll(list2);
         return list1;
     }
+    public String getImage_url() {
+        return image_url;
+    }
+    public void setImage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
 }
