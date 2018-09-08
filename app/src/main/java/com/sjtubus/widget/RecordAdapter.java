@@ -129,7 +129,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                 + UserManager.getInstance().getUser().getUsername();
         holder.qrcode.setImageBitmap(ZxingUtils.createQRImage(info,300,300));
 
-        if (comment == null)
+        if (comment == null || comment.equals(""))
             holder.comment.setVisibility(View.GONE);
         else
             holder.comment.setText("特殊需求： " + comment);

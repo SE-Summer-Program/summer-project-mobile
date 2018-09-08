@@ -99,4 +99,39 @@ public class MyDateUtils {
         return (month == Calendar.FEBRUARY || month == Calendar.AUGUST
                 || month == Calendar.JULY);
     }
+
+    public static String isLegalHoliday(String datestr){
+        Calendar calendar = StringCalendarUtils.StringToCalendar(datestr);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        LunarUtils lunar = LunarUtils.getLunarDate(datestr);
+        String lunar_month = LunarUtils.getChinaMonthString(LunarUtils.getLunarMonth(lunar));
+        String lunar_day = LunarUtils.getChinaDayString(LunarUtils.getLunarDay(lunar));
+
+        if (month == Calendar.JANUARY && day == 1){
+            return "元旦";
+        } else if (lunar_month.equals("腊月") && lunar_day.equals("三十")){
+            return "除夕";
+        } else if (lunar_month.equals("正月") && (lunar_day.equals("初一") || lunar_day.equals("初二"))){
+            return "春节";
+        } else if (month == Calendar.APRIL && day == 5){
+            return "清明";
+        } else if (month == Calendar.MAY && day == 1){
+            return "劳动节";
+        } else if (lunar_month.equals("五月") && lunar_day.equals("初五")){
+            return "端午";
+        } else if (lunar_month.equals("八月") && lunar_day.equals("十五")){
+            return "中秋";
+        } else if (month == Calendar.OCTOBER && (day >= 1 && day <= 3)){
+            return "国庆";
+        } else {
+            return "无";
+        }
+    }
+
+    public static void main(String[] args) {
+        String datestr = "2018-06-18";
+        System.out.print(isLegalHoliday(datestr));
+    }
 }
