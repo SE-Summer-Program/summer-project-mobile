@@ -78,6 +78,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     Button message_btn;
     @BindView(R.id.record_btn)
     Button record_btn;
+    @BindView(R.id.write_btn)
+    Button write_btn;
 
     //Views in navigate menu
     private TextView username;
@@ -127,6 +129,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         navigate_btn = findViewById(R.id.navigate_btn); //实时位置
         record_btn = findViewById(R.id.record_btn);
         message_btn = findViewById(R.id.message_btn);
+        write_btn = findViewById(R.id.write_btn);
 
         reserve_btn.setOnClickListener(this);
         scan_btn.setOnClickListener(this);
@@ -136,6 +139,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
         navigate_btn.setOnClickListener(this);
         record_btn.setOnClickListener(this);
         message_btn.setOnClickListener(this);
+        write_btn.setOnClickListener(this);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -180,22 +184,30 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                     record_btn.setVisibility(View.GONE);
                     position_btn.setVisibility(View.GONE);
                     scan_btn.setVisibility(View.VISIBLE);
+                    reserve_btn.setVisibility(View.GONE);
+                    write_btn.setVisibility(View.VISIBLE);
                     break;
                 case "driver":
                     record_btn.setVisibility(View.GONE);
                     scan_btn.setVisibility(View.GONE);
                     position_btn.setVisibility(View.VISIBLE);
+                    reserve_btn.setVisibility(View.GONE);
+                    write_btn.setVisibility(View.VISIBLE);
                     break;
                 default:
                     scan_btn.setVisibility(View.GONE);
                     position_btn.setVisibility(View.GONE);
                     record_btn.setVisibility(View.VISIBLE);
+                    reserve_btn.setVisibility(View.VISIBLE);
+                    write_btn.setVisibility(View.GONE);
                     break;
             }
         } else {
             scan_btn.setVisibility(View.GONE);
             position_btn.setVisibility(View.GONE);
             record_btn.setVisibility(View.VISIBLE);
+            reserve_btn.setVisibility(View.VISIBLE);
+            write_btn.setVisibility(View.GONE);
         }
 
     }
@@ -254,6 +266,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 }
                 Intent reserveIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
                 startActivity(reserveIntent);
+                break;
+            case R.id.write_btn:
+                if(UserManager.getInstance().getUser() == null){
+                    ToastUtils.showShort("请先登录~");
+                    break;
+                }
+                Intent writeIntent = new Intent(MainActivity.this, AppointNaviActivity.class);
+                startActivity(writeIntent);
                 break;
             case R.id.scan_btn:
                 if(UserManager.getInstance().getUser() == null){

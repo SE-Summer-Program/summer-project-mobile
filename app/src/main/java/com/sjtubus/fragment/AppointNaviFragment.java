@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.sjtubus.R;
 import com.sjtubus.activity.AppointActivity;
+import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.MyDateUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
@@ -38,6 +39,7 @@ public class AppointNaviFragment extends BaseFragment {
     private TextView arrive_place;
     private TextView singleway_date;
     private TextView appoint_comment;
+    private TextView appoint_commenttitle;
 
     private int departure_index = 0;//闵行校区
     private int arrive_index = 1;  //徐汇校区
@@ -72,7 +74,14 @@ public class AppointNaviFragment extends BaseFragment {
         Button search_btn = view.findViewById(R.id.appoint_searchbtn);
         ImageView revert_btn = view.findViewById(R.id.revert_place_btn);
         appoint_comment = view.findViewById(R.id.appoint_comment);
-        initAppointComment();
+        appoint_commenttitle = view.findViewById(R.id.appoint_commenttitle);
+
+        if (!UserManager.getInstance().getRole().equals("admin")&&
+                !UserManager.getInstance().getRole().equals("driver")){
+            initAppointComment();
+        } else {
+            appoint_commenttitle.setVisibility(View.GONE);
+        }
 
         departure_place.setOnClickListener(listener);
         arrive_place.setOnClickListener(listener);

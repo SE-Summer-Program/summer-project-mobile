@@ -13,6 +13,7 @@
     <string name="message_btn">公告</string>
     <string name="idea_btn">意见</string>
     <string name="scanQrcode">管理员扫描预约码</string>
+    <string name="write_btn">录入发车信息</string>
 
     <!--页面toolbar标题 及 侧拉栏-->
     <string name="person_info">个人信息</string>

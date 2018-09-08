@@ -46,10 +46,16 @@ public class AppointNaviActivity extends BaseActivity implements View.OnClickLis
                 R.color.primary_red};
 
         mCoordinatorTabLayout.setTranslucentStatusBar(this)
-                .setTitle("预约班车")
                 .setBackEnable(true)
                 .setImageArray(mImageArray, mColorArray)
                 .setupWithViewPager(mViewPager);
+
+        if (!UserManager.getInstance().getRole().equals("admin")&&
+                !UserManager.getInstance().getRole().equals("driver")){
+            mCoordinatorTabLayout.setTitle("预约班车");
+        } else {
+            mCoordinatorTabLayout.setTitle("录入发车信息");
+        }
     }
 
     private void initFragments(){
