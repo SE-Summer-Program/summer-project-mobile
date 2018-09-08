@@ -18,6 +18,7 @@ import com.sjtubus.model.AppointInfo;
 import com.sjtubus.model.AppointShortInfo;
 import com.sjtubus.model.response.AppointResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.LunarUtils;
 import com.sjtubus.utils.MyDateUtils;
 import com.sjtubus.utils.ShiftUtils;
 import com.sjtubus.utils.StringCalendarUtils;
@@ -170,8 +171,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                             ToastUtils.showShort("不能预约已经发出的班次~");
                             return;
                         } else if (!MyDateUtils.isWithinOneWeek(datestr)){
-                            ToastUtils.showShort("仅可预约一周以内的班次~");
-                            return;
+                            ToastUtils.showShort("仅可预约一周以内的班次哦~");
+//                            return;
                         }
                         //textView_date.setText(year_choose+"-"+(month_choose+1)+"-"+dayOfMonth_choose);
                         String monthStr = StringCalendarUtils.getDoubleDigitMonth(month_choose);
@@ -216,8 +217,8 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                 //modifyDate(1);
                 String tomorrow = MyDateUtils.getTomorrowStr((String) date.getText());
                 if (!MyDateUtils.isWithinOneWeek(tomorrow)){
-                    ToastUtils.showShort("仅可预约一周以内的班次~");
-                    break;
+                    ToastUtils.showShort("仅可预约一周以内的班次哦~");
+//                    break;
                 }
                 date.setText(tomorrow);
                 yesterday_btn.setEnabled(true);
@@ -240,8 +241,6 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
 
 
     private void retrieveData() {
-        Log.d("retrivedata", "start");
-
         final Calendar calendar = StringCalendarUtils.StringToCalendar((String) date.getText());
         line_type = ShiftUtils.getTypeByCalendar(calendar);
         final String appoint_date = (String) date.getText();
@@ -278,11 +277,16 @@ public class AppointActivity extends BaseActivity implements View.OnClickListene
                         infos.add(info);
                     }
                     String left_appoint_info = "";
+                    String legalholiday = MyDateUtils.isLegalHoliday(appoint_date);
 
-                    if ((line_name.equals("MinHangToQiBao") || line_name.equals("QiBaoToMinHang")) &&
-                            (StringCalendarUtils.isWeekend(StringCalendarUtils.StringToCalendar(appoint_date)))){
-                        left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车双休日停运哦~";
-                    } else if (infos.size() == 0){
+                    if (! legalholiday.equals("无")) {
+                        left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车" + legalholiday + "停运哦~";
+                    }
+//                    else if ((line_name.equals("MinHangToQiBao") || line_name.equals("QiBaoToMinHang")) &&
+//                            (StringCalendarUtils.isWeekend(StringCalendarUtils.StringToCalendar(appoint_date)))){
+//                        left_appoint_info = ShiftUtils.getChiLineName(line_name) + "的班车双休日停运哦~";
+//                    }
+                    else if (infos.size() == 0){
                         left_appoint_info = "今日所有班次都已发出,去预约其他班次吧~";
                     } else {
                         int size = infos.size();

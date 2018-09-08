@@ -156,12 +156,12 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                             if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
                                 ToastUtils.showShort("不能预约已经发出的班次哦~");
                                 return;
-                            } else if (!MyDateUtils.isWithinOneWeek(dateStr)){
-                                ToastUtils.showShort("仅可预约一周以内的班次~");
-                                return;
                             } else if (StringCalendarUtils.isBeforeDateOfSecondPara(doubledate_str, dateStr)){
                                 ToastUtils.showShort("回程的时间不能早于去程哦~");
                                 return;
+                            } else if (!MyDateUtils.isWithinOneWeek(dateStr)){
+                                ToastUtils.showShort("仅可预约一周以内的班次哦~");
+//                                return;
                             }
                             singledate.setText(dateStr);
                             singledate_str = (String) singleway_date.getText();
@@ -188,12 +188,12 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                             if (StringCalendarUtils.isBeforeCurrentDate(dateStr)){
                                 ToastUtils.showShort("不能预约已经发出的班次哦~");
                                 return;
-                            } else if (!MyDateUtils.isWithinOneWeek(dateStr)){
-                                ToastUtils.showShort("仅可预约一周以内的班次~");
-                                return;
                             } else if (StringCalendarUtils.isBeforeDateOfSecondPara(dateStr, singledate_str)){
                                 ToastUtils.showShort("回程的时间不能早于去程哦~");
                                 return;
+                            } else if (!MyDateUtils.isWithinOneWeek(dateStr)){
+                                ToastUtils.showShort("仅可预约一周以内的班次哦~");
+//                                return;
                             }
                             doubledate.setText(dateStr);
                             doubledate_str = (String) doubleway_date.getText();

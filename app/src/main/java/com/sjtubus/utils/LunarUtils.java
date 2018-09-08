@@ -14,9 +14,9 @@ public class LunarUtils {
     private int month;
     private int day;
     private boolean leap;
-    final static String chineseMonthNumber[] = {"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
-    final static String chineseNumber[] = {"〇", "一", "二", "三", "四", "五", "六", "七", "八", "九"};
-    static SimpleDateFormat chineseDateFormat = new SimpleDateFormat("yyyy年MM月dd日");
+    final static String chineseMonthNumber[] = {"正", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "腊"};
+    final static String chineseNumber[] = {"〇", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十"};
+    static SimpleDateFormat chineseDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     final static long[] lunarInfo = new long[]
             {0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
                     0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
@@ -100,7 +100,7 @@ public class LunarUtils {
         int leapMonth = 0;
         Date baseDate = null;
         try {
-            baseDate = chineseDateFormat.parse("1900年1月31日");
+            baseDate = chineseDateFormat.parse("1900-01-31");
         } catch (ParseException e) {
             e.printStackTrace(); //To change body of catch statement use Options | File Templates.
         }
@@ -175,7 +175,9 @@ public class LunarUtils {
             year = year/10;
         }
         yearstr += chineseNumber[year];
-        return new StringBuilder(yearstr).reverse().toString();
+        String str = new StringBuilder(yearstr).reverse().toString();
+        str += "年";
+        return str;
     }
 
     public static String getChinaMonthString(int month){
@@ -184,7 +186,7 @@ public class LunarUtils {
 
     public static String getChinaDayString(int day) {
         String chineseTen[] = {"初", "十", "廿", "卅"};
-        int n = day % 10 == 0 ? 9 : day % 10 - 1;
+        int n = day % 10 == 0 ? 10 : day % 10;
         if (day > 30)
             return "";
         if (day == 10)
@@ -194,47 +196,40 @@ public class LunarUtils {
     }
 
     public String toString() {
-        return year + "年" + (leap ? "闰" : "") + chineseNumber[month - 1] + "月" + getChinaDayString(day);
+        return getChinaYearString(year) + (leap ? "闰" : "") + getChinaMonthString(month) + getChinaDayString(day);
     }
 
     public static void main(String[] args) {
         Calendar cal= Calendar.getInstance();
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         cal.setTimeZone(TimeZone.getDefault());
         System.out.println("公历日期:"+sdf.format(cal.getTime()));
         LunarUtils lunar=new LunarUtils(cal);
         System.out.print("农历日期:");
-        System.out.print(getChinaYearString(lunar.year));
-        System.out.print(getChinaMonthString(lunar.month));
-        System.out.print(getChinaDayString(lunar.day));
-        System.out.println("\n*************");
+//        System.out.print(getChinaYearString(lunar.year));
+//        System.out.print(getChinaMonthString(lunar.month));
+//        System.out.print(getChinaDayString(lunar.day));
         System.out.println(lunar);
     }
 
-    public static int getLunarYear(){
-        Calendar cal= Calendar.getInstance();
+    public static LunarUtils getLunarDate(String datestr){
+        Calendar cal = StringCalendarUtils.StringToCalendar(datestr);
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
         cal.setTimeZone(TimeZone.getDefault());
         LunarUtils lunar=new LunarUtils(cal);
+        return lunar;
+    }
+
+    public static int getLunarYear(LunarUtils lunar){
         return lunar.year;
     }
 
-    public static int getLunarMonth(){
-        Calendar cal= Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        cal.setTimeZone(TimeZone.getDefault());
-        LunarUtils lunar=new LunarUtils(cal);
+    public static int getLunarMonth(LunarUtils lunar){
         return lunar.month;
     }
 
-    public static int getLunarDay(){
-        Calendar cal= Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-        cal.setTimeZone(TimeZone.getDefault());
-        LunarUtils lunar=new LunarUtils(cal);
+    public static int getLunarDay(LunarUtils lunar){
         return lunar.day;
     }
 

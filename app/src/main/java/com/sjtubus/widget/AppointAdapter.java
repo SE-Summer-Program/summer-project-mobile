@@ -27,6 +27,7 @@ import com.sjtubus.model.response.RecordInfoResponse;
 import com.sjtubus.model.response.ShiftInfoResponse;
 import com.sjtubus.network.RetrofitClient;
 import com.sjtubus.user.UserManager;
+import com.sjtubus.utils.MyDateUtils;
 import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 
@@ -172,8 +173,21 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
             switch (v.getId()){
                 case R.id.appointitem_reservebtn:
-//                    AppointInfo info_reserve = appointInfoList.get((int)v.getTag()-1);
-//                    Log.i("APPOINT-TAG",String.valueOf((int)v.getTag()));
+                    if (! MyDateUtils.isWithinOneWeek(departure_date)){
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("预约失败")
+                                .setContentText("仅可预约一周以内的班次哦，一周以后的只能看看~")
+                                .setConfirmText("确定")
+                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                    @Override
+                                    public void onClick(SweetAlertDialog sDialog) {
+                                        sDialog.cancel();
+                                    }
+                                })
+                                .show();
+                        return;
+                    }
+
                     Button reserve_btn = (Button)v.findViewById(R.id.appointitem_reservebtn);
                     if (reserve_btn.getText().toString().equals("无座")){
                         new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
