@@ -87,4 +87,16 @@ public class MyDateUtils {
 
         return StringCalendarUtils.isBeforeDateOfSecondPara(threeMonthBefore, datestr);
     }
+
+    /* 由calendar判断是否是双休日 */
+    public static boolean isWeekend(Calendar calendar){
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        return (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
+    }
+    /* 由calendar判断是否是节假日 是否是二月，七月，八月 */
+    public static boolean isHoilday(Calendar calendar){
+        int month = calendar.get(Calendar.MONTH);
+        return (month == Calendar.FEBRUARY || month == Calendar.AUGUST
+                || month == Calendar.JULY);
+    }
 }

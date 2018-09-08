@@ -140,11 +140,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         else
             holder.comment.setText("特殊需求： " + comment);
 
+        String status_str;
         if (StringCalendarUtils.isBeforeCurrentTime(recordInfos.get(position).getDepartureTimeComplete())){
-            holder.status.setText("已出行");
+            status_str = "已发车 ";
         } else {
-            holder.status.setText("未出行");
+            status_str = "未发车 ";
         }
+        status_str += recordInfos.get(position).getStatus();
+        holder.status.setText(status_str);
+
 
         holder.remindbtn.setOnClickListener(ChildListener);
         holder.cancelbtn.setOnClickListener(ChildListener);

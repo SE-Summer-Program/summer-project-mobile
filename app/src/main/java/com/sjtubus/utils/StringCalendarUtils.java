@@ -163,7 +163,6 @@ public class StringCalendarUtils {
 
     /*************************************************************************/
 
-
     /* 由calendar判断是否是双休日 */
     public static boolean isWeekend(Calendar calendar){
         int day = calendar.get(Calendar.DAY_OF_WEEK);
