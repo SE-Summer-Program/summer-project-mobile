@@ -31,7 +31,7 @@ public class AppointChildViewHolder extends BaseViewHolder{
         info_btn.setTag(pos);
         info_btn.setOnClickListener(listener);
 
-        if(UserManager.getInstance().getRole().equals("admin")){
+        if(UserManager.getInstance().getRole().equals("admin")||UserManager.getInstance().getRole().equals("driver")){
             Button import_btn = view.findViewById(R.id.import_rideinfo_btn);
             import_btn.setVisibility(View.VISIBLE);
             import_btn.setTag(pos);

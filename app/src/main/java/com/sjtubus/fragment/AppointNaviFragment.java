@@ -152,8 +152,8 @@ public class AppointNaviFragment extends BaseFragment {
                                 ToastUtils.showShort("不能预约已经发出的班次~");
                                 return;
                             } else if (! MyDateUtils.isWithinOneWeek(dateStr)){
-                                ToastUtils.showShort("仅可预约一周以内的班次~");
-                                return;
+                                ToastUtils.showShort("仅可预约一周以内的班次哦~");
+//                                return;
                             }
                             textView_date.setText(dateStr);
 
