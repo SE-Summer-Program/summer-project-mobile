@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.sjtubus.R;
 import com.sjtubus.model.response.LineInfoResponse;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.utils.ShiftUtils;
+import com.sjtubus.utils.StringCalendarUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.LineAdapter;
 
@@ -46,6 +48,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
     private String[] type_list = {"在校期-工作日", "在校期-双休日/节假日", "寒暑假-工作日","寒暑假-双休日"};
     private String[] type_list_E = {"NormalWorkday","NormalWeekendAndLegalHoliday","HolidayWorkday","HolidayWeekend"};
     private int select;
+
+    private String type;
 
     //private SwipeRefreshView mSwipeRefreshView;
 
@@ -91,7 +95,8 @@ public class LineActivity extends BaseActivity implements LineAdapter.OnItemClic
 
             }
         });
-        String type = "NormalWorkday";
+
+        type = ShiftUtils.getTypeOfToday();
         initSelected(type);
         setAndShowSchedule(type);
 

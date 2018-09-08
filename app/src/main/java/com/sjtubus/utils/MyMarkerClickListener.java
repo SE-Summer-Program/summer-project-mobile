@@ -15,6 +15,8 @@ import com.sjtubus.R;
 import com.sjtubus.model.Station;
 import com.yinglan.scrolllayout.ScrollLayout;
 
+import java.util.Calendar;
+
 public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     private ScrollLayout mScrollLayout;
     private Station station;
@@ -35,29 +37,6 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
 
         station = (Station) bundle.getSerializable("info");
         initView();
-
-//        String context = "";
-//        context += station.getName() + "\n";
-//        if(station.getName().equals("菁菁堂")){
-//            context += "逆时针：" + "\n";
-//            for(String time:station.getAntiClockLoop()){
-//                context += time + " ";
-//            }
-//            context += "\n";
-//            for(String time:station.getAntiClockNonLoop()){
-//                context += time + " ";
-//            }
-//            context += "\n" + "顺时针：" + "\n";
-//            for(String time:station.getClockLoop()){
-//                context += time + " ";
-//            }
-//            context += "\n";
-//            for(String time:station.getClockNonLoop()){
-//                context += time + " ";
-//            }
-//            //还有假期的四个时刻表没加
-//        }
-//        text.setText(context);
 
         mScrollLayout.setToOpen();
         return true;
@@ -103,40 +82,40 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     private void initAnticlockwise(){
         StringBuilder anticlockwise_text = new StringBuilder();
         int index = 1;
-//        for (String time : AntiClockNonLoopFromSubway){
-//            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-//                //灰色
-//                anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-//                continue;
-//            }
-//            //橘红色
-//            anticlockwise_text.append("<font color='#FF6347'>").append(time).append("</font>    ");
-//        }
 
-        for (String time : station.getAntiClockLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
+        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+            for (String time : station.getAntiClockLoop()) {
                 anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                index ++;
-                continue;
             }
-            if (index <= 4){
-                //橘红色
-                anticlockwise_text.append("<font color='#FF6347'>").append(time).append("</font>    ");
-            } else {
-                //草绿色
-                anticlockwise_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
-            }
-            index ++;
-        }
-        for (String time : station.getAntiClockNonLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
+            for (String time : station.getAntiClockNonLoop()){
                 anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                continue;
             }
-            //湖蓝色
-            anticlockwise_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+        } else {
+            for (String time : station.getAntiClockLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    index++;
+                    continue;
+                }
+                if (index <= 4) {
+                    //橘红色
+                    anticlockwise_text.append("<font color='#FF6347'>").append(time).append("</font>    ");
+                } else {
+                    //草绿色
+                    anticlockwise_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
+                }
+                index++;
+            }
+            for (String time : station.getAntiClockNonLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    anticlockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    continue;
+                }
+                //湖蓝色
+                anticlockwise_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+            }
         }
 
         anticlockwise_time.setText(Html.fromHtml(anticlockwise_text.toString()));
@@ -149,23 +128,32 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     private void initClockwise(){
         StringBuilder clockwise_text = new StringBuilder();
 
-        for (String time : station.getClockLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
-               clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                continue;
-            }
-            //草绿色
-            clockwise_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
-        }
-        for (String time : station.getClockNonLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
+        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+            for (String time : station.getClockLoop()) {
                 clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                continue;
             }
-            //湖蓝色
-            clockwise_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+            for (String time : station.getClockNonLoop()){
+                clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+            }
+        } else {
+            for (String time : station.getClockLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    continue;
+                }
+                //草绿色
+                clockwise_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
+            }
+            for (String time : station.getClockNonLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    clockwise_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    continue;
+                }
+                //湖蓝色
+                clockwise_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+            }
         }
 
         clockwise_time.setText(Html.fromHtml(clockwise_text.toString()));
@@ -179,30 +167,39 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
         StringBuilder anticlockwiseHoliday_text = new StringBuilder();
         int index = 1;
 
-        for (String time : station.getVacAntiClockLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
+        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+            for (String time : station.getVacAntiClockLoop()) {
                 anticlockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                index ++;
-                continue;
             }
-            if (index <= 1){
-                //橘红色
-                anticlockwiseHoliday_text.append("<font color='#FF6347'>").append(time).append("</font>    ");
-            } else {
-                //草绿色
-                anticlockwiseHoliday_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
-            }
-            index ++;
-        }
-        for (String time : station.getVacAntiClockNonLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
+            for (String time : station.getVacAntiClockNonLoop()){
                 anticlockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                continue;
             }
-            //湖蓝色
-            anticlockwiseHoliday_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+        } else {
+            for (String time : station.getVacAntiClockLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    anticlockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    index++;
+                    continue;
+                }
+                if (index <= 1) {
+                    //橘红色
+                    anticlockwiseHoliday_text.append("<font color='#FF6347'>").append(time).append("</font>    ");
+                } else {
+                    //草绿色
+                    anticlockwiseHoliday_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
+                }
+                index++;
+            }
+            for (String time : station.getVacAntiClockNonLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    anticlockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    continue;
+                }
+                //湖蓝色
+                anticlockwiseHoliday_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+            }
         }
 
         anticlockwise_holiday_time.setText(Html.fromHtml(anticlockwiseHoliday_text.toString()));
@@ -215,23 +212,32 @@ public class MyMarkerClickListener implements BaiduMap.OnMarkerClickListener {
     private void initclockwiseHoliday(){
         StringBuilder clockwiseHoliday_text = new StringBuilder();
 
-        for (String time : station.getVacClockLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
+        if (StringCalendarUtils.isWeekend(Calendar.getInstance())){
+            for (String time : station.getVacClockLoop()) {
                 clockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                continue;
             }
-            //草绿色
-            clockwiseHoliday_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
-        }
-        for (String time : station.getVacClockNonLoop()){
-            if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)){
-                //灰色
+            for (String time : station.getVacClockNonLoop()){
                 clockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
-                continue;
             }
-            //湖蓝色
-            clockwiseHoliday_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+        } else {
+            for (String time : station.getVacClockLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    clockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    continue;
+                }
+                //草绿色
+                clockwiseHoliday_text.append("<font color='#66CD00'>").append(time).append("</font>    ");
+            }
+            for (String time : station.getVacClockNonLoop()) {
+                if (StringCalendarUtils.isBeforeCurrentTimeHHmm(time)) {
+                    //灰色
+                    clockwiseHoliday_text.append("<font color='#D1D1D1'>").append(time).append("</font>    ");
+                    continue;
+                }
+                //湖蓝色
+                clockwiseHoliday_text.append("<font color='#6495ED'>").append(time).append("</font>    ");
+            }
         }
 
         clockwise_holiday_time.setText(Html.fromHtml(clockwiseHoliday_text.toString()));
