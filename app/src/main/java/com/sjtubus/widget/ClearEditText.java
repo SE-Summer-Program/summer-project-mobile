@@ -27,6 +27,8 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
     private OnFocusChangeListener mOnFocusChangeListener;
     private OnTouchListener       mOnTouchListener;
 
+    private String textContent = "";
+
     public ClearEditText(final Context context) {
         super(context);
         init(context);
@@ -102,6 +104,7 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
             lengthAfter) {
         if (isFocused()) {
             setClearIconVisible(text.length() > 0);
+            textContent = text.toString();
         }
     }
 
@@ -123,6 +126,10 @@ public class ClearEditText extends AppCompatEditText implements View.OnTouchList
                 compoundDrawables[1],
                 visible ? mClearTextIcon : null,
                 compoundDrawables[3]);
+    }
+
+    public String getTextContent(){
+        return textContent;
     }
 
 }

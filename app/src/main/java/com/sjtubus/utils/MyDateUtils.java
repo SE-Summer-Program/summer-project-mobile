@@ -60,4 +60,43 @@ public class MyDateUtils {
 
         return StringCalendarUtils.isBeforeDateOfSecondPara(datestr, oneWeekLater);
     }
+
+    public static boolean isWithinLastOneWeek(String datestr){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getBeginOfDay(StringCalendarUtils.getCurrrentDate()));
+        cal.add(Calendar.WEEK_OF_MONTH, -1);
+        String oneWeekBefore = StringCalendarUtils.CalendarToString(cal);
+
+        return StringCalendarUtils.isBeforeDateOfSecondPara(oneWeekBefore, datestr);
+    }
+
+    public static boolean isWithinLastOneMonth(String datestr){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getBeginOfDay(StringCalendarUtils.getCurrrentDate()));
+        cal.add(Calendar.MONTH, -1);
+        String oneMonthBefore = StringCalendarUtils.CalendarToString(cal);
+
+        return StringCalendarUtils.isBeforeDateOfSecondPara(oneMonthBefore, datestr);
+    }
+
+    public static boolean isWithinLastThreeMonth(String datestr){
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getBeginOfDay(StringCalendarUtils.getCurrrentDate()));
+        cal.add(Calendar.MONTH, -3);
+        String threeMonthBefore = StringCalendarUtils.CalendarToString(cal);
+
+        return StringCalendarUtils.isBeforeDateOfSecondPara(threeMonthBefore, datestr);
+    }
+
+    /* 由calendar判断是否是双休日 */
+    public static boolean isWeekend(Calendar calendar){
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        return (day == Calendar.SATURDAY || day == Calendar.SUNDAY);
+    }
+    /* 由calendar判断是否是节假日 是否是二月，七月，八月 */
+    public static boolean isHoilday(Calendar calendar){
+        int month = calendar.get(Calendar.MONTH);
+        return (month == Calendar.FEBRUARY || month == Calendar.AUGUST
+                || month == Calendar.JULY);
+    }
 }

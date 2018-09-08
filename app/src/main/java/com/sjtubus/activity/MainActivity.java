@@ -465,8 +465,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("扫描失败!")
                         .setContentText("二维码内容为空!")
-                        .setCancelText("确定")
-                        .setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        .setCancelButton("确定",new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
                                 sDialog.cancel();

@@ -1,6 +1,7 @@
 package com.sjtubus.widget;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -72,9 +73,10 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
         TextView submittime;
         TextView linename;
+        TextView status;
         TextView departuremsg;
         TextView shiftid;
-        TextView status;
+        TextView comment;
         Button remindbtn;
         Button cancelbtn;
         ImageView qrcode;
@@ -86,6 +88,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
             departuremsg = view.findViewById(R.id.record_departuremsg);
             shiftid = view.findViewById(R.id.record_shiftid);
             status = view.findViewById(R.id.record_status);
+            comment = view.findViewById(R.id.record_comment);
             remindbtn = view.findViewById(R.id.record_remindbtn);
             cancelbtn = view.findViewById(R.id.record_cancelbtn);
             qrcode = view.findViewById(R.id.record_qrcode);
@@ -108,13 +111,15 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         return holder;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecordAdapter.ViewHolder holder, int position) {
         String confirm_time = recordInfos.get(position).getConfirmDate();
         String line_name = recordInfos.get(position).getLineName();
-        String departure_msg = recordInfos.get(position).getDepartureMsg();
+        String departure_msg = recordInfos.get(position).getDepartureMsg() + "发车";
         String shift_id = recordInfos.get(position).getShiftid();
         String submit_time = "预定时间： " + recordInfos.get(position).getSubmiTime();
+        String comment = recordInfos.get(position).getComment();
         holder.submittime.setText(confirm_time);
         holder.linename.setText(line_name);
         holder.departuremsg.setText(departure_msg);
@@ -123,6 +128,21 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
         String info = shift_id + ";" + recordInfos.get(position).getDepartureDate() + ";"
                 + UserManager.getInstance().getUser().getUsername();
         holder.qrcode.setImageBitmap(ZxingUtils.createQRImage(info,300,300));
+
+        if (comment == null)
+            holder.comment.setVisibility(View.GONE);
+        else
+            holder.comment.setText("特殊需求： " + comment);
+
+        String status_str;
+        if (StringCalendarUtils.isBeforeCurrentTime(recordInfos.get(position).getDepartureTimeComplete())){
+            status_str = "已发车 ";
+        } else {
+            status_str = "未发车 ";
+        }
+        status_str += recordInfos.get(position).getStatus();
+        holder.status.setText(status_str);
+
 
         holder.remindbtn.setOnClickListener(ChildListener);
         holder.cancelbtn.setOnClickListener(ChildListener);
@@ -180,10 +200,30 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
 
                                     CalendarReminder.addCalendarEventRemind(App.getInstance(), "校车发车提醒", description, begintime, begintime, remind_minutes, new CalendarReminder.onCalendarRemindListener() {
                                         public void onFailed(CalendarReminder.onCalendarRemindListener.Status error_code) {
-                                            ToastUtils.showShort("预约提醒设置失败~");
+                                            new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("预约提醒设置失败")
+                                                    .setContentText("请检查你的网络~")
+                                                    .setConfirmText("确定")
+                                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                        @Override
+                                                        public void onClick(SweetAlertDialog sDialog) {
+                                                            sDialog.cancel();
+                                                        }
+                                                    })
+                                                    .show();
                                         }
                                         public void onSuccess() {
-                                            ToastUtils.showShort("预约提醒设置成功~");
+                                            new SweetAlertDialog(context, SweetAlertDialog.SUCCESS_TYPE)
+                                                    .setTitleText("预约提醒设置成功!")
+                                                    .setConfirmText("确定")
+                                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                        @Override
+                                                        public void onClick(SweetAlertDialog sDialog) {
+                                                            sDialog.cancel();
+                                                            context.finish();
+                                                        }
+                                                    })
+                                                    .show();
                                         }
                                     });
                                 }
@@ -217,6 +257,7 @@ public class RecordAdapter extends RecyclerView.Adapter<RecordAdapter.ViewHolder
                                     new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                                             .setTitleText("取消预约失败")
                                             .setContentText("该班次已经发出，不能取消预约了哦~")
+                                            .setConfirmText("确定")
                                             .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                                 @Override
                                                 public void onClick(SweetAlertDialog sDialog) {
