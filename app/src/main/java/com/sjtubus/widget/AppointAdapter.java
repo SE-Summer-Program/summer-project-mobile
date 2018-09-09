@@ -214,7 +214,7 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     break;
                 case R.id.import_rideinfo_btn:
                     if (! StringCalendarUtils.isBeforeCurrentTime(departure_date + " " + departure_time)){
-                        new SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE)
+                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
                                 .setTitleText("录入信息失败")
                                 .setContentText("该班次还未发出")
                                 .setConfirmText("确定")
