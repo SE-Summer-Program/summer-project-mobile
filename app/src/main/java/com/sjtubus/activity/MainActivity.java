@@ -268,7 +268,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
                 default:
                     break;
             }
-            String userinfo_str = "身份:"+role+"   "+"信用积分:"+user.getCredit();
+
+            String userinfo_str = "";
+            if (UserManager.getInstance().getRole().equals("admin") ||
+                    UserManager.getInstance().getRole().equals("driver")){
+                userinfo_str = "身份:" + role;
+            } else {
+                userinfo_str = "身份:" + role + "   " + "信用积分:" + user.getCredit();
+            }
             userinfo.setText(userinfo_str);
             userinfo.setVisibility(View.VISIBLE);
             login_tips.setVisibility(View.GONE);

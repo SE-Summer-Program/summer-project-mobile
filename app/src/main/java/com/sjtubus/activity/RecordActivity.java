@@ -86,6 +86,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 showNotTravelOnly = isChecked;
                 filter_amount = 0;
+                ToastUtils.showShort("筛选成功~");
                 refreshRecord();
             }
         });
@@ -249,6 +250,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                 if (isFliterFlag){
 //                    filter_select = which;
 //                    ToastUtils.showShort(filter_list[filter_select]);
+                    ToastUtils.showShort("筛选完成~");
                 } else {
                     switch (sort_select){
                         case 0:
@@ -266,6 +268,7 @@ public class RecordActivity extends BaseActivity implements View.OnClickListener
                         default:
                             break;
                     }
+                    ToastUtils.showShort("排序完成~");
                 }
             }
         });

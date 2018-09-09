@@ -40,7 +40,11 @@
             android:paddingBottom="5dp"
             android:textColor="@color/primary_white"
             android:textStyle="italic"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:shadowColor="@color/dark_gray"
+            android:shadowDx="3"
+            android:shadowDy="3"
+            android:shadowRadius="1.5" />
 
     </android.support.v7.widget.CardView>
 </LinearLayout>

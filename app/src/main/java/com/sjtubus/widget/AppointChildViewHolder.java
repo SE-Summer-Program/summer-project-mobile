@@ -42,10 +42,12 @@ public class AppointChildViewHolder extends BaseViewHolder{
             collect_btn.setVisibility(View.GONE);
             info_btn.setVisibility(View.GONE);
 
+            import_btn.setBackgroundColor(0xffd81e06);
             if (! StringCalendarUtils.isBeforeCurrentTime(bean.getDate() + " " + bean.getDeparture_time())){
                 import_btn.setBackgroundColor(0xffbfbfbf);
             }
         } else {
+            reserve_btn.setBackgroundColor(0xffd81e06);
             if (bean.getRemain_seat() == 0) {
                 reserve_btn.setBackgroundColor(0xffbfbfbf);
                 //0xFFBFBFBF是int类型的数据，分组一下0x|FF|BFBFBF，

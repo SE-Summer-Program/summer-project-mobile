@@ -212,8 +212,10 @@ public class AppointNaviDoubleFragment extends BaseFragment {
                         break;
                     } else if (departure_index == 1 && arrive_index == 2){
                         ToastUtils.showShort("还没有徐汇校区到七宝校区的班车~");
+                        break;
                     } else if (departure_index == 2 && arrive_index == 1){
                         ToastUtils.showShort("还没有七宝校区到徐汇校区的班车~");
+                        break;
                     }
                     Intent appointDoubleIntent = new Intent(getActivity(), AppointDoubleActivity.class);
 

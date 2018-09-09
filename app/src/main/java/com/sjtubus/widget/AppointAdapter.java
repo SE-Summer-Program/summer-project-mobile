@@ -213,20 +213,20 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                     retrofitShiftInfo(shiftid);
                     break;
                 case R.id.import_rideinfo_btn:
-                    if (! StringCalendarUtils.isBeforeCurrentTime(departure_date + " " + departure_time)){
-                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
-                                .setTitleText("录入信息失败")
-                                .setContentText("该班次还未发出")
-                                .setConfirmText("确定")
-                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                    @Override
-                                    public void onClick(SweetAlertDialog sDialog) {
-                                        sDialog.cancel();
-                                    }
-                                })
-                                .show();
-                        return;
-                    }
+//                    if (! StringCalendarUtils.isBeforeCurrentTime(departure_date + " " + departure_time)){
+//                        new SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE)
+//                                .setTitleText("录入信息失败")
+//                                .setContentText("该班次还未发出")
+//                                .setConfirmText("确定")
+//                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                    @Override
+//                                    public void onClick(SweetAlertDialog sDialog) {
+//                                        sDialog.cancel();
+//                                    }
+//                                })
+//                                .show();
+//                        return;
+//                    }
                     importRideInfo(info);
                     break;
             }
@@ -607,11 +607,6 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         final EditText teacher_num =  view.findViewById(R.id.teacher_num);
         final EditText student_num = view.findViewById(R.id.student_num);
 
-        if(bus_plate.getText().toString().equals("")||teacher_num.getText().toString().equals("")||
-            seat_num.getText().toString().equals("")||student_num.getText().toString().equals("")){
-            ToastUtils.showShort("信息填写不完整!");
-            return;
-        }
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("录入发车信息");
         builder.setView(view);
@@ -629,6 +624,12 @@ public class AppointAdapter extends RecyclerView.Adapter<BaseViewHolder> {
                         .add("remain_num", String.valueOf(info.getRemain_seat()))
                         .add("seat_num",seat_num.getText().toString())
                         .build();
+
+                if(bus_plate.getText().toString().equals("")||teacher_num.getText().toString().equals("")||
+                        seat_num.getText().toString().equals("")||student_num.getText().toString().equals("")){
+                    ToastUtils.showShort("信息填写不完整!");
+                    return;
+                }
 
                 RetrofitClient.getBusApi()
                         .importRideInfo(requestBody)
