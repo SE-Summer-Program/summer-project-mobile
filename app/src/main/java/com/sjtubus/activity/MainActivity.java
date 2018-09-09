@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -121,6 +122,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
 
     private void registerReceiver(){
         IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction("android.NET.conn.CONNECTIVITY_CHANGE");
         filter.addAction("android.Net.wifi.WIFI_STATE_CHANGED");
         filter.addAction("android.net.wifi.STATE_CHANGE");
@@ -555,6 +557,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
 
                             @Override
                             public void onNext(HttpResponse response) {
+                                if (response.getMsg().equals("班次已到站") || response.getMsg().equals("班次未发出")){
+                                    String message = response.getMsg();
+                                    new SweetAlertDialog(MainActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                            .setTitleText("验证失败")
+                                            .setContentText(message)
+                                            .setConfirmText("确定")
+                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sDialog) {
+                                                    sDialog.cancel();
+                                                }
+                                            })
+                                            .show();
+                                    return;
+                                }
+
                                 new SweetAlertDialog(MainActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("验证完成!")
                                         .setContentText(response.getMsg())
