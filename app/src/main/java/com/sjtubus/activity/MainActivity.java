@@ -1,9 +1,12 @@
 package com.sjtubus.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,8 +16,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,10 +33,13 @@ import com.sjtubus.App;
 import com.sjtubus.R;
 import com.sjtubus.model.User;
 import com.sjtubus.model.response.HttpResponse;
+import com.sjtubus.network.NetworkChangeEvent;
 import com.sjtubus.network.RetrofitClient;
+import com.sjtubus.receiver.NetworkConnectChangedReceiver;
 import com.sjtubus.user.UserChangeEvent;
 import com.sjtubus.user.UserManager;
 import com.sjtubus.utils.GlideImageLoader;
+import com.sjtubus.utils.NetworkUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.sjtubus.widget.MarqueeViewAdapter;
 import com.stx.xmarqueeview.XMarqueeView;
@@ -91,19 +101,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     private List<String> images = new ArrayList<>();
     private List<String> messages = new ArrayList<>();
 
+    private boolean mCheckNetWork = true; //默认检查网络状态
+    private View mTipView;
+    private WindowManager mWindowManager;
+    private WindowManager.LayoutParams mLayoutParams;
+    private NetworkConnectChangedReceiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
         initView();
         loadImages();
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
-
+        EventBus.getDefault().register(this);
+        initTipView();//初始化提示View
+        registerReceiver();
         checkRole();
+    }
 
-        //获取顶层视图
-        //decorView = getWindow().getDecorView();
-        //decorView = getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    private void registerReceiver(){
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.NET.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.Net.wifi.WIFI_STATE_CHANGED");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        mReceiver = new NetworkConnectChangedReceiver();
+        this.registerReceiver(mReceiver, filter);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        //在无网络情况下打开APP时，系统不会发送网络状况变更的Intent，需要自己手动检查
+        hasNetWork(NetworkUtils.isNetworkAvailable(MainActivity.this));
     }
 
     public int getContentViewId(){
@@ -444,6 +473,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        unregisterReceiver(mReceiver);
         super.onDestroy();
     }
 
@@ -543,6 +573,50 @@ public class MainActivity extends BaseActivity implements View.OnClickListener,N
             }
         } else {
             super.onActivityResult(requestCode,resultCode,data);
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        //当提示View被动态添加后直接关闭页面会导致该View内存溢出，所以需要在finish时移除
+        if (mTipView != null && mTipView.getParent() != null) {
+            mWindowManager.removeView(mTipView);
+        }
+    }
+
+    private void initTipView() {
+        LayoutInflater inflater = getLayoutInflater();
+        mTipView = inflater.inflate(R.layout.layout_network_tip, null); //提示View布局
+        mWindowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        mLayoutParams = new WindowManager.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                PixelFormat.TRANSLUCENT);
+        //使用非CENTER时，可以通过设置XY的值来改变View的位置
+        mLayoutParams.gravity = Gravity.TOP;
+        mLayoutParams.x = 0;
+        mLayoutParams.y = 0;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNetworkChangeEvent(NetworkChangeEvent event) {
+        hasNetWork(event.isConnected);
+    }
+
+    private void hasNetWork(boolean has) {
+        if (mCheckNetWork) {
+            if (has) {
+                if (mTipView != null && mTipView.getParent() != null) {
+                    mWindowManager.removeView(mTipView);
+                }
+            } else {
+                if (mTipView.getParent() == null) {
+                    mWindowManager.addView(mTipView, mLayoutParams);
+                }
+            }
         }
     }
 }

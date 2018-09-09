@@ -54,13 +54,11 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
         TextView register_txt = view.findViewById(R.id.txt_register);
         Button login_btn = view.findViewById(R.id.btn_login);
         TextView jaccount_btn = view.findViewById(R.id.jaccount_btn);
-        TextView forget_password_btn = view.findViewById(R.id.txt_forget_password);
         phone_edit = view.findViewById(R.id.login_phone_edit);
         password_edit = view.findViewById(R.id.login_pwd_edit);
         jaccount_btn.setOnClickListener(this);
         login_btn.setOnClickListener(this);
         register_txt.setOnClickListener(this);
-        forget_password_btn.setOnClickListener(this);
         return view;
     }
 
@@ -77,9 +75,6 @@ public class UserloginFragment extends BaseFragment implements View.OnClickListe
             case R.id.jaccount_btn:
                 Intent jaccountIntent = new Intent(getActivity(),JaccountActivity.class);
                 startActivity(jaccountIntent);
-                break;
-            case R.id.txt_forget_password:
-                ToastUtils.showShort("忘记密码功能还没有做好哦~");
                 break;
         }
     }

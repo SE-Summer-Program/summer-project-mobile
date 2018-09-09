@@ -56,10 +56,26 @@
         <activity android:name=".activity.CollectActivity"/>
         <activity android:name=".activity.AppointDoubleActivity" />
         <activity android:name=".activity.GPSPositionActivity" />
+        <activity android:name=".activity.ScanActivity" />
 
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
         </activity>
+        <activity android:name=".activity.MapActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.RouteActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.SimpleScanActivity"
+            android:screenOrientation="portrait"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <service android:name="com.avos.avoscloud.PushService" />
 
@@ -71,23 +87,13 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.MapActivity">
+        <receiver android:name=".receiver.NetworkConnectChangedReceiver">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.NET.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.Net.wifi.WIFI_STATE_CHANGED" />
+                <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".activity.RouteActivity">
-            <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".activity.ScanActivity" />
-        <activity android:name=".activity.SimpleScanActivity"
-            android:screenOrientation="portrait"
-            android:stateNotNeeded="true"
-            android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+        </receiver>
 
         <service
             android:name="com.baidu.location.f"

@@ -52,6 +52,7 @@ import com.sjtubus.utils.BusLocationSimulator;
 import com.sjtubus.utils.MyLocationListener;
 import com.sjtubus.utils.MyMapStatusChangeListener;
 import com.sjtubus.utils.MyMarkerClickListener;
+import com.sjtubus.utils.NetworkUtils;
 import com.sjtubus.utils.ToastUtils;
 import com.yinglan.scrolllayout.ScrollLayout;
 
@@ -123,7 +124,11 @@ public class MapActivity extends BaseActivity {
         getPermission();
         initView();
         initLocation();
-        retrieveData();
+        if(NetworkUtils.isNetworkAvailable(MapActivity.this)){
+            retrieveData();
+        }else{
+            ToastUtils.showShort("当前网络不可用!请检查网络连接!");
+        }
     }
 
     public int getContentViewId(){
@@ -454,7 +459,7 @@ public class MapActivity extends BaseActivity {
         mLocationClient.unRegisterLocationListener(myListener);
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
-        mSearch.destroy();
+        if(mSearch!=null) mSearch.destroy();
     }
 
     @Override
@@ -462,7 +467,11 @@ public class MapActivity extends BaseActivity {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mMapView.onResume();
-        startBus();
+        if(NetworkUtils.isNetworkAvailable(MapActivity.this)){
+            startBus();
+        }else{
+            ToastUtils.showShort("当前网络不可用!请检查网络连接!");
+        }
     }
 
     @Override
@@ -477,8 +486,8 @@ public class MapActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
-        task.cancel();
-        pool.shutdown();
+        if(task!=null) task.cancel();
+        if(pool!=null) pool.shutdown();
         mMapView.onPause();
     }
 
